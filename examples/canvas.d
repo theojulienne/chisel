@@ -6,11 +6,9 @@ import chisel.core.all;
 import chisel.graphics.all;
 import chisel.ui.all;
 
-import tango.io.Stdout;
-
 class CanvasView : View {
 	void drawRect( GraphicsContext context, CLRect dirtyRect ) {
-		Stdout.formatln( "dirty! {}, {} ({},{} {}x{})", this, context, dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height );
+		//Stdout.formatln( "dirty! {}, {} ({},{} {}x{})", this, context, dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height );
 		
 		//context.drawText( "☃" );
 		

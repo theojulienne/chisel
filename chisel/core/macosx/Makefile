@@ -1,6 +1,6 @@
 OBJS=application.o
 TARGET=libchiselnative-core.a
-CFLAGS=-g -Wall -I../native/
+CFLAGS=-m32 -g -Wall -I../native/
 
 all: $(TARGET)
 

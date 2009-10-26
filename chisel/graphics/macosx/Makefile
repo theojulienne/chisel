@@ -1,6 +1,6 @@
 OBJS=context.o
 TARGET=libchiselnative-graphics.a
-CFLAGS=-g -Wall -I../../core/macosx/ -I../../core/native/ -I../native/
+CFLAGS=-m32 -g -Wall -I../../core/macosx/ -I../../core/native/ -I../native/
 
 all: $(TARGET)
 
