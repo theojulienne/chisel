@@ -4,15 +4,29 @@ import std.math;
 
 import chisel.core.all;
 import chisel.graphics.all;
+import chisel.text.all;
 import chisel.ui.all;
 
 class CanvasView : View {
+	Font font;
+	String renderText;
+	
+	this( ) {
+		super( );
+		
+		font = Font.createWithName( "Verdana", 42 );
+		
+		renderText = String.fromUTF8( "Aa Bb Cc Dd Ee Ff Ggg Hh Ii Jj" );
+	}
+	
 	void drawRect( GraphicsContext context, CLRect dirtyRect ) {
 		//Stdout.formatln( "dirty! {}, {} ({},{} {}x{})", this, context, dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height );
 		
 		//context.drawText( "☃" );
 		
-		context.yIncreasesUp = true;
+		context.yIncreasesUp = false;
+		
+		
 		
 		Path p = new Path;
 		p.moveTo( 0, 100 );
