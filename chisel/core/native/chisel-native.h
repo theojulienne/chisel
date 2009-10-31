@@ -7,3 +7,5 @@ typedef struct {
 	CLIndex location;
 	CLIndex length;
 } CLRange;
+
+#define Range CLRange

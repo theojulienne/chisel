@@ -8,8 +8,8 @@
 
 #include "view.h"
 
-CLRect NSRectToCLRect( NSRect inRect ) {
-	CLRect rect;
+Rect NSRectToRect( NSRect inRect ) {
+	Rect rect;
 	
 	rect.origin.x = inRect.origin.x;
 	rect.origin.y = inRect.origin.y;
@@ -19,7 +19,7 @@ CLRect NSRectToCLRect( NSRect inRect ) {
 	return rect;
 }
 
-NSRect CLRectToNSRect( CLRect inRect ) {
+NSRect RectToNSRect( Rect inRect ) {
 	NSRect rect;
 	
 	rect.origin.x = inRect.origin.x;
@@ -36,7 +36,7 @@ NSRect CLRectToNSRect( CLRect inRect ) {
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-	CLRect rect = NSRectToCLRect( dirtyRect );
+	Rect rect = NSRectToRect( dirtyRect );
 	
 	_chisel_native_view_draw_rect_callback( self, rect );
 }
@@ -56,7 +56,7 @@ void _chisel_native_view_add_subview( native_handle native, native_handle subvie
 	[pView addSubview: sView];
 }
 
-void _chisel_native_view_set_frame( native_handle native, CLRect frame ) {
+void _chisel_native_view_set_frame( native_handle native, Rect frame ) {
 	NSView *pView = (NSView *)native;
 	
 	NSRect nsFrame;
@@ -68,16 +68,16 @@ void _chisel_native_view_set_frame( native_handle native, CLRect frame ) {
 	[pView setFrame: nsFrame];
 }
 
-CLRect _chisel_native_view_get_frame( native_handle native ) {
+Rect _chisel_native_view_get_frame( native_handle native ) {
 	NSView *pView = (NSView *)native;
 	NSRect rect = [pView frame];
 	
-	return NSRectToCLRect( rect );
+	return NSRectToRect( rect );
 }
 
-void _chisel_native_view_invalidate_rect( native_handle native, CLRect rect ) {
+void _chisel_native_view_invalidate_rect( native_handle native, Rect rect ) {
 	NSView *pView = (NSView *)native;
-	NSRect dirty = CLRectToNSRect( rect );
+	NSRect dirty = RectToNSRect( rect );
 	
 	[pView setNeedsDisplayInRect:dirty];
 }

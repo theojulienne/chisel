@@ -24,7 +24,7 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-	CLRect rect;
+	Rect rect;
 	
 	rect.origin.x = dirtyRect.origin.x;
 	rect.origin.y = dirtyRect.origin.y;

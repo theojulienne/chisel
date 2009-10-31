@@ -6,7 +6,7 @@ import chisel.text.all;
 
 extern (C) {
 	native_handle _chisel_native_formattedstring_create( native_handle text );
-	void _chisel_native_formattedstring_set_font( native_handle fs, CLRange range, native_handle font );
+	void _chisel_native_formattedstring_set_font( native_handle fs, Range range, native_handle font );
 	native_handle _chisel_native_formattedstring_get_string( native_handle fs );
 }
 
@@ -27,7 +27,7 @@ class FormattedString : CObject {
 		this.native = native;
 	}
 	
-	void setFont( CLRange range, Font font ) {
+	void setFont( Range range, Font font ) {
 		_chisel_native_formattedstring_set_font( native, range, font.native );
 	}
 	
@@ -37,7 +37,7 @@ class FormattedString : CObject {
 		return NativeBridge.fromNative!(String)(native);
 	}
 	
-	CLRange range( ) {
-		return CLRange( 0, string.length );
+	Range range( ) {
+		return Range( 0, string.length );
 	}
 }

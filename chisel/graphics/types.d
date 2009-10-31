@@ -2,22 +2,22 @@ module chisel.graphics.types;
 
 alias float CLFloat;
 
-struct CLSize {
+struct Size {
 	CLFloat width;
 	CLFloat height;
 }
 
-struct CLPoint {
+struct Point {
 	CLFloat x;
 	CLFloat y;
 }
 
-struct CLRect {
-	CLPoint origin;
-	CLSize size;
+struct Rect {
+	Point origin;
+	Size size;
 	
-	static CLRect opCall( CLFloat x, CLFloat y, CLFloat w, CLFloat h ) {
-		CLRect r;
+	static Rect opCall( CLFloat x, CLFloat y, CLFloat w, CLFloat h ) {
+		Rect r;
 		
 		r.origin.x = x;
 		r.origin.y = y;

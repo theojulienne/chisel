@@ -10,12 +10,12 @@ import chisel.ui.openglu;
 class CubeView : OpenGLView {
 	float rquad = 0;
 	
-	this( CLRect frame ) {
+	this( Rect frame ) {
 		super( frame );
 	}
 	
 	void reshape( ) {
-		CLSize size = this.frame.size;
+		Size size = this.frame.size;
 		
 		glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
@@ -48,7 +48,7 @@ class CubeView : OpenGLView {
 		glDisable(GL_CULL_FACE);
 	}
 	
-	void drawRect( GraphicsContext context, CLRect dirtyRect ) {
+	void drawRect( GraphicsContext context, Rect dirtyRect ) {
 		OpenGLContext glContext = openGLContext;
 		
 		glEnable(GL_CULL_FACE);
@@ -118,7 +118,7 @@ class GLCubeApp : Application {
 		
 		mainWindow.onClose += &closeApp;
 		
-		glView = new CubeView( CLRect( 0, 0, 800, 600 ) );
+		glView = new CubeView( Rect( 0, 0, 800, 600 ) );
 		mainWindow.contentView.addSubview( glView );
 		
 		mainWindow.show( );

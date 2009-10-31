@@ -51,7 +51,7 @@ class Path {
 		subpaths[$-1].moveTo( x, y );
 	}
 	
-	void moveTo( CLPoint point ) {
+	void moveTo( Point point ) {
 		moveTo( point.x, point.y );
 	}
 	
@@ -59,7 +59,7 @@ class Path {
 		subpaths[$-1].lineTo( x, y );
 	}
 	
-	void lineTo( CLPoint point ) {
+	void lineTo( Point point ) {
 		lineTo( point.x, point.y );
 	}
 	
@@ -67,7 +67,7 @@ class Path {
 		subpaths[$-1].curveTo( cp1X, cp1Y, cp2X, cp2Y, endX, endY );
 	}
 	
-	void curveTo( CLPoint cpStart, CLPoint cpEnd, CLPoint end ) {
+	void curveTo( Point cpStart, Point cpEnd, Point end ) {
 		curveTo( 
 			cpStart.x, cpStart.y,
 			cpEnd.x, cpEnd.y,

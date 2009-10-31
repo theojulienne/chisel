@@ -42,7 +42,7 @@ class OpenGLView : View {
 		super( native );
 	}
 	
-	this( CLRect frame ) {
+	this( Rect frame ) {
 		this( );
 		this.frame = frame;
 	}

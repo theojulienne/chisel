@@ -23,18 +23,18 @@ class CanvasView : View {
 		
 		fmtString.setFont( fmtString.range, font );
 		
-		fmtString.setFont( CLRange( 0, 8 ), Font.createWithName( "Courier New", font.size ) );
-		fmtString.setFont( CLRange( 9, 8 ), Font.createWithName( "Times New Roman", font.size ) );
+		fmtString.setFont( Range( 0, 8 ), Font.createWithName( "Courier New", font.size ) );
+		fmtString.setFont( Range( 9, 8 ), Font.createWithName( "Times New Roman", font.size ) );
 	}
 	
-	void drawRect( GraphicsContext context, CLRect dirtyRect ) {
+	void drawRect( GraphicsContext context, Rect dirtyRect ) {
 		//Stdout.formatln( "dirty! {}, {} ({},{} {}x{})", this, context, dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height );
 		
 		//context.drawText( "☃" );
 		
 		context.yIncreasesUp = false;
 		
-		CLPoint point = CLPoint( 0, 0 );
+		Point point = Point( 0, 0 );
 		float numLines = (frame.size.height / font.size) + 1;
 		for ( int i = 0; i < numLines; i++ ) {
 			point.y += font.size;

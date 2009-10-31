@@ -1,13 +1,13 @@
 module chisel.core.types;
 
-alias int CLIndex;
+alias int Index;
 
-struct CLRange {
-	CLIndex location;
-	CLIndex length;
+struct Range {
+	Index location;
+	Index length;
 	
-	static CLRange opCall( CLIndex location, CLIndex length ) {
-		CLRange r;
+	static Range opCall( Index location, Index length ) {
+		Range r;
 		
 		r.location = location;
 		r.length = length;

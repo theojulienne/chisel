@@ -44,7 +44,7 @@ void _chisel_native_window_set_title( native_handle native, char *title ) {
 	[newTitle release];
 }
 
-void _chisel_native_window_set_content_size( native_handle native, CLSize size ) {
+void _chisel_native_window_set_content_size( native_handle native, Size size ) {
 	ChiselWindow *window = (ChiselWindow *)native;
 	
 	NSSize windowRect = NSMakeSize( size.width, size.height );

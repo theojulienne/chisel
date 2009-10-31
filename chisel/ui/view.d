@@ -6,12 +6,12 @@ import chisel.ui.native;
 
 extern (C) {
 	native_handle _chisel_native_view_create( );
-	void _chisel_native_view_set_frame( native_handle native, CLRect frame );
-	CLRect _chisel_native_view_get_frame( native_handle native );
+	void _chisel_native_view_set_frame( native_handle native, Rect frame );
+	Rect _chisel_native_view_get_frame( native_handle native );
 	void _chisel_native_view_add_subview( native_handle native, native_handle subview );
-	void _chisel_native_view_invalidate_rect( native_handle native, CLRect frame );
+	void _chisel_native_view_invalidate_rect( native_handle native, Rect frame );
 	
-	void _chisel_native_view_draw_rect_callback( native_handle native, CLRect rect ) {
+	void _chisel_native_view_draw_rect_callback( native_handle native, Rect rect ) {
 		View view = NativeBridge.fromNative!(View)( native );
 		assert( view !is null );
 		
@@ -29,15 +29,15 @@ class View : CObject {
 		this( _chisel_native_view_create( ) );
 	}
 	
-	void frame( CLRect frame ) {
+	void frame( Rect frame ) {
 		_chisel_native_view_set_frame( native, frame );
 	}
 	
-	CLRect frame( ) {
+	Rect frame( ) {
 		return _chisel_native_view_get_frame( native );
 	}
 	
-	void drawRect( GraphicsContext context, CLRect rect ) {
+	void drawRect( GraphicsContext context, Rect rect ) {
 		
 	}
 	
@@ -49,7 +49,7 @@ class View : CObject {
 		invalidate( frame );
 	}
 	
-	void invalidate( CLRect dirty ) {
+	void invalidate( Rect dirty ) {
 		_chisel_native_view_invalidate_rect( native, dirty );
 	}
 }
