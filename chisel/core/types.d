@@ -1,6 +1,6 @@
 module chisel.core.types;
 
-alias long CLIndex;
+alias int CLIndex;
 
 struct CLRange {
 	CLIndex location;

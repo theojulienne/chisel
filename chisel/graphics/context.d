@@ -2,12 +2,14 @@ module chisel.graphics.context;
 
 import chisel.core.all;
 import chisel.graphics.all;
+import chisel.graphics.types;
 import chisel.graphics.path;
+import chisel.text.all;
 
 extern (C) {
 	void _chisel_native_graphicscontext_save_graphics_state( native_handle );
 	void _chisel_native_graphicscontext_restore_graphics_state( native_handle );
-	void _chisel_native_graphicscontext_draw_text( native_handle, char* );
+	void _chisel_native_graphicscontext_draw_formattedstring( native_handle, native_handle fs, CLPoint point );
 	//void _chisel_native_graphicscontext_set_current_context( native_handle );
 	native_handle _chisel_native_graphicscontext_get_current_context( );
 }
@@ -56,7 +58,7 @@ class GraphicsContext : CObject {
 		stroke( path );
 	}
 	
-	void drawText( unicode text ) {
-		_chisel_native_graphicscontext_draw_text( native, toStringz(text) );
+	void drawFormattedString( FormattedString formattedString, CLPoint point ) {
+		_chisel_native_graphicscontext_draw_formattedstring( native, formattedString.native, point );
 	}
 }

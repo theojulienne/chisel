@@ -1,4 +1,4 @@
-OBJS=font.o
+OBJS=font.o formattedstring.o helpers.o
 TARGET=libchiselnative-text.a
 CFLAGS=-m32 -g -Wall -I../../core/macosx/ -I../../core/native/ -I../../graphics/native/ -I../native/
 

@@ -1,0 +1,1 @@
+NSRange CLRangeToNSRange( CLRange range );

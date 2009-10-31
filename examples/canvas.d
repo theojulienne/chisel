@@ -10,13 +10,21 @@ import chisel.ui.all;
 class CanvasView : View {
 	Font font;
 	String renderText;
+	FormattedString fmtString;
 	
 	this( ) {
 		super( );
 		
-		font = Font.createWithName( "Verdana", 42 );
+		font = Font.createWithName( "Verdana", 15 );
 		
-		renderText = String.fromUTF8( "Aa Bb Cc Dd Ee Ff Ggg Hh Ii Jj" );
+		renderText = String.fromUTF8( "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj" );
+		
+		fmtString = FormattedString.createWithString( renderText );
+		
+		fmtString.setFont( fmtString.range, font );
+		
+		fmtString.setFont( CLRange( 0, 8 ), Font.createWithName( "Courier New", font.size ) );
+		fmtString.setFont( CLRange( 9, 8 ), Font.createWithName( "Times New Roman", font.size ) );
 	}
 	
 	void drawRect( GraphicsContext context, CLRect dirtyRect ) {
@@ -26,7 +34,12 @@ class CanvasView : View {
 		
 		context.yIncreasesUp = false;
 		
-		
+		CLPoint point = CLPoint( 0, 0 );
+		float numLines = (frame.size.height / font.size) + 1;
+		for ( int i = 0; i < numLines; i++ ) {
+			point.y += font.size;
+			context.drawFormattedString( fmtString, point );
+		}
 		
 		Path p = new Path;
 		p.moveTo( 0, 100 );

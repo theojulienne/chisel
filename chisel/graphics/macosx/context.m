@@ -25,6 +25,21 @@ native_handle _chisel_native_graphicscontext_get_current_context( ) {
 	return (native_handle)[NSGraphicsContext currentContext];
 }
 
+void _chisel_native_graphicscontext_draw_formattedstring( native_handle native, native_handle fs, CLPoint point ) {
+	NSGraphicsContext *gContext = (NSGraphicsContext *)native;
+	CGContextRef context = [gContext graphicsPort];
+	CFAttributedStringRef attrString = (CFAttributedStringRef)fs;
+	
+	CTLineRef line = CTLineCreateWithAttributedString( attrString );
+	CGAffineTransform t = CGAffineTransformScale( CGAffineTransformIdentity, 1, -1 );
+	CGContextSetTextMatrix( context, t );
+	CGContextSetTextPosition( context, point.x, point.y );
+	CTLineDraw( line, context );
+	
+	CFRelease( line );
+}
+
+/*
 void _chisel_native_graphicscontext_draw_text( native_handle native, char *utf8 ) {
 	NSGraphicsContext *context = (NSGraphicsContext *)native;
 	//CGContextRef cg = (CGContextRef)[context graphicsPort];
@@ -44,3 +59,4 @@ void _chisel_native_graphicscontext_draw_text( native_handle native, char *utf8 
 	[str release];
 	[font release];
 }
+*/
