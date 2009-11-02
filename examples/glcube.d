@@ -7,10 +7,30 @@ import chisel.ui.all;
 import chisel.ui.opengl;
 import chisel.ui.openglu;
 
+import tango.time.Time;
+import tango.time.Clock;
+
 class CubeView : OpenGLView {
 	float rquad = 0;
 	
+	Time startTime;
+	float axisX = 1.0;
+	float axisY = 0.0;
+	float axisZ = 0.0;
+	
+	float angleX = 0.0;
+	float angleY = 0.0;
+	float angleZ = 0.0;
+	
+	float secondsSinceStart = 0.0;
+	
+	this( ) {
+		startTime = Clock.now;
+		super( );
+	}
+	
 	this( Rect frame ) {
+		startTime = Clock.now;
 		super( frame );
 	}
 	
@@ -50,6 +70,7 @@ class CubeView : OpenGLView {
 	
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
 		OpenGLContext glContext = openGLContext;
+
 		
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -60,7 +81,50 @@ class CubeView : OpenGLView {
 		glLoadIdentity();
 		glTranslatef( 0.0f, 0.0f, -7.0f );
 		
-		glRotatef( rquad, 1.0f, 1.0f, 1.0f );
+		
+		float newSecondsSinceStart = (Clock.now-startTime).millis/1000.0;
+		
+		float frameDelta = newSecondsSinceStart - secondsSinceStart;
+		
+		secondsSinceStart = newSecondsSinceStart;
+		
+		float angle;
+		
+		// 360 degree rotations in each axis at 90 degrees a second
+		if ( axisX == 1.0 ) {
+			angleX += frameDelta * 90; //degrees per second
+			angle = angleX;
+			
+			if ( angle > 360 ) {
+				axisX = 0.0;
+				axisY = 1.0;
+				angleX = 0.0;
+			}
+		} else if ( axisY == 1.0 ) {
+			angleY += frameDelta * 90;
+			angle = angleY;
+			
+			if ( angle > 360 ) {
+				axisY = 0.0;
+				axisZ = 1.0;
+				angleY = 0.0;
+			}
+		} else {
+			angleZ += frameDelta * 90;
+			angle = angleZ;
+			
+			if ( angle > 360 ) {
+				axisZ = 0.0;
+				axisX = 1.0;
+				angleZ = 0.0;
+			}
+		}
+		
+		// first put the cube on a tilt so it looks cooler
+		glRotatef( 45, 1.0, 1.0, 1.0 );
+		
+		glRotatef( angle, axisX, axisY, axisZ );
+		
 		
 		glBegin( GL_QUADS );
 		
@@ -102,7 +166,7 @@ class CubeView : OpenGLView {
 		
 		glEnd();
 		
-		rquad -= 0.015;
+		//rquad -= 0.015;
 		
 		glFlush( );
 	}
