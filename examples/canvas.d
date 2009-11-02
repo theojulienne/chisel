@@ -70,9 +70,7 @@ class CanvasApp : Application {
 		mainWindow = new Window( "Canvas Example" );
 		mainWindow.setSize( 500, 500 );
 		
-		mainWindow.onClose += {
-			stop( );
-		};
+		mainWindow.onClose += &stop;
 		
 		mainWindow.contentView = new CanvasView;
 		
