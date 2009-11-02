@@ -10,11 +10,13 @@ class HelloWorldApp : Application {
 		mainWindow = new Window( "Hello, ☃!" );
 		mainWindow.setSize( 500, 500 );
 		
-		mainWindow.onClose += {
-			stop( );
-		};
+		mainWindow.onClose += &onWindowCloses;
 		
 		mainWindow.show( );
+	}
+	
+	void onWindowCloses( ) {
+		stop( );
 	}
 }
 

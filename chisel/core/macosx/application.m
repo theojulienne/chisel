@@ -9,6 +9,8 @@ static NSObject *app;
 void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 void _chisel_native_application_init( ) {
+    printf( "Native app init!\n" );
+    
 	NSApplicationLoad( );
 	
 	arpool = [[NSAutoreleasePool alloc] init];

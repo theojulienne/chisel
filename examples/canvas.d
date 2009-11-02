@@ -1,6 +1,11 @@
 module canvas;
 
-import std.math;
+version (Tango) {
+	import tango.math.Math;
+} else {
+	import std.math;
+}
+
 
 import chisel.core.all;
 import chisel.graphics.all;
