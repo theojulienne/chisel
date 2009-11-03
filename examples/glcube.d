@@ -65,7 +65,7 @@ class CubeView : OpenGLView {
 	void reshape( ) {
 		Size size = this.frame.size;
 		
-		printf( "resize %dx%d\n", size.width, size.height );
+		printf( "resize %fx%f\n", size.width, size.height );
 		
 		glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 

@@ -17,6 +17,8 @@
 
 - (void)reshape {
 	_chisel_native_openglview_reshape_callback( self );
+	
+	[self update];
 }
 
 - (void)prepareOpenGL {
