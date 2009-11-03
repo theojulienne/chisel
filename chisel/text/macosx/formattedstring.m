@@ -28,3 +28,17 @@ native_handle _chisel_native_formattedstring_get_string( native_handle fs ) {
 	
 	return string;
 }
+
+void _chisel_native_formattedstring_draw( native_handle fs, native_handle ctx, CLPoint point ) {
+	NSGraphicsContext *gContext = (NSGraphicsContext *)ctx;
+	CGContextRef context = [gContext graphicsPort];
+	CFAttributedStringRef attrString = (CFAttributedStringRef)fs;
+	
+	CTLineRef line = CTLineCreateWithAttributedString( attrString );
+	CGAffineTransform t = CGAffineTransformScale( CGAffineTransformIdentity, 1, -1 );
+	CGContextSetTextMatrix( context, t );
+	CGContextSetTextPosition( context, point.x, point.y );
+	CTLineDraw( line, context );
+	
+	CFRelease( line );
+}

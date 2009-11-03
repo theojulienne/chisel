@@ -43,7 +43,7 @@ class CanvasView : View {
 		float numLines = (frame.size.height / font.size) + 1;
 		for ( int i = 0; i < numLines; i++ ) {
 			point.y += font.size;
-			context.drawFormattedString( fmtString, point );
+			fmtString.drawToContext( context, point );
 		}
 		
 		Path p = new Path;

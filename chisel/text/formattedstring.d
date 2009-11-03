@@ -2,12 +2,14 @@ module chisel.text.formattedstring;
 
 import chisel.core.all;
 import chisel.graphics.types;
+import chisel.graphics.context;
 import chisel.text.all;
 
 extern (C) {
 	native_handle _chisel_native_formattedstring_create( native_handle text );
 	void _chisel_native_formattedstring_set_font( native_handle fs, Range range, native_handle font );
 	native_handle _chisel_native_formattedstring_get_string( native_handle fs );
+	void _chisel_native_formattedstring_draw( native_handle fs, native_handle ctx, Point point );
 }
 
 class FormattedString : CObject {
@@ -39,5 +41,9 @@ class FormattedString : CObject {
 	
 	Range range( ) {
 		return Range( 0, string.length );
+	}
+	
+	void drawToContext( GraphicsContext context, Point point ) {
+		_chisel_native_formattedstring_draw( native, context.native, point );
 	}
 }

@@ -37,6 +37,8 @@ class CubeView : OpenGLView {
 	void reshape( ) {
 		Size size = this.frame.size;
 		
+		printf( "resize %dx%d\n", size.width, size.height );
+		
 		glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
 		glViewport( 0, 0, cast(int)size.width, cast(int)size.height );
@@ -183,7 +185,7 @@ class GLCubeApp : Application {
 		mainWindow.onClose += &closeApp;
 		
 		glView = new CubeView( Rect( 0, 0, 800, 600 ) );
-		mainWindow.contentView.addSubview( glView );
+		mainWindow.contentView = glView; //.addSubview( glView );
 		
 		mainWindow.show( );
 		

@@ -1,0 +1,15 @@
+Import('env')
+
+env = env.Clone( )
+env.Append( LIBS=['chisel-ui', 'chisel-graphics', 'chisel-text', 'chisel-core'] )
+env.Append( FRAMEWORKS=['OpenGL'] )
+
+EXAMPLES = [
+	'canvas',
+	'fonts',
+	'glcube',
+	'strings',
+]
+
+for example in EXAMPLES:
+	env.Program( example+'.d' )
