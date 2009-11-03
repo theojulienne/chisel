@@ -13,10 +13,10 @@ env = Environment(
 from os.path import exists
 import sys
 
-if exists( '/usr/local/lib/libgphobos.a' ):
+if exists( '/usr/lib/libgphobos.a' ):
 	env.Append( LIBS=['gphobos'] )
 
-if exists( '/usr/local/lib/libgtango.a' ):
+if exists( '/usr/lib/libgtango.a' ):
 	env.Append( LIBS=['gtango'] )
 	env.Append( DFLAGS=['-version=Tango'] )
 

@@ -19,7 +19,7 @@ unicode copyFreeingStringz( char* str ) {
 	unicode result = fromStringz( str ).dup;
 	
 	// free the original string
-	free( str );
+	//free( str );
 	
 	return result;
 }
