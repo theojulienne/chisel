@@ -10,6 +10,13 @@ import chisel.ui.openglu;
 import tango.time.Time;
 import tango.time.Clock;
 
+import tango.stdc.stdlib;
+
+class Star {
+	float x, y;
+	float vx, vy;
+}
+
 class CubeView : OpenGLView {
 	float rquad = 0;
 	
@@ -24,14 +31,35 @@ class CubeView : OpenGLView {
 	
 	float secondsSinceStart = 0.0;
 	
-	this( ) {
+	int numStars = 150;
+	
+	Star[] stars;
+	
+	void init( ) {
 		startTime = Clock.now;
+		stars.length = numStars;
+		
+		float stretch = 10;
+		for ( int i = 0; i < stars.length; i++ ) {
+			stars[i] = new Star( );
+
+			stars[i].x = stretch * (rand( ) % 1000) / 1000.0f - stretch/2.0;
+			stars[i].y = stretch * (rand( ) % 1000) / 1000.0f - stretch/2.0;
+			stars[i].vx = (rand( ) % 50) / 1000.0f + 0.01;
+			stars[i].vy = 0.0;
+		}
+	}
+	
+	this( ) {
 		super( );
+		
+		init( );
 	}
 	
 	this( Rect frame ) {
-		startTime = Clock.now;
 		super( frame );
+		
+		init( );
 	}
 	
 	void reshape( ) {
@@ -44,7 +72,7 @@ class CubeView : OpenGLView {
 		glViewport( 0, 0, cast(int)size.width, cast(int)size.height );
 
 		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
+		glLoadIdentity( );
 
 		float aspect = size.width / size.height;
 
@@ -71,22 +99,40 @@ class CubeView : OpenGLView {
 	}
 	
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
+		float newSecondsSinceStart = (Clock.now-startTime).millis/1000.0;
+		
+		float frameDelta = newSecondsSinceStart - secondsSinceStart;
+		
 		OpenGLContext glContext = openGLContext;
-
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		
 		
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		
-		// draw the cube
 		glLoadIdentity();
 		glTranslatef( 0.0f, 0.0f, -7.0f );
+
+		// fake a starfield in the background
+		foreach ( star; stars ) {
+			star.x += star.vx*frameDelta*60.0;
+			star.y += star.vy*frameDelta*60.0;
+			if ( star.x < 5 ) {
+				glBegin( GL_LINE_STRIP );
+				glColor3ub( 0, 0, 0 );
+				glVertex3f( star.x-star.vx*4, star.y-star.vy*4, 1.0f );
+				glColor3ub( 255, 255, 255 );
+				glVertex3f( star.x, star.y, 1.0f );
+				glEnd();
+			} else {
+				star.x = -5;
+			}
+		}
 		
-		
-		float newSecondsSinceStart = (Clock.now-startTime).millis/1000.0;
-		
-		float frameDelta = newSecondsSinceStart - secondsSinceStart;
 		
 		secondsSinceStart = newSecondsSinceStart;
 		
@@ -128,6 +174,7 @@ class CubeView : OpenGLView {
 		glRotatef( angle, axisX, axisY, axisZ );
 		
 		
+		// draw the cube
 		glBegin( GL_QUADS );
 		
 		glColor3f( 0.0f, 1.0f, 0.0f );
