@@ -1,10 +1,32 @@
+import os
+
 env = Environment(
-	DFLAGS=['-version=Tango','-version=Posix','-I/usr/include/d/'],
+	ENV = os.environ,
+
+	DFLAGS=['-version=Posix','-I/usr/include/d/'],
 #	CFLAGS=['-Ichisel/core/native/'],
 	FRAMEWORKS=['Cocoa'],
-	LIBS=['gphobos', 'gtango'],
+#	LIBS=['gphobos', 'gtango'],
 	LINKFLAGS=['-L.']
 )
+
+from os.path import exists
+import sys
+
+if exists( '/usr/local/lib/libgphobos.a' ):
+	env.Append( LIBS=['gphobos'] )
+
+if exists( '/usr/local/lib/libgtango.a' ):
+	env.Append( LIBS=['gtango'] )
+	env.Append( DFLAGS=['-version=Tango'] )
+
+if env.Detect( ['dmd', 'gdmd', 'ldmd'] ) == 'ldmd':
+	env.Append( LINKFLAGS=['-L/usr/local/ldc/ldc/lib'] )
+	env.Append( LIBS=['tango-user-ldc','tango-base-ldc'] )
+
+if sys.platform == "darwin":
+	env.Append( CFLAGS=['-m32'] )
+	env.Append( LINKFLAGS=['-m32'] )
 
 from glob import glob
 
@@ -49,13 +71,15 @@ for package in CHISEL_PACKAGES:
 	sub_env.Append( LIBS=link_libs )
 	sub_env.Append( CFLAGS=cflags_str )
 	
-	lib = sub_env.SharedLibrary( target, sources )
+	lib = sub_env.Library( target, sources )
 	libs[package] = lib
 
 for package in CHISEL_PACKAGES:
 	for dep in CHISEL_DEPS[package]:
 		Depends( libs[package], libs[dep] )
 
-Export( 'env' )
+CHISEL_LIBS = libs.values( )
+
+Export( 'env', 'CHISEL_LIBS' )
 
 env.SConscript( 'examples/SConscript' )

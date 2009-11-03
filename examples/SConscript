@@ -1,4 +1,4 @@
-Import('env')
+Import( 'env', 'CHISEL_LIBS' )
 
 env = env.Clone( )
 env.Append( LIBS=['chisel-ui', 'chisel-graphics', 'chisel-text', 'chisel-core'] )
@@ -12,4 +12,5 @@ EXAMPLES = [
 ]
 
 for example in EXAMPLES:
-	env.Program( example+'.d' )
+	prog = env.Program( example+'.d' )
+	Depends( prog, CHISEL_LIBS )
