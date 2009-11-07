@@ -10,6 +10,8 @@ extern (C) {
 	
 	void _chisel_native_splitview_set_vertical( native_handle, int );
 	int _chisel_native_splitview_get_vertical( native_handle );
+	
+	void _chisel_native_splitview_set_divider_position( native_handle, int index, CLFloat position );
 }
 
 class SplitView : View {
@@ -33,5 +35,9 @@ class SplitView : View {
 	
 	void vertical( bool val ) {
 		_chisel_native_splitview_set_vertical( native, val ? 1 : 0 );
+	}
+	
+	void setDividerPosition( int divider, CLFloat position ) {
+		_chisel_native_splitview_set_divider_position( native, divider, position );
 	}
 }

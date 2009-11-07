@@ -7,19 +7,9 @@ import chisel.ui.all;
 import chisel.ui.opengl;
 import chisel.ui.openglu;
 
-import tango.time.Time;
-import tango.time.Clock;
-
 import tango.stdc.stdlib;
 
 class CubeView : OpenGLView {
-	float rquad = 0;
-	
-	Time startTime;
-	float axisX = 1.0;
-	float axisY = 0.0;
-	float axisZ = 0.0;
-	
 	float angleX = 0.0;
 	float angleY = 0.0;
 	float angleZ = 0.0;
@@ -93,9 +83,13 @@ class CubeView : OpenGLView {
 		glTranslatef( 0.0f, 0.0f, -7.0f );
 
 		// first put the cube on a tilt so it looks cooler
-		glRotatef( 45, 1.0, 1.0, 1.0 );
+		//glRotatef( 45, 1.0, 1.0, 1.0 );
 		
-		//glRotatef( angle, axisX, axisY, axisZ );
+		double max = 360;
+		
+		glRotatef( max*angleX, 1.0f, 0.0f, 0.0f );
+		glRotatef( max*angleY, 0.0f, 1.0f, 0.0f );
+		glRotatef( max*angleZ, 0.0f, 0.0f, 1.0f );
 		
 		
 		// draw the cube
@@ -139,8 +133,6 @@ class CubeView : OpenGLView {
 		
 		glEnd();
 		
-		//rquad -= 0.015;
-		
 		glFlush( );
 	}
 }
@@ -149,9 +141,11 @@ class GLCubeApp : Application {
 	Window mainWindow;
 	CubeView glView;
 	
+	Slider sliderX, sliderY, sliderZ;
+	
 	this( ) {
 		mainWindow = new Window( "Chisel Examples - GL Cube" );
-		mainWindow.setSize( 800, 600 );
+		mainWindow.setSize( 1000, 600 );
 		
 		mainWindow.onClose += &closeApp;
 		
@@ -162,19 +156,42 @@ class GLCubeApp : Application {
 		
 		split.addSubview( glView );
 		
-		auto slider = new Slider( );
-		//slider.vertical = false;
+		auto rightView = new View( );
 		
-		split.addSubview( slider );
+		sliderX = new Slider( Rect( 0, 10, 180, 20 ) );
+		sliderX.minValue = 0;
+		sliderX.maxValue = 1;
+		sliderX.onChange += &sliderChanged;
+		rightView.addSubview( sliderX );
+		
+		sliderY = new Slider( Rect( 0, 40, 180, 20 ) );
+		sliderY.minValue = 0;
+		sliderY.maxValue = 1;
+		sliderY.onChange += &sliderChanged;
+		rightView.addSubview( sliderY );
+		
+		sliderZ = new Slider( Rect( 0, 70, 180, 20 ) );
+		sliderZ.minValue = 0;
+		sliderZ.maxValue = 1;
+		sliderZ.onChange += &sliderChanged;
+		rightView.addSubview( sliderZ );
+		
+		split.addSubview( rightView );
 		
 		mainWindow.contentView = split;
+		
+		split.setDividerPosition( 0, 800 );
 		
 		mainWindow.show( );
 		
 		this.useIdleTask = true;
 	}
 	
-	void idleTask( ) {
+	void sliderChanged( ) {
+		glView.angleX = sliderX.value;
+		glView.angleY = sliderY.value;
+		glView.angleZ = sliderZ.value;
+		
 		glView.invalidate( );
 	}
 	
