@@ -19,6 +19,10 @@ class CObject {
 		this( null );
 	}
 	
+	~this( ) {
+		NativeBridge.deregister( this );
+	}
+	
 	native_handle native( ) {
 		return _native;
 	}

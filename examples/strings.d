@@ -4,7 +4,7 @@ import chisel.core.string;
 
 char[] snowman = "☃";
 
-extern (C) void printf( char*, ... );
+version (Tango) import tango.core.Memory;
 
 void main( ) {
 	String s = String.withUTF8( snowman );
@@ -17,4 +17,6 @@ void main( ) {
 	
 	// check for inequality between utf8 and String
 	assert( s != "oh hai" );
+	
+	version (Tango) GC.collect( );
 }
