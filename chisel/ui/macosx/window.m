@@ -34,14 +34,12 @@ native_handle _chisel_native_window_create( ) {
 	return (native_handle)window;
 }
 
-void _chisel_native_window_set_title( native_handle native, char *title ) {
+void _chisel_native_window_set_title( native_handle native, native_handle str ) {
 	ChiselWindow *window = (ChiselWindow *)native;
 	
-	NSString *newTitle = [[NSString alloc] initWithUTF8String:title];
+	NSString *newTitle = (NSString *)str;
 	
 	[window setTitle:newTitle];
-	
-	[newTitle release];
 }
 
 void _chisel_native_window_set_content_size( native_handle native, Size size ) {
