@@ -20,7 +20,7 @@ class CObject {
 	}
 	
 	~this( ) {
-		NativeBridge.deregister( this );
+		NativeBridge.destroy( this );
 	}
 	
 	native_handle native( ) {
@@ -30,6 +30,8 @@ class CObject {
 	void native( native_handle n ) {
 		_native = n;
 		
-		NativeBridge.register( this );
+		if ( n !is null ) {
+			NativeBridge.register( this );
+		}
 	}
 }

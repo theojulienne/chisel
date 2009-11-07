@@ -2,11 +2,29 @@
 
 #include <chisel-native.h>
 #include <chisel-native-application.h>
+#include <chisel-native-bridge.h>
 
 static NSAutoreleasePool *arpool;
 static NSObject *app;
 
 void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
+
+@interface ChiselObject : NSObject
+- (void)dealloc;
+@end
+
+@implementation ChiselObject
+- (void)dealloc {
+	_chisel_native_handle_destroyed( self );
+	
+	[super dealloc];
+}
+@end
+
+void _chisel_native_handle_destroy( native_handle native ) {
+	NSObject *obj = (NSObject *)native;
+	[obj release];
+}
 
 void _chisel_native_application_init( ) {
     printf( "Native app init!\n" );
@@ -35,6 +53,9 @@ void _chisel_native_application_init( ) {
 		
 		SetFrontProcess( &myProc );
 	}
+	
+	// add our ChiselObject in to pose as NSObject
+	[ChiselObject poseAsClass:[NSObject class]];
 }
 
 void _chisel_native_application_run( ) {

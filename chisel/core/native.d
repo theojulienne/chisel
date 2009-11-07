@@ -4,6 +4,17 @@ import chisel.core.cobject;
 
 typedef void* native_handle;
 
+extern (C) {
+	void _chisel_native_handle_destroy( native_handle native );
+	
+	void _chisel_native_handle_destroyed( native_handle native ) {
+		if ( NativeBridge.isRegistered( native ) ) {
+			CObject obj = NativeBridge.forNative( native );
+			obj.native = null; // more?
+			NativeBridge.deregister( obj );
+		}
+	}
+}
 
 /* GC note:
 The native bridge functions assume that CObject ptrs wont move.
@@ -67,6 +78,12 @@ static class NativeBridge {
 		
 		nativeToD.remove( obj.native );
 		DToNative.remove( ptrRef );
+	}
+	
+	static void destroy( CObject obj ) {
+		_chisel_native_handle_destroy( obj.native );
+		
+		deregister( obj );
 	}
 	
 	static bool isRegistered( native_handle native ) {

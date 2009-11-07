@@ -3,6 +3,7 @@ GEN="python utils/genNativeH.py"
 $GEN chisel/core/application.d chisel/core/native/chisel-native-application.h
 $GEN chisel/core/exceptions.d chisel/core/native/chisel-native-exceptions.h
 $GEN chisel/core/string.d chisel/core/native/chisel-native-string.h
+$GEN chisel/core/native.d chisel/core/native/chisel-native-bridge.h
 
 $GEN chisel/graphics/context.d chisel/graphics/native/chisel-native-context.h
 
