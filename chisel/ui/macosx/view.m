@@ -39,6 +39,8 @@ NSRect RectToNSRect( Rect inRect ) {
 	Rect rect = NSRectToRect( dirtyRect );
 	
 	_chisel_native_view_draw_rect_callback( self, rect );
+	
+	[super drawRect: dirtyRect];
 }
 @end
 

@@ -15,19 +15,33 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 @implementation ChiselObject
 - (void)dealloc {
+	//printf( "[%p dealloc] -- beginning\n", self );
+	
 	_chisel_native_handle_destroyed( self );
 	
+	//printf( "[%p dealloc] -- nativebridge unregistered\n", self );
+	
 	[super dealloc];
+	
+	//printf( "[%p dealloc] -- super dealloced\n", self );
 }
 @end
 
 void _chisel_native_handle_destroy( native_handle native ) {
 	NSObject *obj = (NSObject *)native;
+	
+	//printf( "_chisel_native_handle_destroy: %p\n", obj );
+	
 	[obj release];
+	
+	//printf( "released.\n" );
 }
 
 void _chisel_native_application_init( ) {
-    printf( "Native app init!\n" );
+    //printf( "Native app init!\n" );
+
+	// add our ChiselObject in to pose as NSObject
+	[ChiselObject poseAsClass:[NSObject class]];
     
 	NSApplicationLoad( );
 	
@@ -53,9 +67,6 @@ void _chisel_native_application_init( ) {
 		
 		SetFrontProcess( &myProc );
 	}
-	
-	// add our ChiselObject in to pose as NSObject
-	[ChiselObject poseAsClass:[NSObject class]];
 }
 
 void _chisel_native_application_run( ) {

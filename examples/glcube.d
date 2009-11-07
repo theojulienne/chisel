@@ -156,7 +156,18 @@ class GLCubeApp : Application {
 		mainWindow.onClose += &closeApp;
 		
 		glView = new CubeView( Rect( 0, 0, 800, 600 ) );
-		mainWindow.contentView.addSubview( glView );
+		
+		auto split = new SplitView( );
+		split.vertical = true;
+		
+		split.addSubview( glView );
+		
+		auto slider = new Slider( );
+		//slider.vertical = false;
+		
+		split.addSubview( slider );
+		
+		mainWindow.contentView = split;
 		
 		mainWindow.show( );
 		

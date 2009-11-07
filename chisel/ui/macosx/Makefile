@@ -1,4 +1,4 @@
-OBJS=window.o view.o openglview.o openglcontext.o
+OBJS=window.o view.o openglview.o openglcontext.o slider.o splitview.o
 TARGET=libchiselnative-ui.a
 CFLAGS=-m32 -g -Wall -I../../core/macosx/ -I../../core/native/ -I../../graphics/native/ -I../native/
 

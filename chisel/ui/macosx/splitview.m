@@ -1,0 +1,28 @@
+#include <Cocoa/Cocoa.h>
+#include <assert.h>
+
+#include <chisel-native.h>
+#include <chisel-native-ui.h>
+
+#include <chisel-native-view.h>
+#include <chisel-native-splitview.h>
+
+native_handle _chisel_native_splitview_create( ) {
+	NSSplitView *view = [[NSSplitView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
+	assert( view != nil );
+	
+	return (native_handle)view;
+}
+
+void _chisel_native_splitview_set_vertical( native_handle native, int vertical ) {
+	NSSplitView *view = (NSSplitView *)native;
+	
+	[view setVertical: vertical ? YES : NO];
+}
+
+int _chisel_native_splitview_get_vertical( native_handle native ) {
+	NSSplitView *view = (NSSplitView *)native;
+	
+	return [view isVertical] ? 1 : 0;
+}
+
