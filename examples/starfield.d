@@ -1,4 +1,4 @@
-module glcube;
+module starfield;
 
 import chisel.core.all;
 import chisel.graphics.all;
@@ -12,6 +12,11 @@ import tango.time.Clock;
 
 import tango.stdc.stdlib;
 
+class Star {
+	float x, y;
+	float vx, vy;
+}
+
 class CubeView : OpenGLView {
 	float rquad = 0;
 	
@@ -24,8 +29,25 @@ class CubeView : OpenGLView {
 	float angleY = 0.0;
 	float angleZ = 0.0;
 	
+	float secondsSinceStart = 0.0;
+	
+	int numStars = 150;
+	
+	Star[] stars;
+	
 	void init( ) {
+		startTime = Clock.now;
+		stars.length = numStars;
 		
+		float stretch = 10;
+		for ( int i = 0; i < stars.length; i++ ) {
+			stars[i] = new Star( );
+
+			stars[i].x = stretch * (rand( ) % 1000) / 1000.0f - stretch/2.0;
+			stars[i].y = stretch * (rand( ) % 1000) / 1000.0f - stretch/2.0;
+			stars[i].vx = (rand( ) % 50) / 1000.0f + 0.01;
+			stars[i].vy = 0.0;
+		}
 	}
 	
 	this( ) {
@@ -77,7 +99,10 @@ class CubeView : OpenGLView {
 	}
 	
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
-
+		float newSecondsSinceStart = (Clock.now-startTime).millis/1000.0;
+		
+		float frameDelta = newSecondsSinceStart - secondsSinceStart;
+		
 		OpenGLContext glContext = openGLContext;
 		
 		glMatrixMode(GL_MODELVIEW);
@@ -92,10 +117,61 @@ class CubeView : OpenGLView {
 		glLoadIdentity();
 		glTranslatef( 0.0f, 0.0f, -7.0f );
 
+		// fake a starfield in the background
+		foreach ( star; stars ) {
+			star.x += star.vx*frameDelta*60.0;
+			star.y += star.vy*frameDelta*60.0;
+			if ( star.x < 5 ) {
+				glBegin( GL_LINE_STRIP );
+				glColor3ub( 0, 0, 0 );
+				glVertex3f( star.x-star.vx*4, star.y-star.vy*4, 1.0f );
+				glColor3ub( 255, 255, 255 );
+				glVertex3f( star.x, star.y, 1.0f );
+				glEnd();
+			} else {
+				star.x = -5;
+			}
+		}
+		
+		
+		secondsSinceStart = newSecondsSinceStart;
+		
+		float angle;
+		
+		// 360 degree rotations in each axis at 90 degrees a second
+		if ( axisX == 1.0 ) {
+			angleX += frameDelta * 90; //degrees per second
+			angle = angleX;
+			
+			if ( angle > 360 ) {
+				axisX = 0.0;
+				axisY = 1.0;
+				angleX = 0.0;
+			}
+		} else if ( axisY == 1.0 ) {
+			angleY += frameDelta * 90;
+			angle = angleY;
+			
+			if ( angle > 360 ) {
+				axisY = 0.0;
+				axisZ = 1.0;
+				angleY = 0.0;
+			}
+		} else {
+			angleZ += frameDelta * 90;
+			angle = angleZ;
+			
+			if ( angle > 360 ) {
+				axisZ = 0.0;
+				axisX = 1.0;
+				angleZ = 0.0;
+			}
+		}
+		
 		// first put the cube on a tilt so it looks cooler
 		glRotatef( 45, 1.0, 1.0, 1.0 );
 		
-		//glRotatef( angle, axisX, axisY, axisZ );
+		glRotatef( angle, axisX, axisY, axisZ );
 		
 		
 		// draw the cube
@@ -150,13 +226,13 @@ class GLCubeApp : Application {
 	CubeView glView;
 	
 	this( ) {
-		mainWindow = new Window( "Chisel Examples - GL Cube" );
+		mainWindow = new Window( "Chisel Examples - GL Starfield" );
 		mainWindow.setSize( 800, 600 );
 		
 		mainWindow.onClose += &closeApp;
 		
 		glView = new CubeView( Rect( 0, 0, 800, 600 ) );
-		mainWindow.contentView.addSubview( glView );
+		mainWindow.contentView = glView; //.addSubview( glView );
 		
 		mainWindow.show( );
 		
