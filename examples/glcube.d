@@ -160,17 +160,23 @@ class GLCubeApp : Application {
 		rightView.direction = StackDirection.Vertical;
 		rightView.padding = 10;
 		
+		rightView.addSubview( new Label( "Pitch (X)" ) );
+		
 		sliderX = new Slider( SliderType.Horizontal );
 		sliderX.minValue = 0;
 		sliderX.maxValue = 1;
 		sliderX.onChange += &sliderChanged;
 		rightView.addSubview( sliderX );
 		
+		rightView.addSubview( new Label( "Yaw (Y)" ) );
+		
 		sliderY = new Slider( SliderType.Horizontal, Rect( 0, 40, 180, 20 ) );
 		sliderY.minValue = 0;
 		sliderY.maxValue = 1;
 		sliderY.onChange += &sliderChanged;
 		rightView.addSubview( sliderY );
+		
+		rightView.addSubview( new Label( "Roll (Z)" ) );
 		
 		sliderZ = new Slider( SliderType.Horizontal, Rect( 0, 70, 180, 20 ) );
 		sliderZ.minValue = 0;

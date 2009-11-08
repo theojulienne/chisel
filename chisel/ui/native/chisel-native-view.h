@@ -6,3 +6,5 @@ native_handle _chisel_native_view_get_subviews( native_handle native );
 void _chisel_native_view_invalidate_rect( native_handle native, Rect frame );
 
 void _chisel_native_view_draw_rect_callback( native_handle native, Rect rect );
+
+void _chisel_native_view_frame_changed_callback( native_handle native );
