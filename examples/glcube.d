@@ -170,7 +170,7 @@ class GLCubeApp : Application {
 		
 		rightView.addSubview( new Label( "Yaw (Y)" ) );
 		
-		sliderY = new Slider( SliderType.Horizontal, Rect( 0, 40, 180, 20 ) );
+		sliderY = new Slider( SliderType.Horizontal );
 		sliderY.minValue = 0;
 		sliderY.maxValue = 1;
 		sliderY.onChange += &sliderChanged;
@@ -178,7 +178,7 @@ class GLCubeApp : Application {
 		
 		rightView.addSubview( new Label( "Roll (Z)" ) );
 		
-		sliderZ = new Slider( SliderType.Horizontal, Rect( 0, 70, 180, 20 ) );
+		sliderZ = new Slider( SliderType.Horizontal );
 		sliderZ.minValue = 0;
 		sliderZ.maxValue = 1;
 		sliderZ.onChange += &sliderChanged;
