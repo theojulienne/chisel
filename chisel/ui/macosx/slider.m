@@ -57,3 +57,9 @@ CLFloat _chisel_native_slider_get_value( native_handle native ) {
 	
 	return [slider doubleValue];
 }
+
+CLFloat _chisel_native_slider_get_thickness( native_handle native ) {
+	NSSlider *slider = (NSSlider *)native;
+	
+	return [slider knobThickness];
+}

@@ -42,6 +42,12 @@ NSRect RectToNSRect( Rect inRect ) {
 	
 	[super drawRect: dirtyRect];
 }
+
+- (void)setFrame:(NSRect)frameRect {
+	[super setFrame:frameRect];
+	
+	_chisel_native_view_frame_changed_callback( self );
+}
 @end
 
 native_handle _chisel_native_view_create( ) {
@@ -82,4 +88,12 @@ void _chisel_native_view_invalidate_rect( native_handle native, Rect rect ) {
 	NSRect dirty = RectToNSRect( rect );
 	
 	[pView setNeedsDisplayInRect:dirty];
+}
+
+native_handle _chisel_native_view_get_subviews( native_handle native ) {
+	NSView *pView = (NSView *)native;
+	
+	NSArray *subviews = [pView subviews];
+	
+	return (native_handle)subviews;
 }

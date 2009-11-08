@@ -7,6 +7,7 @@ public {
 	import chisel.ui.openglview;
 	import chisel.ui.openglcontext;
 	
+	import chisel.ui.stackview;
 	import chisel.ui.splitview;
 	
 	import chisel.ui.slider;

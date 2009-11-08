@@ -156,21 +156,23 @@ class GLCubeApp : Application {
 		
 		split.addSubview( glView );
 		
-		auto rightView = new View( );
+		auto rightView = new StackView( );
+		rightView.direction = StackDirection.Vertical;
+		rightView.padding = 10;
 		
-		sliderX = new Slider( Rect( 0, 10, 180, 20 ) );
+		sliderX = new Slider( SliderType.Horizontal );
 		sliderX.minValue = 0;
 		sliderX.maxValue = 1;
 		sliderX.onChange += &sliderChanged;
 		rightView.addSubview( sliderX );
 		
-		sliderY = new Slider( Rect( 0, 40, 180, 20 ) );
+		sliderY = new Slider( SliderType.Horizontal, Rect( 0, 40, 180, 20 ) );
 		sliderY.minValue = 0;
 		sliderY.maxValue = 1;
 		sliderY.onChange += &sliderChanged;
 		rightView.addSubview( sliderY );
 		
-		sliderZ = new Slider( Rect( 0, 70, 180, 20 ) );
+		sliderZ = new Slider( SliderType.Horizontal, Rect( 0, 70, 180, 20 ) );
 		sliderZ.minValue = 0;
 		sliderZ.maxValue = 1;
 		sliderZ.onChange += &sliderChanged;

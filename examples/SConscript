@@ -5,6 +5,7 @@ env.Append( LIBS=['chisel-ui', 'chisel-graphics', 'chisel-text', 'chisel-core'] 
 env.Append( FRAMEWORKS=['OpenGL'] )
 
 EXAMPLES = [
+	'helloworld',
 	'canvas',
 	'fonts',
 	'glcube',

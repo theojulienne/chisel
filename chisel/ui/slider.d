@@ -11,6 +11,8 @@ extern (C) {
 	void _chisel_native_slider_set_minimum( native_handle, CLFloat );
 	void _chisel_native_slider_set_maximum( native_handle, CLFloat );
 	
+	CLFloat _chisel_native_slider_get_thickness( native_handle );
+	
 	void _chisel_native_slider_set_value( native_handle, CLFloat );
 	CLFloat _chisel_native_slider_get_value( native_handle );
 	
@@ -22,20 +24,28 @@ extern (C) {
 	}
 }
 
+enum SliderType {
+	Horizontal=0,
+	Vertical=1,
+}
+
 class Slider : View {
 	EventManager onChange;
+	SliderType type;
 	
-	this( ) {
+	this( SliderType type ) {
 		super( );
+		this.type = type;
 		native = _chisel_native_slider_create( );
 	}
 	
 	this( native_handle native ) {
 		super( native );
+		assert( false ); // FIXME: determine type from native
 	}
 	
-	this( Rect frame ) {
-		this( );
+	this( SliderType type, Rect frame ) {
+		this( type );
 		this.frame = frame;
 	}
 	
@@ -57,5 +67,19 @@ class Slider : View {
 	
 	void value( double val ) {
 		_chisel_native_slider_set_value( native, val );
+	}
+	
+	SizeHint sizeHint( ) {
+		SizeHint hint = super.sizeHint( );
+		
+		CLFloat thickness = _chisel_native_slider_get_thickness( native );
+		
+		if ( type == SliderType.Horizontal ) {
+			hint.suggestedSize.height = thickness;
+		} else {
+			hint.suggestedSize.width = thickness;
+		}
+		
+		return hint;
 	}
 }
