@@ -14,8 +14,11 @@ $GEN chisel/text/formattedstring.d chisel/text/native/chisel-native-formattedstr
 $GEN chisel/ui/view.d chisel/ui/native/chisel-native-view.h
 $GEN chisel/ui/window.d chisel/ui/native/chisel-native-window.h
 $GEN chisel/ui/openglcontext.d chisel/ui/native/chisel-native-openglcontext.h
+# views
 $GEN chisel/ui/openglview.d chisel/ui/native/chisel-native-openglview.h
-$GEN chisel/ui/slider.d chisel/ui/native/chisel-native-slider.h
-$GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
 $GEN chisel/ui/splitview.d chisel/ui/native/chisel-native-splitview.h
 $GEN chisel/ui/frame.d chisel/ui/native/chisel-native-frame.h
+# controls
+$GEN chisel/ui/slider.d chisel/ui/native/chisel-native-slider.h
+$GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
+$GEN chisel/ui/button.d chisel/ui/native/chisel-native-button.h

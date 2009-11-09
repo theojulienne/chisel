@@ -12,5 +12,6 @@ public {
 	import chisel.ui.frame;
 	
 	import chisel.ui.label;
+	import chisel.ui.button;
 	import chisel.ui.slider;
 }

@@ -195,6 +195,10 @@ class GLCubeApp : Application {
 		sliderZ.onChange += &sliderChanged;
 		rotatePropsView.addSubview( sliderZ );
 		
+		auto resetButton = new Button( "Reset" );
+		resetButton.onPressed += &resetAngles;
+		rotatePropsView.addSubview( resetButton );
+		
 		split.addSubview( rightView );
 		
 		mainWindow.contentView = split;
@@ -212,6 +216,14 @@ class GLCubeApp : Application {
 		glView.angleZ = sliderZ.value;
 		
 		glView.invalidate( );
+	}
+	
+	void resetAngles( ) {
+		sliderX.value = 0;
+		sliderY.value = 0;
+		sliderZ.value = 0;
+		
+		sliderChanged( );
 	}
 	
 	void closeApp( ) {
