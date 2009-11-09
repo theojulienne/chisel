@@ -18,3 +18,4 @@ $GEN chisel/ui/openglview.d chisel/ui/native/chisel-native-openglview.h
 $GEN chisel/ui/slider.d chisel/ui/native/chisel-native-slider.h
 $GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
 $GEN chisel/ui/splitview.d chisel/ui/native/chisel-native-splitview.h
+$GEN chisel/ui/frame.d chisel/ui/native/chisel-native-frame.h

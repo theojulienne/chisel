@@ -9,6 +9,7 @@ public {
 	
 	import chisel.ui.stackview;
 	import chisel.ui.splitview;
+	import chisel.ui.frame;
 	
 	import chisel.ui.label;
 	import chisel.ui.slider;

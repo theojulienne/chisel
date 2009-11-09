@@ -72,4 +72,35 @@ class StackView : View {
 		}
 		
 	}
+	
+	SizeHint sizeHint( ) {
+		SizeHint hint = super.sizeHint( );
+		
+		View[] children = this.subviews;
+		double size = _padding;
+		
+		foreach ( child; children ) {
+			double childSize;
+			
+			if ( direction == StackDirection.Vertical ) {
+				childSize = child.sizeHint.suggestedSize.height;
+			} else {
+				childSize = child.sizeHint.suggestedSize.width;
+			}
+			
+			if ( childSize < 0 ) {
+				childSize = 0;
+			}
+			
+			size += childSize + _padding;
+		}
+		
+		if ( direction == StackDirection.Vertical ) {
+			hint.suggestedSize.height = size;
+		} else {
+			hint.suggestedSize.width = size;
+		}
+		
+		return hint;
+	}
 }

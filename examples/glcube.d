@@ -158,31 +158,42 @@ class GLCubeApp : Application {
 		
 		auto rightView = new StackView( );
 		rightView.direction = StackDirection.Vertical;
-		rightView.padding = 10;
+		rightView.padding = 5;
 		
-		rightView.addSubview( new Label( "Pitch (X)" ) );
+		auto rotateView = new Frame( );
+		rotateView.title = "Cube Rotation";
+		
+		rightView.addSubview( rotateView );
+		
+		auto rotatePropsView = new StackView( );
+		rotatePropsView.direction = StackDirection.Vertical;
+		rotatePropsView.padding = 5;
+		
+		rotateView.contentView = rotatePropsView;
+		
+		rotatePropsView.addSubview( new Label( "Pitch (X)" ) );
 		
 		sliderX = new Slider( SliderType.Horizontal );
 		sliderX.minValue = 0;
 		sliderX.maxValue = 1;
 		sliderX.onChange += &sliderChanged;
-		rightView.addSubview( sliderX );
+		rotatePropsView.addSubview( sliderX );
 		
-		rightView.addSubview( new Label( "Yaw (Y)" ) );
+		rotatePropsView.addSubview( new Label( "Yaw (Y)" ) );
 		
 		sliderY = new Slider( SliderType.Horizontal );
 		sliderY.minValue = 0;
 		sliderY.maxValue = 1;
 		sliderY.onChange += &sliderChanged;
-		rightView.addSubview( sliderY );
+		rotatePropsView.addSubview( sliderY );
 		
-		rightView.addSubview( new Label( "Roll (Z)" ) );
+		rotatePropsView.addSubview( new Label( "Roll (Z)" ) );
 		
 		sliderZ = new Slider( SliderType.Horizontal );
 		sliderZ.minValue = 0;
 		sliderZ.maxValue = 1;
 		sliderZ.onChange += &sliderChanged;
-		rightView.addSubview( sliderZ );
+		rotatePropsView.addSubview( sliderZ );
 		
 		split.addSubview( rightView );
 		
