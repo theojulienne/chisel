@@ -1,4 +1,4 @@
-OBJS=application.o exceptions.o string.o
+OBJS=application.o exceptions.o string.o array.o
 TARGET=libchiselnative-core.a
 CFLAGS=-m32 -g -Wall -I../native/
 
