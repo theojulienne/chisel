@@ -12,11 +12,18 @@
 }
 
 - (void)windowWillClose:(NSNotification *)notification;
+- (void)windowDidResize:(NSNotification *)notification;
 @end
 
 @implementation ChiselWindow
 - (void)windowWillClose:(NSNotification *)notification {
 	_chisel_native_window_will_close_callback( self );
+}
+
+- (void)windowDidResize:(NSNotification *)notification {
+	NSView *view = [self contentView];
+	
+	[view setFrame: [view frame]];
 }
 @end
 
@@ -54,6 +61,11 @@ void _chisel_native_window_set_visible( native_handle native, int visibility ) {
 	ChiselWindow *window = (ChiselWindow *)native;
 	
 	if ( visibility ) {
+		// ensure that the resize events do happen as expected, before the window is shown
+		NSView *view = [window contentView];
+		
+		[view setFrame: [view frame]];
+		
 		[window makeKeyAndOrderFront:nil];
 	}
 }

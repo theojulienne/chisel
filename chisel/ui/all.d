@@ -14,4 +14,6 @@ public {
 	import chisel.ui.label;
 	import chisel.ui.button;
 	import chisel.ui.slider;
+	import chisel.ui.progressbar;
+	import chisel.ui.checkbox;
 }

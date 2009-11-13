@@ -77,7 +77,7 @@ class Window : CObject {
 	}
 	
 	void willClose( ) {
-		onClose.call( );
+		onClose.call( this );
 	}
 	
 	void performClose( ) {

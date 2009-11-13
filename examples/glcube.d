@@ -196,7 +196,7 @@ class GLCubeApp : Application {
 		rotatePropsView.addSubview( sliderZ );
 		
 		auto resetButton = new Button( "Reset" );
-		resetButton.onPressed += &resetAngles;
+		resetButton.onPress += &resetAngles;
 		rotatePropsView.addSubview( resetButton );
 		
 		split.addSubview( rightView );

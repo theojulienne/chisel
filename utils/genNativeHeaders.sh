@@ -22,3 +22,5 @@ $GEN chisel/ui/frame.d chisel/ui/native/chisel-native-frame.h
 $GEN chisel/ui/slider.d chisel/ui/native/chisel-native-slider.h
 $GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
 $GEN chisel/ui/button.d chisel/ui/native/chisel-native-button.h
+$GEN chisel/ui/progressbar.d chisel/ui/native/chisel-native-progressbar.h
+$GEN chisel/ui/checkbox.d chisel/ui/native/chisel-native-checkbox.h

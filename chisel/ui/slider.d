@@ -50,7 +50,7 @@ class Slider : View {
 	}
 	
 	void valueChanged( ) {
-		onChange.call( );
+		onChange.call( this );
 	}
 	
 	void minValue( double val ) {

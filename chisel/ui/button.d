@@ -24,7 +24,7 @@ extern (C) {
 }
 
 class Button : View {
-	EventManager onPressed;
+	EventManager onPress;
 	
 	this( ) {
 		super( );
@@ -67,7 +67,7 @@ class Button : View {
 	}
 	
 	void pressed( ) {
-		onPressed.call( );
+		onPress.call( this );
 	}
 	
 	SizeHint sizeHint( ) {

@@ -1,7 +1,15 @@
 module chisel.core.events;
 
+import chisel.core.cobject;
+
 class Event {
 	private bool _should_stop = false;
+	
+	CObject target;
+	
+	this( CObject target ) {
+		this.target = target;
+	}
 	
 	void stop( ) {
 		_should_stop = true;
@@ -20,9 +28,11 @@ struct EventManager {
 		handlers ~= EventDelegate( handler );
 	}
 	
-	void call( ) {
-		Event e = new Event;
-		
+	void call( CObject target ) {
+		call( new Event( target ) );
+	}
+	
+	void call( Event e ) {
 		foreach_reverse ( handler; handlers ) {
 			handler( e );
 			

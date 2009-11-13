@@ -11,6 +11,7 @@ EXAMPLES = [
 	'glcube',
 	'strings',
 	'starfield',
+	'widgets',
 ]
 
 for example in EXAMPLES:
