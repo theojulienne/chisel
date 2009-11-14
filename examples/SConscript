@@ -12,6 +12,7 @@ EXAMPLES = [
 	'strings',
 	'starfield',
 	'widgets',
+	'multimenu',
 ]
 
 for example in EXAMPLES:
