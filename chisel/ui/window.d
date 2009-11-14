@@ -3,22 +3,31 @@ module chisel.ui.window;
 import chisel.core.all;
 import chisel.ui.native;
 import chisel.ui.view;
+import chisel.ui.menubar;
 
 extern (C) {
 	native_handle _chisel_native_window_create( );
+	
 	void _chisel_native_window_set_title( native_handle, native_handle str );
+	
 	void _chisel_native_window_set_visible( native_handle, int );
+	
 	void _chisel_native_window_set_content_size( native_handle, Size );
+	
 	native_handle _chisel_native_window_get_content_view( native_handle );
 	void _chisel_native_window_set_content_view( native_handle, native_handle );
-	void _chisel_native_window_close( native_handle );
 	
+	void _chisel_native_window_close( native_handle );
 	void _chisel_native_window_will_close_callback( native_handle native ) {
 		Window window = cast(Window)NativeBridge.forNative( native );
 		assert( window !is null );
 		
 		window.willClose( );
 	}
+	
+	void _chisel_native_window_set_menubar( native_handle window, native_handle menubar );
+	native_handle _chisel_native_window_get_menubar( native_handle window );
+	
 }
 
 class Window : CObject {
@@ -30,6 +39,10 @@ class Window : CObject {
 	this( unicode title ) {
 		this( );
 		this.title = title;
+	}
+	
+	this( native_handle native ) {
+		super( native );
 	}
 	
 	void title( String title ) {
@@ -82,5 +95,14 @@ class Window : CObject {
 	
 	void performClose( ) {
 		close( );
+	}
+	
+	void menubar( MenuBar menubar ) {
+		_chisel_native_window_set_menubar( native, menubar.native );
+	}
+	
+	MenuBar menubar( ) {
+		native_handle nMenubar = _chisel_native_window_get_menubar( native );
+		return NativeBridge.fromNative!(MenuBar)( nMenubar );
 	}
 }

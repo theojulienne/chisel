@@ -1,4 +1,4 @@
-module chisel.ui.progress;
+module chisel.ui.progressbar;
 
 import chisel.core.all;
 import chisel.graphics.context;

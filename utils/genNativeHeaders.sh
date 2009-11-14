@@ -24,3 +24,8 @@ $GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
 $GEN chisel/ui/button.d chisel/ui/native/chisel-native-button.h
 $GEN chisel/ui/progressbar.d chisel/ui/native/chisel-native-progressbar.h
 $GEN chisel/ui/checkbox.d chisel/ui/native/chisel-native-checkbox.h
+# menuing
+$GEN chisel/ui/menu.d chisel/ui/native/chisel-native-menu.h
+$GEN chisel/ui/menuitem.d chisel/ui/native/chisel-native-menuitem.h
+$GEN chisel/ui/menubar.d chisel/ui/native/chisel-native-menubar.h
+$GEN chisel/ui/contextmenu.d chisel/ui/native/chisel-native-contextmenu.h

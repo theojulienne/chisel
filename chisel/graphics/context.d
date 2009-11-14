@@ -24,7 +24,7 @@ class GraphicsContext : CObject {
 	}
 	
 	this( native_handle nativeContext ) {
-		super( null );
+		super( );
 		
 		native = nativeContext;
 	}

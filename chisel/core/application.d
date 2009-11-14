@@ -32,7 +32,7 @@ class Application : CObject {
 	}
 	
 	this( ) {
-		super( null );
+		super( );
 		
 		assert( _sharedApplication is null );
 		

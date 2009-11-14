@@ -15,8 +15,13 @@ class CObject {
 		}
 	}
 	
+	this( native_handle native ) {
+		this( cast(CObject)null );
+		this.native = native;
+	}
+	
 	this( ) {
-		this( null );
+		this( cast(CObject)null );
 	}
 	
 	~this( ) {

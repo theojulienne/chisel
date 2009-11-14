@@ -16,4 +16,9 @@ public {
 	import chisel.ui.slider;
 	import chisel.ui.progressbar;
 	import chisel.ui.checkbox;
+	
+	import chisel.ui.menu;
+	import chisel.ui.menuitem;
+	import chisel.ui.menubar;
+	import chisel.ui.contextmenu;
 }

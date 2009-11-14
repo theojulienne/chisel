@@ -25,7 +25,7 @@ class OpenGLContext : CObject {
 	}
 	
 	this( native_handle nativeContext ) {
-		super( null );
+		super( );
 		
 		native = nativeContext;
 	}

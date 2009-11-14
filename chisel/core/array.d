@@ -11,7 +11,7 @@ extern (C) {
 
 class CArray : CObject {
 	this( native_handle native ) {
-		super( null );
+		super( );
 		
 		this.native = native;
 	}

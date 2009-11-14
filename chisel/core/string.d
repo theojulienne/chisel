@@ -38,7 +38,7 @@ class String : CObject {
 	alias fromUTF8 withUTF8;
 	
 	this( native_handle native ) {
-		super( null );
+		super( );
 		
 		this.native = native;
 	}
