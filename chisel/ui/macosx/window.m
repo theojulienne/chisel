@@ -36,8 +36,6 @@
 	if ( _menuBar != nil ) {
 		[_menuBar update];
 		[NSApp setMainMenu: _menuBar];
-		
-		NSLog( @"%@", _menuBar );
 	}
 }
 
