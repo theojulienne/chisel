@@ -18,6 +18,13 @@ class HelloWorldApp : Application {
 		mainWindow = new Window( "Hello, Chisel!" );
 		mainWindow.setSize( 300, 500 );
 		
+		MenuBar menubar = new MenuBar( );
+		
+		MenuItem mi = new MenuItem( "Example" );
+		menubar.appendItem( mi );
+		
+		mainWindow.menubar = menubar;
+		
 		
 		// create a stack of groups
 		groupStackView = new StackView( );

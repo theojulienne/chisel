@@ -9,6 +9,97 @@ static NSObject *app;
 
 void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
+@interface NSApplication(Moo)
+- (void) setAppleMenu:(NSMenu *)menu;
+@end
+
+@interface ChiselApplicationDelegate : NSObject
+{}
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification;
+- (NSMenuItem *)createAppleMenuItem;
+@end
+
+@implementation ChiselApplicationDelegate
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
+	NSMenuItem *menuItem = [self createAppleMenuItem];
+	
+	NSMenu *mainMenu = [[[NSMenu alloc] init] autorelease];
+	[mainMenu addItem:menuItem];
+	[NSApp setMainMenu:mainMenu];
+	[menuItem release];
+}
+
+- (NSMenuItem *)createAppleMenuItem {
+	NSString *appName = [[NSProcessInfo processInfo] processName];
+	
+	// menu stuff
+	NSMenu *appleMenu = [[NSMenu alloc] initWithTitle:@""];
+	NSMenuItem *menuItem;
+	
+	NSMenu *servicesMenu = [[NSMenu alloc] init];
+	NSMenuItem *servItem = [[NSMenuItem alloc] initWithTitle:@"Services" action:nil keyEquivalent:@""];
+	[servItem setSubmenu:servicesMenu];
+	[appleMenu addItem:servItem];
+	[servItem release];
+	
+	[appleMenu addItem:[NSMenuItem separatorItem]];
+	
+	menuItem = [[NSMenuItem alloc]
+			initWithTitle:[@"Hide " stringByAppendingString:appName]
+			action:@selector(hide:)
+			keyEquivalent:@"h"];
+	[menuItem setTarget:NSApp];
+	[appleMenu addItem:menuItem];
+	[menuItem release];
+
+	menuItem = [[NSMenuItem alloc]
+			initWithTitle:@"Hide Others" 
+			action:@selector(hideOtherApplications:) 
+			keyEquivalent:@"h"];
+	[menuItem setKeyEquivalentModifierMask:
+		(NSAlternateKeyMask | NSCommandKeyMask)];
+	[menuItem setTarget:NSApp];
+	[appleMenu addItem:menuItem];
+	[menuItem release];
+
+	menuItem = [[NSMenuItem alloc]
+			initWithTitle:@"Show All" 
+			action:@selector(unhideAllApplications:) 
+			keyEquivalent:@""];
+	[menuItem setTarget:NSApp];
+	[appleMenu addItem:menuItem];
+	[menuItem release];
+
+	[appleMenu addItem:[NSMenuItem separatorItem]];
+	
+	menuItem = [[NSMenuItem alloc]
+			initWithTitle:[@"Quit " stringByAppendingString:appName]
+			action:@selector(terminate:) 
+			keyEquivalent:@"q"];
+	[menuItem setTarget:NSApp];
+	[appleMenu addItem:menuItem];
+	[menuItem release];
+
+
+	
+	menuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+	[menuItem setSubmenu:appleMenu];
+	//NSMenu *mainMenu = [[[NSMenu alloc] init] autorelease];
+	//[mainMenu addItem:menuItem];
+	//[NSApp setMainMenu:mainMenu];
+	//[menuItem release];
+	
+	[NSApp setAppleMenu:appleMenu];
+	[appleMenu release];
+	[NSApp setServicesMenu:servicesMenu];
+	[servicesMenu release];
+	
+	return menuItem;
+}
+@end
+
+
+
 @interface ChiselObject : NSObject
 - (void)dealloc;
 @end
@@ -43,15 +134,15 @@ void _chisel_native_application_init( ) {
 	// add our ChiselObject in to pose as NSObject
 	[ChiselObject poseAsClass:[NSObject class]];
     
-	NSApplicationLoad( );
+	//NSApplicationLoad( );
 	
 	arpool = [[NSAutoreleasePool alloc] init];
 	
 	[NSApplication sharedApplication];
 	
-	[NSApp setMainMenu:[[NSMenu alloc] init]];
+	//[NSApp setMainMenu:[[[NSMenu alloc] init] autorelease]];
 	
-	app = [[NSObject alloc] init];
+	app = [[[ChiselApplicationDelegate alloc] init] autorelease];
 	[NSApp setDelegate: app];
 	
 	// let Finder know we're here

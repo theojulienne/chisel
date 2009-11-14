@@ -1,5 +1,6 @@
 module chisel.ui.contextmenu;
 
+import chisel.core.native;
 import chisel.core.cobject;
 import chisel.ui.menu;
 

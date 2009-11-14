@@ -9,10 +9,16 @@
 #include "view.h"
 
 @interface ChiselWindow : NSWindow {
+	NSMenu *_menuBar;
 }
 
 - (void)windowWillClose:(NSNotification *)notification;
 - (void)windowDidResize:(NSNotification *)notification;
+
+- (void)windowDidBecomeKey:(NSNotification *)notification;
+
+- (void)setMenuBar:(NSMenu *)menuBar;
+- (NSMenu *)menuBar;
 @end
 
 @implementation ChiselWindow
@@ -25,6 +31,22 @@
 	
 	[view setFrame: [view frame]];
 }
+
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+	if ( _menuBar != nil ) {
+		//[NSApp setMainMenu: _menuBar];
+	}
+}
+
+- (void)setMenuBar:(NSMenu *)menuBar {
+	_menuBar = menuBar;
+}
+
+- (NSMenu *)menuBar {
+	return _menuBar;
+}
+
+
 @end
 
 native_handle _chisel_native_window_create( ) {
@@ -34,6 +56,8 @@ native_handle _chisel_native_window_create( ) {
 	styleMask:( NSResizableWindowMask | NSClosableWindowMask | NSTitledWindowMask) 
 	backing:NSBackingStoreBuffered defer:NO];
 	assert( window != nil );
+	
+	[window setMenuBar: nil];
 	
 	[window setContentView: [[ChiselView alloc] init]];
 	[window setDelegate: window];
@@ -86,4 +110,17 @@ void _chisel_native_window_set_content_view( native_handle native, native_handle
 void _chisel_native_window_close( native_handle native ) {
 	ChiselWindow *window = (ChiselWindow *)native;
 	[window close];
+}
+
+void _chisel_native_window_set_menubar( native_handle nwindow, native_handle nmenubar ) {
+	ChiselWindow *window = (ChiselWindow *)nwindow;
+	NSMenu *menubar = (NSMenu *)nmenubar;
+	
+	[window setMenuBar:menubar];
+}
+
+native_handle _chisel_native_window_get_menubar( native_handle nwindow ) {
+	ChiselWindow *window = (ChiselWindow *)nwindow;
+	
+	return (native_handle)[window menuBar];
 }
