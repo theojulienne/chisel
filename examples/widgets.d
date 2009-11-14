@@ -15,13 +15,24 @@ class HelloWorldApp : Application {
 	View[unicode] groups;
 	
 	this( ) {
+		applicationName = "Chisel Widgets";
+		
 		mainWindow = new Window( "Hello, Chisel!" );
 		mainWindow.setSize( 300, 500 );
 		
 		MenuBar menubar = new MenuBar( );
 		
-		MenuItem mi = new MenuItem( "Example" );
+		MenuItem mi = new MenuItem( "File" );
+		Menu exampleSub = new Menu( );
+		mi.submenu = exampleSub;
+		exampleSub.appendItem( new MenuItem( "Foo" ) );
 		menubar.appendItem( mi );
+		
+		MenuItem mi2 = new MenuItem( "Example" );
+		Menu exampleSub2 = new Menu( );
+		mi2.submenu = exampleSub2;
+		exampleSub2.appendItem( new MenuItem( "Foo" ) );
+		menubar.appendItem( mi2 );
 		
 		mainWindow.menubar = menubar;
 		

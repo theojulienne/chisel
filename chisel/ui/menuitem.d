@@ -22,6 +22,13 @@ extern (C) {
 	
 	void _chisel_native_menuitem_set_title( native_handle menuitem, native_handle title );
 	native_handle _chisel_native_menuitem_get_title( native_handle menuitem );
+	
+	void _chisel_native_menuitem_pressed_callback( native_handle native ) {
+		MenuItem menuItem = cast(MenuItem)NativeBridge.forNative( native );
+		assert( menuItem !is null );
+		
+		menuItem.pressed( );
+	}
 }
 
 class MenuItem : CObject {
@@ -85,5 +92,9 @@ class MenuItem : CObject {
 	String title( ) {
 		native_handle nTitle = _chisel_native_menuitem_get_title( native );
 		return NativeBridge.fromNative!(String)( nTitle );
+	}
+	
+	void pressed( ) {
+		onPress.call( this );
 	}
 }

@@ -1,5 +1,8 @@
 module chisel.core.application;
 
+import chisel.core.native;
+import chisel.core.string;
+import chisel.core.utf;
 import chisel.core.cobject;
 
 extern (C) {
@@ -13,6 +16,16 @@ extern (C) {
 		Application app = Application.sharedApplication;
 		
 		app.idleTask( );
+	}
+	
+	native_handle _chisel_native_application_name_callback( ) {
+		Application app = Application.sharedApplication;
+		
+		if ( app._applicationName is null ) {
+			return null;
+		}
+		
+		return app._applicationName.native;
 	}
 }
 
@@ -30,6 +43,8 @@ class Application : CObject {
 		
 		return _sharedApplication;
 	}
+	
+	String _applicationName = null;
 	
 	this( ) {
 		super( );
@@ -60,5 +75,17 @@ class Application : CObject {
 	
 	void idleTask( ) {
 		
+	}
+	
+	void applicationName( String name ) {
+		_applicationName = name;
+	}
+	
+	void applicationName( unicode name ) {
+		_applicationName = String.fromUTF8( name );
+	}
+	
+	String applicationName( ) {
+		return _applicationName;
 	}
 }

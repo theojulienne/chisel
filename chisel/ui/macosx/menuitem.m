@@ -5,67 +5,81 @@
 #include <chisel-native-ui.h>
 
 #include <chisel-native-view.h>
-#include <chisel-native-menuitem.h>
+#include <chisel-native-menuItem.h>
+
+@interface ChiselMenuItem : NSMenuItem
+- (void)onPress;
+@end
+
+@implementation ChiselMenuItem
+- (void)onPress {
+	_chisel_native_menuitem_pressed_callback( self );
+}
+@end
 
 native_handle _chisel_native_menuitem_create( ) {
-	NSMenuItem *menuitem = [[NSMenuItem alloc] initWithTitle:@"" action:NULL keyEquivalent:@""];
+	NSMenuItem *menuItem = [[ChiselMenuItem alloc] init];
 	
-	[menuitem setEnabled:YES];
+	[menuItem setTarget: menuItem];
+	[menuItem setAction: @selector(onPress)];
 	
-	return (native_handle)menuitem;
+	[menuItem setEnabled:YES];
+	[menuItem setHidden:NO];
+	
+	return (native_handle)menuItem;
 }
 
 native_handle _chisel_native_menuitem_create_separator( ) {
 	return (native_handle)[NSMenuItem separatorItem];
 }
 
-void _chisel_native_menuitem_set_submenu( native_handle nmenuitem, native_handle nsubmenu ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+void _chisel_native_menuitem_set_submenu( native_handle nmenuItem, native_handle nsubmenu ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	NSMenu *submenu = (NSMenu *)nsubmenu;
 	
-	[menuitem setSubmenu: submenu];
+	[menuItem setSubmenu: submenu];
 }
 
-native_handle _chisel_native_menuitem_get_submenu( native_handle nmenuitem ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+native_handle _chisel_native_menuitem_get_submenu( native_handle nmenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	return (native_handle)[menuitem submenu];
+	return (native_handle)[menuItem submenu];
 }
 
-void _chisel_native_menuitem_set_enabled( native_handle nmenuitem, int flag ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+void _chisel_native_menuitem_set_enabled( native_handle nmenuItem, int flag ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	[menuitem setEnabled: flag ? YES : NO];
+	[menuItem setEnabled: flag ? YES : NO];
 }
 
-int _chisel_native_menuitem_get_enabled( native_handle nmenuitem ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+int _chisel_native_menuitem_get_enabled( native_handle nmenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	return [menuitem isEnabled];
+	return [menuItem isEnabled];
 }
 
-void _chisel_native_menuitem_set_visible( native_handle nmenuitem, int flag ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+void _chisel_native_menuitem_set_visible( native_handle nmenuItem, int flag ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	[menuitem setHidden: flag ? NO : YES];
+	[menuItem setHidden: flag ? NO : YES];
 }
 
-int _chisel_native_menuitem_get_visible( native_handle nmenuitem ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+int _chisel_native_menuitem_get_visible( native_handle nmenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	return ![menuitem isHidden];
+	return ![menuItem isHidden];
 }
 
-void _chisel_native_menuitem_set_title( native_handle nmenuitem, native_handle ntitle ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+void _chisel_native_menuitem_set_title( native_handle nmenuItem, native_handle ntitle ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	NSString *title = (NSString *)ntitle;
 	
-	[menuitem setTitle:title];
+	[menuItem setTitle:title];
 }
 
-native_handle _chisel_native_menuitem_get_title( native_handle nmenuitem ) {
-	NSMenuItem *menuitem = (NSMenuItem *)nmenuitem;
+native_handle _chisel_native_menuitem_get_title( native_handle nmenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nmenuItem;
 	
-	return (native_handle)[menuitem title];
+	return (native_handle)[menuItem title];
 }
 

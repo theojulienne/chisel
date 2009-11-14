@@ -34,16 +34,19 @@
 
 - (void)windowDidBecomeKey:(NSNotification *)notification {
 	if ( _menuBar != nil ) {
-		//[NSApp setMainMenu: _menuBar];
+		[_menuBar update];
+		[NSApp setMainMenu: _menuBar];
+		
+		NSLog( @"%@", _menuBar );
 	}
 }
 
 - (void)setMenuBar:(NSMenu *)menuBar {
-	_menuBar = menuBar;
+	_menuBar = [menuBar retain];
 }
 
 - (NSMenu *)menuBar {
-	return _menuBar;
+	return [_menuBar retain];
 }
 
 

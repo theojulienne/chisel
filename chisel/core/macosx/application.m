@@ -4,6 +4,8 @@
 #include <chisel-native-application.h>
 #include <chisel-native-bridge.h>
 
+#include "application.h"
+
 static NSAutoreleasePool *arpool;
 static NSObject *app;
 
@@ -11,12 +13,6 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 @interface NSApplication(Moo)
 - (void) setAppleMenu:(NSMenu *)menu;
-@end
-
-@interface ChiselApplicationDelegate : NSObject
-{}
-- (void)applicationWillFinishLaunching:(NSNotification *)aNotification;
-- (NSMenuItem *)createAppleMenuItem;
 @end
 
 @implementation ChiselApplicationDelegate
@@ -31,6 +27,17 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 - (NSMenuItem *)createAppleMenuItem {
 	NSString *appName = [[NSProcessInfo processInfo] processName];
+	
+	NSString *preferredName = (NSString *)_chisel_native_application_name_callback( );
+	
+	if ( preferredName != nil ) {
+		[appName release];
+		[preferredName retain];
+		
+		appName = preferredName;
+		
+		//NSLog( @"%@\n", appName );
+	}
 	
 	// menu stuff
 	NSMenu *appleMenu = [[NSMenu alloc] initWithTitle:@""];
@@ -93,6 +100,8 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	[appleMenu release];
 	[NSApp setServicesMenu:servicesMenu];
 	[servicesMenu release];
+	
+	[appName release];
 	
 	return menuItem;
 }
