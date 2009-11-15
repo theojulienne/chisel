@@ -7,6 +7,7 @@ $GEN chisel/core/array.d chisel/core/native/chisel-native-array.h
 $GEN chisel/core/native.d chisel/core/native/chisel-native-bridge.h
 
 $GEN chisel/graphics/context.d chisel/graphics/native/chisel-native-context.h
+$GEN chisel/graphics/image.d chisel/graphics/native/chisel-native-image.h
 
 $GEN chisel/text/font.d chisel/text/native/chisel-native-font.h
 $GEN chisel/text/formattedstring.d chisel/text/native/chisel-native-formattedstring.h

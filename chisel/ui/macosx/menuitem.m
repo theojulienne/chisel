@@ -154,3 +154,16 @@ int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle nMenuIte
 	
 	return modifiers;
 }
+
+void _chisel_native_menuitem_set_image( native_handle nMenuItem, native_handle nImage ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	NSImage *image = (NSImage *)nImage;
+	
+	[menuItem setImage: image];
+}
+
+native_handle _chisel_native_menuitem_get_image( native_handle nMenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	
+	return (native_handle)[menuItem image];
+}

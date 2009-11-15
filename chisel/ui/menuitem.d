@@ -5,6 +5,7 @@ import chisel.core.events;
 import chisel.core.string;
 import chisel.core.utf;
 import chisel.core.cobject;
+import chisel.graphics.image;
 import chisel.ui.menu;
 
 extern (C) {
@@ -35,6 +36,9 @@ extern (C) {
 	
 	void _chisel_native_menuitem_set_key_equivalent_modifiers( native_handle menuitem, int modifiers );
 	int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle menuitem );
+	
+	void _chisel_native_menuitem_set_image( native_handle menuitem, native_handle image );
+	native_handle _chisel_native_menuitem_get_image( native_handle menuitem );
 }
 
 enum ModifierKey {
@@ -89,6 +93,36 @@ class MenuItem : CObject {
 	this( unicode title, unicode keyEquivalent, ModifierKey keyEquivalentModifiers ) {
 		this( title, keyEquivalent );
 		this.keyEquivalentModifiers = keyEquivalentModifiers;
+	}
+	
+	this( Image image, String title ) {
+		this( title );
+		this.image = image;
+	}
+	
+	this( Image image, unicode title ) {
+		this( title );
+		this.image = image;
+	}
+	
+	this( Image image, String title, String keyEquivalent ) {
+		this( title, keyEquivalent );
+		this.image = image;
+	}
+	
+	this( Image image, unicode title, unicode keyEquivalent ) {
+		this( title, keyEquivalent );
+		this.image = image;
+	}
+	
+	this( Image image, String title, String keyEquivalent, ModifierKey keyEquivalentModifiers ) {
+		this( title, keyEquivalent, keyEquivalentModifiers );
+		this.image = image;
+	}
+	
+	this( Image image, unicode title, unicode keyEquivalent, ModifierKey keyEquivalentModifiers ) {
+		this( title, keyEquivalent, keyEquivalentModifiers );
+		this.image = image;
 	}
 	
 	void submenu( Menu submenu ) {
@@ -156,5 +190,14 @@ class MenuItem : CObject {
 	
 	void addModifier( ModifierKey key ) {
 		this.keyEquivalentModifiers = this.keyEquivalentModifiers | key;
+	}
+	
+	void image( Image image ) {
+		_chisel_native_menuitem_set_image( native, image.native );
+	}
+	
+	Image image( ) {
+		native_handle nImage = _chisel_native_menuitem_get_image( native );
+		return NativeBridge.fromNative!(Image)( nImage );
 	}
 }

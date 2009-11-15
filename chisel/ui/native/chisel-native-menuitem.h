@@ -20,3 +20,6 @@ native_handle _chisel_native_menuitem_get_key_equivalent( native_handle menuitem
 
 void _chisel_native_menuitem_set_key_equivalent_modifiers( native_handle menuitem, int modifiers );
 int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle menuitem );
+
+void _chisel_native_menuitem_set_image( native_handle menuitem, native_handle image );
+native_handle _chisel_native_menuitem_get_image( native_handle menuitem );

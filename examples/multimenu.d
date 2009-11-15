@@ -1,6 +1,7 @@
 module multimenu;
 
 import chisel.core.all;
+import chisel.graphics.all;
 import chisel.ui.all;
 
 version (Tango) {
@@ -50,7 +51,13 @@ class MultiMenuApp : Application {
 		MenuItem mi2 = new MenuItem( "Example ("~name~")" );
 		Menu exampleSub2 = new Menu( );
 		mi2.submenu = exampleSub2;
-		exampleSub2.appendItem( new MenuItem( "Foo" ) );
+		auto foo = new MenuItem( "Foo" );
+		try {
+			foo.image = new Image( "picture.png" );
+		} catch (ImageException e) {
+			foo.image = new Image( "examples/picture.png" );
+		}
+		exampleSub2.appendItem( foo );
 		menubar.appendItem( mi2 );
 		
 		mainWindow.menubar = menubar;
