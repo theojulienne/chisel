@@ -6,35 +6,29 @@ import chisel.ui.native;
 import chisel.ui.view;
 
 extern (C) {
-	native_handle _chisel_native_splitview_create( );
-	
-	void _chisel_native_splitview_set_vertical( native_handle, int );
-	int _chisel_native_splitview_get_vertical( native_handle );
+	native_handle _chisel_native_splitview_create( int direction );
 	
 	void _chisel_native_splitview_set_divider_position( native_handle, int index, CLFloat position );
 }
 
+enum SpitterStacking {
+	Horizontal=0,
+	Vertical=1,
+}
+
 class SplitView : View {
-	this( ) {
+	this( SplitterStacking direction ) {
 		super( );
-		native = _chisel_native_splitview_create( );
+		native = _chisel_native_splitview_create( direction );
 	}
 	
 	this( native_handle native ) {
 		super( native );
 	}
 	
-	this( Rect frame ) {
-		this( );
+	this( SplitterStacking direction, Rect frame ) {
+		this( direction );
 		this.frame = frame;
-	}
-	
-	bool vertical( ) {
-		return _chisel_native_splitview_get_vertical( native ) != 0;
-	}
-	
-	void vertical( bool val ) {
-		_chisel_native_splitview_set_vertical( native, val ? 1 : 0 );
 	}
 	
 	void setDividerPosition( int divider, CLFloat position ) {

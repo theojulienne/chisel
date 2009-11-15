@@ -151,8 +151,7 @@ class GLCubeApp : Application {
 		
 		glView = new CubeView( Rect( 0, 0, 800, 600 ) );
 		
-		auto split = new SplitView( );
-		split.vertical = true;
+		auto split = new SplitView( SplitterStacking.Horizontal );
 		
 		split.addSubview( glView );
 		
