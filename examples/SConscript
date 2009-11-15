@@ -4,10 +4,15 @@ env = env.Clone( )
 env.Append( LIBS=['chisel-ui', 'chisel-graphics', 'chisel-text', 'chisel-core'] )
 env.Append( FRAMEWORKS=['OpenGL'] )
 
+import sys
+if sys.platform.startswith( 'linux' ):
+	env.Append( LIBS=['GL', 'GLU'] )
+	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0' )
+
 EXAMPLES = [
 	'helloworld',
 	'canvas',
-	'fonts',
+#	'fonts',
 	'glcube',
 	'strings',
 	'starfield',
