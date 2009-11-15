@@ -7,6 +7,8 @@
 #include <chisel-native-view.h>
 #include <chisel-native-splitview.h>
 
+#include <chisel-native-enums.h>
+
 native_handle _chisel_native_splitview_create( int direction ) {
 	NSSplitView *view = [[NSSplitView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
 	assert( view != nil );
