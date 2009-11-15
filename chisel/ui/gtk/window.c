@@ -33,7 +33,7 @@ native_handle _chisel_native_window_create( ) {
 	gtk_box_pack_start( GTK_BOX(container), w, FALSE, FALSE, 0 );
 	//gtk_widget_show( w );
 	
-	GtkWidget *contentView = gtk_fixed_new( );
+	GtkWidget *contentView = gtk_layout_new( NULL, NULL );
 	_chisel_gtk_setup_events( contentView );
 	gtk_container_add( GTK_CONTAINER(container), contentView );
 	gtk_widget_show( GTK_WIDGET(contentView) );

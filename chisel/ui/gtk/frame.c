@@ -15,7 +15,7 @@
 native_handle _chisel_native_frame_create( ) {
 	GtkWidget *widget = gtk_frame_new( "" );
 	
-	GtkWidget *contentView = gtk_fixed_new( );
+	GtkWidget *contentView = gtk_layout_new( NULL, NULL );
 	
 	_chisel_gtk_setup_events( contentView );
 	

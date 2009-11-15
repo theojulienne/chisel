@@ -18,7 +18,7 @@ void _chisel_native_helper_get_position( GObject *obj, int *x, int *y ) {
 }
 
 native_handle _chisel_native_view_create( ) {
-	GtkWidget *widget = gtk_fixed_new( );
+	GtkWidget *widget = gtk_layout_new( NULL, NULL );
 	
 	g_object_set_data( G_OBJECT(widget), "chisel-content-view", widget );
 	
@@ -41,8 +41,8 @@ void _chisel_native_view_add_subview( native_handle native, native_handle subvie
 	int x, y;
 	_chisel_native_helper_get_position( G_OBJECT(child), &x, &y );
 	
-	if ( GTK_IS_FIXED(container) ) {
-		gtk_fixed_put( GTK_FIXED(container), child, x, y );
+	if ( GTK_IS_LAYOUT(container) ) {
+		gtk_layout_put( GTK_LAYOUT(container), child, x, y );
 	} else if ( GTK_IS_CONTAINER(container) ) {
 		gtk_container_add( GTK_CONTAINER(container), child );
 	} else {
@@ -64,9 +64,11 @@ void _chisel_native_view_set_frame( native_handle native, Rect frame ) {
 	
 	gtk_widget_get_allocation( GTK_WIDGET(native), &allocation );
 	
-	if ( GTK_IS_FIXED( widget ) ) {
-		printf( "fixed == %d,%d\n", width, height );
+	/*
+	if ( GTK_IS_LAYOUT( widget ) ) {
+		printf( "layout == %d,%d\n", width, height );
 	}
+	*/
 	
 	if ( allocation.width != width || allocation.height != height ) {
 		printf( "req: %dx%d (%p, currently have %dx%d)\n", width, height, native, allocation.width, allocation.height );
@@ -89,12 +91,12 @@ void _chisel_native_view_set_frame( native_handle native, Rect frame ) {
 	
 	GtkWidget *parent = gtk_widget_get_parent( widget );
 	
-	if ( parent != NULL && GTK_IS_FIXED(parent) ) {
+	if ( parent != NULL && GTK_IS_LAYOUT(parent) ) {
 		// reposition child in parent
-		GtkFixed *fixed = GTK_FIXED(parent);
+		GtkLayout *layout = GTK_LAYOUT(parent);
 		
 		if ( (int)newX != oldX || (int)newY != oldY ) {
-			gtk_fixed_move( fixed, widget, frame.origin.x, frame.origin.y );
+			gtk_layout_move( layout, widget, frame.origin.x, frame.origin.y );
 		}
 	}
 }
