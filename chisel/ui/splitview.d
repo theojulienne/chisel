@@ -11,7 +11,7 @@ extern (C) {
 	void _chisel_native_splitview_set_divider_position( native_handle, int index, CLFloat position );
 }
 
-enum SpitterStacking {
+enum SplitterStacking {
 	Horizontal=0,
 	Vertical=1,
 }
