@@ -13,7 +13,7 @@ native_handle _chisel_native_splitview_create( int direction ) {
 	NSSplitView *view = [[NSSplitView alloc] initWithFrame:NSMakeRect( 0, 0, 1, 1 )];
 	assert( view != nil );
 	
-	if ( direction == SpitterStackingHorizontal ) {
+	if ( direction == SplitterStackingHorizontal ) {
 		[view setVertical: NO];
 	} else {
 		[view setVertical: YES];
