@@ -5,7 +5,7 @@
 #include <chisel-native-ui.h>
 
 #include <chisel-native-view.h>
-#include <chisel-native-menuItem.h>
+#include <chisel-native-menuitem.h>
 
 enum {
 	ModifierKeyShift=0x01,

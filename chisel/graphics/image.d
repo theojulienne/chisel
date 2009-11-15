@@ -1,4 +1,4 @@
-module chisel.ui.image;
+module chisel.graphics.image;
 
 import chisel.core.all;
 

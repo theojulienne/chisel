@@ -13,20 +13,27 @@ env = Environment(
 from os.path import exists
 import sys
 
-if exists( '/usr/lib/libgphobos.a' ):
-	env.Append( LIBS=['gphobos'] )
-
 if exists( '/usr/lib/libgtango.a' ):
 	env.Append( LIBS=['gtango'] )
 	env.Append( DFLAGS=['-version=Tango'] )
+elif exists( '/usr/lib/libgphobos.a' ):
+	env.Append( LIBS=['gphobos'] )
 
 if env.Detect( ['dmd', 'gdmd', 'ldmd'] ) == 'ldmd':
 	env.Append( LINKFLAGS=['-L/usr/local/ldc/ldc/lib'] )
 	env.Append( LIBS=['tango-user-ldc','tango-base-ldc'] )
 
+platform_name = ''
+
 if sys.platform == "darwin":
 	env.Append( CFLAGS=['-m32'] )
 	env.Append( LINKFLAGS=['-m32'] )
+	platform_name = 'macosx'
+
+if sys.platform.startswith( 'linux' ):
+	platform_name = 'gtk'
+
+assert platform_name != ''
 
 from glob import glob
 
@@ -47,7 +54,8 @@ for package in CHISEL_PACKAGES:
 	sources = []
 	
 	sources += glob( 'chisel/%s/*.d' % (package,) )
-	sources += glob( 'chisel/%s/macosx/*.m' % (package,) )
+	sources += glob( 'chisel/%s/%s/*.c' % (package,platform_name) )
+	sources += glob( 'chisel/%s/%s/*.m' % (package,platform_name) )
 	
 	target = 'chisel-%s' % (package,)
 	
