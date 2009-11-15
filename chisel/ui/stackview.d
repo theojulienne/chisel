@@ -39,8 +39,6 @@ class StackView : View {
 			otherSize = this.frame.size.height;
 		}
 		
-		printf( "other size: %f\n", otherSize );
-		
 		foreach ( child; children ) {
 			Rect r;
 			
