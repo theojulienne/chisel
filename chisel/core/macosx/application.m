@@ -5,6 +5,7 @@
 #include <chisel-native-bridge.h>
 
 #include "application.h"
+#include "../../ui/macosx/menus.h"
 
 static NSAutoreleasePool *arpool;
 static NSObject *app;
@@ -12,14 +13,13 @@ static NSObject *app;
 void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 @interface NSApplication(Moo)
-- (void) setAppleMenu:(NSMenu *)menu;
+- (void) setAppleMenu:(ChiselMenu *)menu;
 @end
 
 @implementation ChiselApplicationDelegate
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
 	NSMenuItem *menuItem = [self createAppleMenuItem];
-	
-	NSMenu *mainMenu = [[[NSMenu alloc] init] autorelease];
+	ChiselMenu *mainMenu = [[[ChiselMenu alloc] init] autorelease];
 	[mainMenu addItem:menuItem];
 	[NSApp setMainMenu:mainMenu];
 	[menuItem release];
@@ -29,26 +29,23 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	NSString *appName = [[NSProcessInfo processInfo] processName];
 	
 	NSString *preferredName = (NSString *)_chisel_native_application_name_callback( );
-	
+
 	if ( preferredName != nil ) {
-		[appName release];
 		[preferredName retain];
-		
 		appName = preferredName;
-		
 		//NSLog( @"%@\n", appName );
 	}
-	
+
 	// menu stuff
-	NSMenu *appleMenu = [[NSMenu alloc] initWithTitle:@""];
+	ChiselMenu *appleMenu = [[ChiselMenu alloc] initWithTitle:@""];
 	NSMenuItem *menuItem;
-	
-	NSMenu *servicesMenu = [[NSMenu alloc] init];
+
+	ChiselMenu *servicesMenu = [[ChiselMenu alloc] init];
 	NSMenuItem *servItem = [[NSMenuItem alloc] initWithTitle:@"Services" action:nil keyEquivalent:@""];
 	[servItem setSubmenu:servicesMenu];
 	[appleMenu addItem:servItem];
 	[servItem release];
-	
+
 	[appleMenu addItem:[NSMenuItem separatorItem]];
 	
 	menuItem = [[NSMenuItem alloc]
@@ -91,7 +88,7 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	
 	menuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
 	[menuItem setSubmenu:appleMenu];
-	//NSMenu *mainMenu = [[[NSMenu alloc] init] autorelease];
+	//ChiselMenu *mainMenu = [[[ChiselMenu alloc] init] autorelease];
 	//[mainMenu addItem:menuItem];
 	//[NSApp setMainMenu:mainMenu];
 	//[menuItem release];
@@ -149,7 +146,7 @@ void _chisel_native_application_init( ) {
 	
 	[NSApplication sharedApplication];
 	
-	//[NSApp setMainMenu:[[[NSMenu alloc] init] autorelease]];
+	//[NSApp setMainMenu:[[[ChiselMenu alloc] init] autorelease]];
 	
 	app = [[[ChiselApplicationDelegate alloc] init] autorelease];
 	[NSApp setDelegate: app];

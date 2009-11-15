@@ -16,9 +16,11 @@
 	[super initWithTitle:title];
 	
 	ChiselApplicationDelegate *ad = (ChiselApplicationDelegate *)[NSApp delegate];
-	
-	[self addItem: [ad createAppleMenuItem]];
-	
+
+	NSMenuItem *item = [ad createAppleMenuItem];
+
+	[self addItem: item];
+
 	return self;
 }
 
