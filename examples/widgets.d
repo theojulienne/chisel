@@ -14,6 +14,13 @@ class HelloWorldApp : Application {
 	
 	View[unicode] groups;
 	
+	ProgressBar sliderProgress;
+	
+	void updateSliderProgress( Event event ) {
+		Slider sliderWidget = cast(Slider)event.target;
+		sliderProgress.value = sliderWidget.value;
+	}
+	
 	this( ) {
 		applicationName = "Chisel Widgets";
 		
@@ -54,6 +61,7 @@ class HelloWorldApp : Application {
 		ProgressBar myProgress = new ProgressBar( ProgressBarType.Horizontal );
 		myProgress.indeterminate = false;
 		myProgress.value = 0.5;
+		sliderProgress = myProgress;
 		showOff( "display", "Progress Bar (Value)", myProgress );
 		
 		ProgressBar myProgressI = new ProgressBar( ProgressBarType.Horizontal );
@@ -67,7 +75,9 @@ class HelloWorldApp : Application {
 		
 		// show off a slider widget
 		Slider mySlider = new Slider( SliderType.Horizontal );
+		mySlider.value = 0.5;
 		mySlider.onChange += &printAction!( "Slider changed!" );
+		mySlider.onChange += &updateSliderProgress;
 		showOff( "interact", "Slider", mySlider );
 		
 		// show off a checkbox widget
