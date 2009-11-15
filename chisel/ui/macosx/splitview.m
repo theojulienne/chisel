@@ -14,9 +14,9 @@ native_handle _chisel_native_splitview_create( int direction ) {
 	assert( view != nil );
 	
 	if ( direction == SplitterStackingHorizontal ) {
-		[view setVertical: NO];
+		[view setVertical: YES]; // vertical *bars*
 	} else {
-		[view setVertical: YES];
+		[view setVertical: NO];
 	}
 	
 	return (native_handle)view;
