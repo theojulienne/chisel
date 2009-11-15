@@ -3,6 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <gtk/gtk.h>
+
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
 
@@ -10,7 +12,9 @@
 #include <chisel-native-checkbox.h>
 
 native_handle _chisel_native_checkbox_create( ) {
-	return NULL;
+	GtkWidget *widget = gtk_check_button_new( );
+	
+	return (native_handle)widget;
 }
 
 void _chisel_native_checkbox_set_enabled( native_handle native, int val ) {

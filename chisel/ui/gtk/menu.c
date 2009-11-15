@@ -3,6 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <gtk/gtk.h>
+
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
 

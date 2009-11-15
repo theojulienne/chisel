@@ -3,6 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <gtk/gtk.h>
+
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
 
@@ -10,7 +12,9 @@
 #include <chisel-native-progressbar.h>
 
 native_handle _chisel_native_progressbar_create( ) {
-	return NULL;
+	GtkWidget *widget = gtk_progress_bar_new( );
+	
+	return (native_handle)widget;
 }
 
 void _chisel_native_progressbar_set_minimum( native_handle native, CLFloat minValue ) {

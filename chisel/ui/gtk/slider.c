@@ -3,6 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <gtk/gtk.h>
+
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
 
@@ -10,7 +12,9 @@
 #include <chisel-native-slider.h>
 
 native_handle _chisel_native_slider_create( ) {
-	return NULL;
+	GtkWidget *widget = gtk_hscale_new_with_range( 0, 1, 0.001 );
+	
+	return (native_handle)widget;
 }
 
 void _chisel_native_slider_set_minimum( native_handle native, CLFloat minValue ) {
