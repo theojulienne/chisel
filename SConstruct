@@ -32,6 +32,7 @@ if sys.platform == "darwin":
 
 if sys.platform.startswith( 'linux' ):
 	platform_name = 'gtk'
+	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0' )
 
 assert platform_name != ''
 
