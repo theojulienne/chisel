@@ -24,11 +24,28 @@ class MultiMenuApp : Application {
 		
 		MenuBar menubar = new MenuBar( );
 		
-		MenuItem mi = new MenuItem( "File" );
-		Menu exampleSub = new Menu( );
-		mi.submenu = exampleSub;
-		exampleSub.appendItem( new MenuItem( "Foo" ) );
-		menubar.appendItem( mi );
+		MenuItem fileItem = new MenuItem( "File" );
+		Menu fileMenu = new Menu( );
+		fileItem.submenu = fileMenu;
+		menubar.appendItem( fileItem );
+		
+		MenuItem addWithEvent( unicode title, unicode keyEquiv="" ) {
+			MenuItem item = new MenuItem( title, keyEquiv );
+			
+			item.onPress += &menuItemPressed;
+			
+			fileMenu.appendItem( item );
+			
+			return item;
+		}
+		
+		addWithEvent( "New", "n" );
+		addWithEvent( "Open", "o" );
+		fileMenu.appendItem( MenuItem.separatorItem );
+		addWithEvent( "Close", "w" );
+		addWithEvent( "Save", "s" );
+		auto saveAsItem = addWithEvent( "Save As...", "s" );
+		saveAsItem.addModifier( ModifierKey.Shift );
 		
 		MenuItem mi2 = new MenuItem( "Example ("~name~")" );
 		Menu exampleSub2 = new Menu( );
@@ -38,13 +55,20 @@ class MultiMenuApp : Application {
 		
 		mainWindow.menubar = menubar;
 		
-		//myButton.onPress += &printAction!( "Button Pressed!" );
-		
 		mainWindow.onClose += &onWindowCloses;
 		
 		mainWindow.show( );
 		
 		numWindows++;
+	}
+	
+	void menuItemPressed( Event e ) {
+		MenuItem menuItem = cast(MenuItem)e.target;
+		assert( menuItem !is null );
+		
+		version (Tango) {
+			Stdout.formatln( "Action on menu item: {}", menuItem.title.dString );
+		}
 	}
 	
 	void printAction( unicode description )( ) {

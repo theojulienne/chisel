@@ -7,6 +7,17 @@
 #include <chisel-native-view.h>
 #include <chisel-native-menuItem.h>
 
+enum {
+	ModifierKeyShift=0x01,
+	ModifierKeyAlternate=0x02,
+	ModifierKeyCommand=0x04,
+	ModifierKeyControl=0x08,
+	
+	ModifierKeyNativeDefault=0x10,
+};
+
+
+
 @interface ChiselMenuItem : NSMenuItem
 - (void)onPress;
 @end
@@ -83,3 +94,63 @@ native_handle _chisel_native_menuitem_get_title( native_handle nmenuItem ) {
 	return (native_handle)[menuItem title];
 }
 
+void _chisel_native_menuitem_set_key_equivalent( native_handle nMenuItem, native_handle key ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	NSString *keyEq = (NSString *)key;
+	
+	[menuItem setKeyEquivalent:keyEq];
+}
+
+native_handle _chisel_native_menuitem_get_key_equivalent( native_handle nMenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	
+	return (native_handle)[menuItem keyEquivalent];
+}
+
+void _chisel_native_menuitem_set_key_equivalent_modifiers( native_handle nMenuItem, int modifiers ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	NSUInteger mask = 0;
+	
+	if ( (modifiers & ModifierKeyShift) != 0 ) {
+		mask |= NSShiftKeyMask;
+	}
+	
+	if ( (modifiers & ModifierKeyAlternate) != 0 ) {
+		mask |= NSAlternateKeyMask;
+	}
+	
+	// the native default modifier key on OS X is the command key
+	if ( (modifiers & ModifierKeyCommand) != 0 || (modifiers & ModifierKeyNativeDefault) != 0 ) {
+		mask |= NSCommandKeyMask;
+	}
+	
+	if ( (modifiers & ModifierKeyControl) != 0 ) {
+		mask |= NSControlKeyMask;
+	}
+	
+	[menuItem setKeyEquivalentModifierMask:mask];
+}
+
+int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle nMenuItem ) {
+	NSMenuItem *menuItem = (NSMenuItem *)nMenuItem;
+	int modifiers = 0;
+	NSUInteger mask = [menuItem keyEquivalentModifierMask];
+	
+	if ( (mask & NSShiftKeyMask) != 0 ) {
+		modifiers |= ModifierKeyShift;
+	}
+	
+	if ( (mask & NSAlternateKeyMask) != 0 ) {
+		modifiers |= ModifierKeyAlternate;
+	}
+	
+	if ( (mask & NSCommandKeyMask) != 0 ) {
+		modifiers |= ModifierKeyCommand;
+	}
+	
+	if ( (mask & NSControlKeyMask) != 0 ) {
+		modifiers |= ModifierKeyControl;
+	}
+	
+	return modifiers;
+}

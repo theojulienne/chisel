@@ -12,3 +12,11 @@ int _chisel_native_menuitem_get_visible( native_handle menuitem );
 
 void _chisel_native_menuitem_set_title( native_handle menuitem, native_handle title );
 native_handle _chisel_native_menuitem_get_title( native_handle menuitem );
+
+void _chisel_native_menuitem_pressed_callback( native_handle native );
+
+void _chisel_native_menuitem_set_key_equivalent( native_handle menuitem, native_handle key );
+native_handle _chisel_native_menuitem_get_key_equivalent( native_handle menuitem );
+
+void _chisel_native_menuitem_set_key_equivalent_modifiers( native_handle menuitem, int modifiers );
+int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle menuitem );

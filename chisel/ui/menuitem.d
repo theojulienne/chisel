@@ -29,6 +29,21 @@ extern (C) {
 		
 		menuItem.pressed( );
 	}
+	
+	void _chisel_native_menuitem_set_key_equivalent( native_handle menuitem, native_handle key );
+	native_handle _chisel_native_menuitem_get_key_equivalent( native_handle menuitem );
+	
+	void _chisel_native_menuitem_set_key_equivalent_modifiers( native_handle menuitem, int modifiers );
+	int _chisel_native_menuitem_get_key_equivalent_modifiers( native_handle menuitem );
+}
+
+enum ModifierKey {
+	Shift=0x01,
+	Alternate=0x02,
+	Command=0x04,
+	Control=0x08,
+	
+	NativeDefault=0x10,
 }
 
 class MenuItem : CObject {
@@ -54,6 +69,26 @@ class MenuItem : CObject {
 	this( unicode title ) {
 		this( );
 		this.title = title;
+	}
+	
+	this( String title, String keyEquivalent ) {
+		this( title );
+		this.keyEquivalent = keyEquivalent;
+	}
+	
+	this( unicode title, unicode keyEquivalent ) {
+		this( title );
+		this.keyEquivalent = keyEquivalent;
+	}
+	
+	this( String title, String keyEquivalent, ModifierKey keyEquivalentModifiers ) {
+		this( title, keyEquivalent );
+		this.keyEquivalentModifiers = keyEquivalentModifiers;
+	}
+	
+	this( unicode title, unicode keyEquivalent, ModifierKey keyEquivalentModifiers ) {
+		this( title, keyEquivalent );
+		this.keyEquivalentModifiers = keyEquivalentModifiers;
 	}
 	
 	void submenu( Menu submenu ) {
@@ -96,5 +131,30 @@ class MenuItem : CObject {
 	
 	void pressed( ) {
 		onPress.call( this );
+	}
+	
+	void keyEquivalent( String key ) {
+		_chisel_native_menuitem_set_key_equivalent( native, key.native );
+	}
+	
+	void keyEquivalent( unicode key ) {
+		this.keyEquivalent = String.fromUTF8( key );
+	}
+	
+	String keyEquivalent( ) {
+		native_handle nKey = _chisel_native_menuitem_get_key_equivalent( native );
+		return NativeBridge.fromNative!(String)( nKey );
+	}
+	
+	void keyEquivalentModifiers( ModifierKey mask ) {
+		_chisel_native_menuitem_set_key_equivalent_modifiers( native, mask );
+	}
+	
+	ModifierKey keyEquivalentModifiers( ) {
+		return cast(ModifierKey)_chisel_native_menuitem_get_key_equivalent_modifiers( native );
+	}
+	
+	void addModifier( ModifierKey key ) {
+		this.keyEquivalentModifiers = this.keyEquivalentModifiers | key;
 	}
 }
