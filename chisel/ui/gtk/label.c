@@ -14,21 +14,25 @@
 native_handle _chisel_native_label_create( ) {
 	GtkWidget *widget = gtk_label_new( "" );
 	
+	gtk_misc_set_alignment( GTK_MISC(widget), 0, 0 );
+	
 	return (native_handle)widget;
 }
 
 void _chisel_native_label_set_selectable( native_handle native, int val ) {
-	
+	gtk_label_set_selectable( GTK_LABEL(native), val );
 }
 
 int _chisel_native_label_get_selectable( native_handle native ) {
-	return 0;
+	return gtk_label_get_selectable( GTK_LABEL(native) );
 }
 
 void _chisel_native_label_set_text( native_handle native, native_handle s ) {
+	GString *str = (GString *)s;
 	
+	gtk_label_set_text( GTK_LABEL(native), str->str );
 }
 
 CLFloat _chisel_native_label_get_height( native_handle native ) {
-	return 0.0;
+	return 16.0; // FIXME: hax
 }

@@ -6,7 +6,7 @@ import chisel.ui.native;
 import chisel.ui.view;
 
 extern (C) {
-	native_handle _chisel_native_slider_create( );
+	native_handle _chisel_native_slider_create( int type );
 	
 	void _chisel_native_slider_set_minimum( native_handle, CLFloat );
 	void _chisel_native_slider_set_maximum( native_handle, CLFloat );
@@ -36,7 +36,7 @@ class Slider : View {
 	this( SliderType type ) {
 		super( );
 		this.type = type;
-		native = _chisel_native_slider_create( );
+		native = _chisel_native_slider_create( type );
 	}
 	
 	this( native_handle native ) {

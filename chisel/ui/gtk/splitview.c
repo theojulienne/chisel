@@ -11,16 +11,18 @@
 #include <chisel-native-view.h>
 #include <chisel-native-splitview.h>
 
-native_handle _chisel_native_splitview_create( ) {
-	return NULL;
-}
+#include <chisel-native-enums.h>
 
-void _chisel_native_splitview_set_vertical( native_handle native, int vertical ) {
+native_handle _chisel_native_splitview_create( int direction ) {
+	GtkWidget *widget;
 	
-}
-
-int _chisel_native_splitview_get_vertical( native_handle native ) {
-	return 0;
+	if ( direction == SplitterStackingHorizontal ) {
+		widget = gtk_hpaned_new( );
+	} else {
+		widget = gtk_vpaned_new( );
+	}
+	
+	return (native_handle)widget;
 }
 
 void _chisel_native_splitview_set_divider_position( native_handle native, int index, CLFloat position ) {

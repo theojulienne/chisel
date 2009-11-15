@@ -27,7 +27,7 @@
 }
 @end
 
-native_handle _chisel_native_slider_create( ) {
+native_handle _chisel_native_slider_create( int type ) {
 	NSSlider *view = [[ChiselSlider alloc] init];
 	assert( view != nil );
 	

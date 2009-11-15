@@ -12,7 +12,7 @@
 #include <chisel-native-openglview.h>
 
 native_handle _chisel_native_openglview_create( ) {
-	return NULL;
+	return gtk_fixed_new( );
 }
 
 native_handle _chisel_native_openglview_opengl_context( native_handle handle ) {

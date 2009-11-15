@@ -6,7 +6,7 @@ import chisel.ui.native;
 import chisel.ui.view;
 
 extern (C) {
-	native_handle _chisel_native_progressbar_create( );
+	native_handle _chisel_native_progressbar_create( int direction );
 	
 	void _chisel_native_progressbar_set_minimum( native_handle, CLFloat );
 	void _chisel_native_progressbar_set_maximum( native_handle, CLFloat );
@@ -34,7 +34,7 @@ class ProgressBar : View {
 	this( ProgressBarType type ) {
 		super( );
 		this.type = type;
-		native = _chisel_native_progressbar_create( );
+		native = _chisel_native_progressbar_create( type );
 		_chisel_native_progressbar_set_minimum( native, 0 );
 		_chisel_native_progressbar_set_maximum( native, 1 );
 	}

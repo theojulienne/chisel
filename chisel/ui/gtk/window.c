@@ -10,7 +10,9 @@
 
 #include <chisel-native-window.h>
 
-static gboolean delete_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+#include "widgets.h"
+
+static gboolean _chisel_gtk_delete_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
 	_chisel_native_window_will_close_callback( widget );
 }
 
@@ -19,14 +21,27 @@ native_handle _chisel_native_window_create( ) {
 	
 	window = (GtkWidget *)gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	
-	g_signal_connect( G_OBJECT(window), "delete_event", G_CALLBACK(delete_event), NULL );
+	g_signal_connect( G_OBJECT(window), "delete_event", G_CALLBACK(_chisel_gtk_delete_event), NULL );
 	
 	GtkWidget *container = gtk_vbox_new( FALSE, 0 );
 	
 	gtk_container_add( GTK_CONTAINER(window), container );
+	gtk_widget_show( GTK_WIDGET(container) );
+	
+	// top button
+	GtkWidget *w = gtk_button_new_with_label( "hi" );
+	gtk_box_pack_start( GTK_BOX(container), w, FALSE, FALSE, 0 );
+	//gtk_widget_show( w );
 	
 	GtkWidget *contentView = gtk_fixed_new( );
+	_chisel_gtk_setup_events( contentView );
 	gtk_container_add( GTK_CONTAINER(container), contentView );
+	gtk_widget_show( GTK_WIDGET(contentView) );
+	
+	// bottom button
+	w = gtk_button_new_with_label( "hi" );
+	gtk_box_pack_end( GTK_BOX(container), w, FALSE, FALSE, 0 );
+	//gtk_widget_show( w );
 	
 	g_object_set_data( G_OBJECT(window), "chisel-window-container", container );
 	g_object_set_data( G_OBJECT(window), "chisel-content-view", contentView );
@@ -69,11 +84,16 @@ void _chisel_native_window_set_content_view( native_handle native, native_handle
 	GtkWidget *window = (GtkWidget *)native;
 
 	GtkWidget *container = g_object_get_data( G_OBJECT(window), "chisel-window-container" );
-	GtkWidget *contentView = GTK_WIDGET(nview);
+
+	GtkWidget *contentView = g_object_get_data( G_OBJECT(window), "chisel-content-view" );
+	gtk_container_remove( GTK_CONTAINER(container), contentView );
 	
-	// FIXME: actually replace it in the packing in container
+	contentView = GTK_WIDGET(nview);
+	gtk_container_add( GTK_CONTAINER(container), contentView );
 	
 	g_object_set_data( G_OBJECT(window), "chisel-content-view", contentView );
+	
+	gtk_widget_show( GTK_WIDGET(contentView) );
 }
 
 void _chisel_native_window_close( native_handle native ) {

@@ -18,17 +18,20 @@ native_handle _chisel_native_button_create( ) {
 }
 
 void _chisel_native_button_set_enabled( native_handle native, int val ) {
-	
+	gtk_widget_set_sensitive( GTK_WIDGET(native), val );
 }
 
 int _chisel_native_button_get_enabled( native_handle native ) {
-	
+	return gtk_widget_get_sensitive( GTK_WIDGET(native) );
 }
 
 void _chisel_native_button_set_text( native_handle native, native_handle s ) {
+	GtkWidget *widget = GTK_WIDGET(native);
+	GString *string = (GString *)s;
 	
+	gtk_button_set_label( GTK_BUTTON(widget), string->str );
 }
 
 CLFloat _chisel_native_button_get_height( native_handle native ) {
-	return 0.0;
+	return 30.0;
 }

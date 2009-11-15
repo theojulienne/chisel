@@ -45,7 +45,7 @@
 }
 @end
 
-native_handle _chisel_native_progressbar_create( ) {
+native_handle _chisel_native_progressbar_create( int direction ) {
 	NSProgressIndicator *view = [[ChiselProgressIndicator alloc] init];
 	assert( view != nil );
 	

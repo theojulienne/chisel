@@ -3,15 +3,15 @@
 #include <string.h>
 #include <assert.h>
 
+#include <glib.h>
+
 #include <chisel-native.h>
 #include <chisel-native-array.h>
 
 uint _chisel_native_array_get_length( native_handle native ) {
-	assert( 0 );
-	return 0;
+	return g_list_length( (GList *)(native) );
 }
 
 native_handle _chisel_native_array_get_object( native_handle native, uint index ) {
-	assert( 0 );
-	return NULL;
+	return (native_handle)g_list_nth_data( (GList *)(native), index );
 }
