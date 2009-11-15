@@ -42,6 +42,12 @@ class MultiMenuApp : Application {
 		
 		addWithEvent( "New", "n" );
 		addWithEvent( "Open", "o" );
+		MenuItem recent = addWithEvent( "Open Recent" );
+		Menu recentItems = new Menu;
+		recent.submenu = recentItems;
+		recentItems.appendItem( new MenuItem( "Item 1" ) );
+		recentItems.appendItem( new MenuItem( "Item 2" ) );
+		recentItems.appendItem( new MenuItem( "Item 3" ) );
 		fileMenu.appendItem( MenuItem.separatorItem );
 		addWithEvent( "Close", "w" );
 		addWithEvent( "Save", "s" );
