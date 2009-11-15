@@ -1,4 +1,4 @@
 enum {
-	SpitterStackingHorizontal=0,
-	SpitterStackingVertical=1,
+	SplitterStackingHorizontal=0,
+	SplitterStackingVertical=1,
 };
