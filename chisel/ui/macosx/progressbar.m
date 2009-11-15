@@ -67,6 +67,12 @@ void _chisel_native_progressbar_set_maximum( native_handle native, CLFloat maxVa
 void _chisel_native_progressbar_set_value( native_handle native, CLFloat value ) {
 	NSProgressIndicator *progressbar = (NSProgressIndicator *)native;
 	
+	double oldVal = [progressbar doubleValue];
+	if ( oldVal == [progressbar minValue] || oldVal == [progressbar maxValue] ) {
+		[progressbar setIndeterminate: YES];
+		[progressbar setIndeterminate: NO];
+	}
+	
 	[progressbar setDoubleValue: value];
 }
 
