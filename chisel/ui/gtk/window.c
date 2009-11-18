@@ -104,6 +104,10 @@ void _chisel_native_window_close( native_handle native ) {
 
 void _chisel_native_window_set_menubar( native_handle nwindow, native_handle nmenubar ) {
 	GtkWidget *window = (GtkWidget *)nwindow;
+	GtkWidget *container = g_object_get_data( G_OBJECT(window), "chisel-window-container" );
+	
+	gtk_box_pack_start( GTK_BOX(container), GTK_WIDGET(nmenubar), FALSE, FALSE, 0 );
+	gtk_widget_show( GTK_WIDGET(nmenubar) );
 }
 
 native_handle _chisel_native_window_get_menubar( native_handle nwindow ) {

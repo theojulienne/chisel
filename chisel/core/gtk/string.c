@@ -27,7 +27,7 @@ int _chisel_native_string_utf8_bytes( native_handle native ) {
 void _chisel_native_string_get_utf8( native_handle native, char* buf, int maxBytes ) {
 	GString *str = (GString *)native;
 	
-	assert( maxBytes < str->len );
+	assert( maxBytes > str->len );
 	
 	strncpy( buf, str->str, maxBytes );
 	buf[maxBytes-1] = 0;

@@ -13,5 +13,7 @@
 #include <chisel-native-menu.h>
 
 native_handle _chisel_native_menubar_create( ) {
-	return (native_handle)_chisel_native_menu_create( );
+    GtkWidget *menubar = gtk_menu_bar_new( );
+    
+	return (native_handle)menubar;
 }
