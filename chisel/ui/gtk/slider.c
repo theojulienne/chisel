@@ -13,6 +13,10 @@
 
 #include <chisel-native-enums.h>
 
+void _chisel_gtk_slider_changed_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+    _chisel_native_slider_changed_callback( (native_handle)widget );
+}
+
 native_handle _chisel_native_slider_create( int type ) {
 	GtkWidget *widget;
 	
@@ -23,6 +27,8 @@ native_handle _chisel_native_slider_create( int type ) {
 	}
 	
 	gtk_scale_set_draw_value( GTK_SCALE(widget), FALSE );
+	
+	g_signal_connect( G_OBJECT(widget), "value_changed", G_CALLBACK(_chisel_gtk_slider_changed_event), NULL );
 	
 	return (native_handle)widget;
 }

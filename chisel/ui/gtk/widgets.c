@@ -10,6 +10,8 @@
 
 #include <chisel-native-view.h>
 
+#include "compathacks.h"
+
 static gboolean _chisel_gtk_resize_event( GtkWidget *widget, GdkEvent *event, gpointer native_data ) {
 	int x = (int)g_object_get_data( G_OBJECT(widget), "chisel-allocation-x" );
 	int y = (int)g_object_get_data( G_OBJECT(widget), "chisel-allocation-y" );

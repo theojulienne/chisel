@@ -10,6 +10,8 @@
 
 #include <chisel-native-view.h>
 
+#include "compathacks.h"
+
 #include "widgets.h"
 
 void _chisel_native_helper_get_position( GObject *obj, int *x, int *y ) {

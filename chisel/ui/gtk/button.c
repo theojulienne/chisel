@@ -11,8 +11,16 @@
 #include <chisel-native-view.h>
 #include <chisel-native-button.h>
 
+#include "compathacks.h"
+
+void _chisel_gtk_button_pushed_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+    _chisel_native_button_pressed_callback( (native_handle)widget );
+}
+
 native_handle _chisel_native_button_create( ) {
 	GtkWidget *widget = gtk_button_new( );
+	
+	g_signal_connect( G_OBJECT(widget), "pressed", G_CALLBACK(_chisel_gtk_button_pushed_event), NULL );
 	
 	return (native_handle)widget;
 }

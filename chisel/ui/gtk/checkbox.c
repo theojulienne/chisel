@@ -11,8 +11,16 @@
 #include <chisel-native-view.h>
 #include <chisel-native-checkbox.h>
 
+#include "compathacks.h"
+
+void _chisel_gtk_checkbox_changed_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+    _chisel_native_checkbox_changed_callback( (native_handle)widget );
+}
+
 native_handle _chisel_native_checkbox_create( ) {
 	GtkWidget *widget = gtk_check_button_new( );
+	
+	g_signal_connect( G_OBJECT(widget), "changed", G_CALLBACK(_chisel_gtk_checkbox_changed_event), NULL );
 	
 	return (native_handle)widget;
 }
