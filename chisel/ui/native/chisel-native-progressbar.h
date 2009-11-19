@@ -1,4 +1,4 @@
-native_handle _chisel_native_progressbar_create( );
+native_handle _chisel_native_progressbar_create( int direction );
 
 void _chisel_native_progressbar_set_minimum( native_handle, CLFloat );
 void _chisel_native_progressbar_set_maximum( native_handle, CLFloat );

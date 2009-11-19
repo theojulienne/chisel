@@ -1,4 +1,4 @@
-native_handle _chisel_native_slider_create( );
+native_handle _chisel_native_slider_create( int type );
 
 void _chisel_native_slider_set_minimum( native_handle, CLFloat );
 void _chisel_native_slider_set_maximum( native_handle, CLFloat );

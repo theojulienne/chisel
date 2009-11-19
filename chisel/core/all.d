@@ -9,4 +9,6 @@ public {
 	import chisel.core.events;
 	import chisel.core.cobject;
 	import chisel.core.application;
+	import chisel.core.number;
+	import chisel.core.array;
 }
