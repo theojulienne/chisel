@@ -115,10 +115,18 @@ class HelloWorldApp : Application {
 		groups[groupCode].addSubview( widget );
 	}
 	
+	int buttonText = 0;
+	unicode[] buttonTextItems = [ "Ouch!", "Really, that hurt.", "Please, stop!", "Go away!", "", "", "", "Now you're just being annoying." ];
+	
 	void buttonPressed( Event e ) {
 		Button b = cast(Button)e.target;
 		
-		b.text = "Ouch!";
+		if ( buttonText < buttonTextItems.length ) {
+			b.text = buttonTextItems[buttonText];
+			buttonText++;
+		} else {
+			b.enabled = false;
+		}
 	}
 	
 	void printAction( unicode description )( ) {
