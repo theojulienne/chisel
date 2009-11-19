@@ -3,7 +3,7 @@ import os
 env = Environment(
 	ENV = os.environ,
 
-	DFLAGS=['-version=Posix','-I/usr/include/d/'],
+	DFLAGS=['-version=Posix','-I/usr/include/d/','-g','-gc'],
 #	CFLAGS=['-Ichisel/core/native/'],
 	FRAMEWORKS=['Cocoa'],
 #	LIBS=['gphobos', 'gtango'],

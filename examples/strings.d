@@ -4,9 +4,12 @@ import chisel.core.string;
 
 char[] snowman = "☃";
 
-version (Tango) import tango.core.Memory;
+version (Tango) {
+	import tango.stdc.stdio;
+	import tango.core.Memory;
+}
 
-void main( ) {
+void testStrings( ) {
 	String s = String.withUTF8( snowman );
 	
 	// unicode snowman is 1 unicode character, but takes 3 bytes
@@ -18,5 +21,14 @@ void main( ) {
 	// check for inequality between utf8 and String
 	assert( s != "oh hai" );
 	
-	version (Tango) GC.collect( );
+	//delete s;
+}
+
+void main( ) {
+	testStrings( );
+	
+	version (Tango) {
+		printf( "Running collect...\n" );
+		GC.collect( );
+	}
 }

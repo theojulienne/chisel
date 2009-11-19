@@ -6,6 +6,8 @@
 native_handle _chisel_native_string_create_with_utf8_bytes( char* buf, int bytes ) {
 	NSString *str = [[NSString alloc] initWithBytes:buf length:bytes encoding:NSUTF8StringEncoding];
 	
+	//NSLog( @"string created: %p (retain count: %d)\n", str, [str retainCount] );
+	
 	return (native_handle)str;
 }
 

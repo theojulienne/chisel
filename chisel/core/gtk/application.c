@@ -28,3 +28,11 @@ void _chisel_native_application_stop( ) {
 void _chisel_native_application_set_use_idle_task( int status ) {
 	
 }
+
+void _chisel_native_handle_bridge_registered( native_handle native ) {
+	
+}
+
+void _chisel_native_handle_bridge_deregistered( native_handle native ) {
+	
+}

@@ -107,10 +107,22 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 
 @interface ChiselObject : NSObject
++ (void) load;
+
 - (void)dealloc;
+- (id)retain;
+- (oneway void)release;
+- (oneway void)chiselRelease;
+
+- (void)chiselComm;
 @end
 
 @implementation ChiselObject
++ (void) load {
+	// add our ChiselObject in to pose as NSObject
+	[self poseAsClass:[NSObject class]];
+}
+
 - (void)dealloc {
 	//printf( "[%p dealloc] -- beginning\n", self );
 	
@@ -122,23 +134,62 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	
 	//printf( "[%p dealloc] -- super dealloced\n", self );
 }
+
+- (id)retain {
+	id result = [super retain];
+	
+	int count = [self retainCount];
+	
+	//NSLog( @"%p retain, retainCount is now: %d\n", self, count );
+	[self chiselComm];
+	
+	return result;
+}
+
+- (oneway void)release {
+	[self chiselRelease];
+}
+
+- (oneway void)chiselRelease {
+	int count = [self retainCount];
+	
+	//NSLog( @"%p release, retainCount will be: %d\n", self, count-1 );
+	
+	[super release];
+	
+	// if we would still exist after that release, communicate back to chisel
+	if ( count > 1 ) {
+		[self chiselComm];
+	}
+}
+
+- (void)chiselComm {
+	_chisel_native_handle_current_references( self, [self retainCount] );
+}
 @end
 
+void _chisel_native_handle_bridge_registered( native_handle native ) {
+	ChiselObject *obj = (ChiselObject *)native;
+	
+	[obj chiselComm];
+}
+
+void _chisel_native_handle_bridge_deregistered( native_handle native ) {
+	
+}
+
 void _chisel_native_handle_destroy( native_handle native ) {
-	NSObject *obj = (NSObject *)native;
+	ChiselObject *obj = (ChiselObject *)native;
 	
-	//printf( "_chisel_native_handle_destroy: %p\n", obj );
+	//printf( "_chisel_native_handle_destroy: %p (count=%d)\n", obj, [obj retainCount] );
 	
-	[obj release];
+	[obj chiselRelease];
 	
 	//printf( "released.\n" );
 }
 
 void _chisel_native_application_init( ) {
     //printf( "Native app init!\n" );
-
-	// add our ChiselObject in to pose as NSObject
-	[ChiselObject poseAsClass:[NSObject class]];
     
 	//NSApplicationLoad( );
 	
