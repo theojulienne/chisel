@@ -69,8 +69,8 @@ class HelloWorldApp : Application {
 		showOff( "display", "Progress Bar (Indeterminate)", myProgressI );
 		
 		// show off a button widget
-		Button myButton = new Button( "Chisel" );
-		myButton.onPress += &printAction!( "Button Pressed!" );
+		Button myButton = new Button( "Click here" );
+		myButton.onPress += &buttonPressed;
 		showOff( "interact", "Button", myButton );
 		
 		// show off a slider widget
@@ -113,6 +113,12 @@ class HelloWorldApp : Application {
 	void showOff( unicode groupCode, unicode description, View widget ) {
 		groups[groupCode].addSubview( new Label( description ) );
 		groups[groupCode].addSubview( widget );
+	}
+	
+	void buttonPressed( Event e ) {
+		Button b = cast(Button)e.target;
+		
+		b.text = "Ouch!";
 	}
 	
 	void printAction( unicode description )( ) {
