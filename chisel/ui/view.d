@@ -82,7 +82,11 @@ class View : CObject {
 	}
 	
 	SizeHint sizeHint( ) {
-		return SizeHint.noHints;
+	   SizeHint hint = SizeHint.noHints;
+
+	   hint.suggestedSize = this.frame.size;
+
+	   return hint;
 	}
 	
 	View[] subviews( ) {
