@@ -25,3 +25,9 @@ void _chisel_native_openglcontext_make_current_context( native_handle handle ) {
 	
 	[ctx makeCurrentContext];
 }
+
+void _chisel_native_openglcontext_flush_buffer( native_handle handle ) {
+	NSOpenGLContext *ctx = (NSOpenGLContext *)handle;
+	
+	[ctx flushBuffer];
+}

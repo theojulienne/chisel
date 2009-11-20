@@ -51,7 +51,7 @@ class CubeView : OpenGLView {
 
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
-		glClearDepth(1.0);				
+		glClearDepth(1.0);
 		glDepthFunc(GL_LEQUAL);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
@@ -62,20 +62,13 @@ class CubeView : OpenGLView {
 		glEnable(GL_POINT_SMOOTH);
 		glEnable(GL_LINE_SMOOTH);
 		glEnable(GL_POLYGON_SMOOTH);
-		
-		glDisable(GL_CULL_FACE);
 	}
 	
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
 
 		OpenGLContext glContext = openGLContext;
 		
-		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
-		
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
 		
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		
@@ -133,7 +126,7 @@ class CubeView : OpenGLView {
 		
 		glEnd();
 		
-		glFlush( );
+		glContext.flushBuffer( );
 	}
 }
 

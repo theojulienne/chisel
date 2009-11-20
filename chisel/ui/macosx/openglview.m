@@ -38,8 +38,22 @@
 @end
 
 native_handle _chisel_native_openglview_create( ) {
-	ChiselOpenGLView *view = [[ChiselOpenGLView alloc] init];
+	NSRect frame = NSMakeRect( 0, 0, 10, 10 );
+	
+	NSOpenGLPixelFormatAttribute attr[] = {
+		NSOpenGLPFADoubleBuffer,
+		NSOpenGLPFAAccelerated,
+		NSOpenGLPFAColorSize, 32,
+		NSOpenGLPFADepthSize, 16,
+		0
+	};
+	
+	NSOpenGLPixelFormat *format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
+	
+	ChiselOpenGLView *view = [[ChiselOpenGLView alloc] initWithFrame:frame pixelFormat:format];
 	assert( view != nil );
+	
+	[format release];
 	
 	return (native_handle)view;
 }

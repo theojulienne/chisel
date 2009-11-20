@@ -204,12 +204,12 @@ class RacerView : OpenGLView {
 		glAlphaFunc(GL_GREATER,0.01);
 		glEnable(GL_ALPHA_TEST);				
 		glEnable(GL_TEXTURE_2D);
+		
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 		glEnable(GL_POINT_SMOOTH);
 		glEnable(GL_LINE_SMOOTH);
 		glEnable(GL_POLYGON_SMOOTH);
-
-		glDisable(GL_CULL_FACE);
 	}
 
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
@@ -248,11 +248,7 @@ class RacerView : OpenGLView {
 		
 		OpenGLContext glContext = openGLContext;
 
-		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
 
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -269,7 +265,7 @@ class RacerView : OpenGLView {
 			cube.render( );
 		}
 		
-		glFlush( );
+		glContext.flushBuffer( );
 
 		if ( ouch ) {
 			this.z = 0.0;
