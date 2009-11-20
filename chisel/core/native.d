@@ -41,7 +41,7 @@ class MaskedPointer {
 	}
 	
 	Object unmask( ) {
-		Object obj = cast(Object)(_ptr ^ magicXor);
+		Object obj = cast(Object)(cast(void*)(_ptr ^ magicXor));
 		return obj;
 	}
 	
