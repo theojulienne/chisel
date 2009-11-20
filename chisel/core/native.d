@@ -3,6 +3,7 @@ module chisel.core.native;
 import chisel.core.cobject;
 
 typedef void* native_handle;
+typedef void* object_handle;
 
 extern (C) {
 	void _chisel_native_handle_destroy( native_handle native );

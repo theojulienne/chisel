@@ -1,5 +1,6 @@
 
 typedef void* native_handle;
+typedef void* object_handle;
 
 typedef int CLIndex;
 

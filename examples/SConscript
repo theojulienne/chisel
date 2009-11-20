@@ -18,6 +18,7 @@ EXAMPLES = [
 	'starfield',
 	'widgets',
 	'multimenu',
+	'treetest',
 ]
 
 for example in EXAMPLES:
