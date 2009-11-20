@@ -21,6 +21,8 @@
 native_handle _chisel_native_tablecolumn_create( ) {
 	NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier: nil];
 	
+	[tableColumn setEditable: NO];
+	
 	return (native_handle)tableColumn;
 }
 

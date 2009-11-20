@@ -149,6 +149,7 @@ static class NativeBridge {
 	}
 	
 	static CObject forNative( native_handle native ) {
+		assert( native in nativeToD );
 		return cast(CObject)nativeToD[native].unmasked;
 	}
 	

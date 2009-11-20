@@ -19,6 +19,7 @@ EXAMPLES = [
 	'widgets',
 	'multimenu',
 	'treetest',
+	'racer',
 ]
 
 for example in EXAMPLES:

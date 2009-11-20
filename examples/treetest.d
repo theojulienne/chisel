@@ -2,6 +2,9 @@ module treetest;
 
 version (Tango) {
 	import tango.math.Math;
+	import tango.io.FilePath;
+	import tango.io.Stdout;
+	import tango.stdc.posix.dirent;
 } else {
 	import std.math;
 }
@@ -23,9 +26,11 @@ class TreeTestApp : Application {
 		
 		auto tv = new TreeView;
 		
-		tv.addTableColumn( new TableColumn( "Column A" ) );
-		tv.addTableColumn( new TableColumn( "Column B" ) );
-		tv.addTableColumn( new TableColumn( "Column C" ) );
+		tv.dataSource = new FileSystemDataSource( );
+		
+		auto col = new TableColumn( "Filename" );
+		tv.addTableColumn( col );
+		tv.outlineTableColumn = col;
 		
 		mainWindow.contentView = tv;
 		
@@ -37,6 +42,116 @@ int main( char[][] args ) {
 	auto app = new TreeTestApp( );
 	app.run( );
 	
+	
 	return 0;
 }
 
+class FileSystemDataSource : TreeViewDataSource {
+	uint numberOfChildrenOfItem( TreeView treeView, Object item ) {
+		FileSystemItem fitem = cast(FileSystemItem)item;
+		Stdout.formatln( "numberOfChildrenOfItem {} {}", treeView, item );
+		return ( item is null ) ? 1 : fitem.numberOfChildren;
+	}
+	
+	bool isItemExpandable( TreeView treeView, Object item ) {
+		FileSystemItem fitem = cast(FileSystemItem)item;
+		Stdout.formatln( "isItemExpandable {} {}", treeView, item );
+		return ( item is null ) ? true : (fitem.numberOfChildren != -1);
+	}
+	
+	Object childAtIndex( TreeView treeView, Object parent, uint index ) {
+		FileSystemItem item = cast(FileSystemItem)parent;
+		Stdout.formatln( "childAtIndex {} {} {}", treeView, parent, index );
+		return ( parent is null ) ? FileSystemItem.rootItem : item.childAtIndex(index);
+	}
+	
+	CObject valueForTableColumn( TreeView treeView, Object item, TableColumn column ) {
+		FileSystemItem fitem = cast(FileSystemItem)item;
+		Stdout.formatln( "valueForTableColumn {} {} {}", treeView, item, column );
+		return ( item is null ) ? String.fromUTF8("/") : fitem.relativePath;
+	}
+}
+
+class FileSystemItem {
+	static FileSystemItem rootItem( ) {
+		return new FileSystemItem( "/" );
+	}
+	
+	FilePath path;
+	
+	FilePath[] _children;
+	bool foundChildren = false;
+	
+	bool noPermissions = false;
+	
+	this( unicode path ) {
+		Stdout.formatln( "FilePath for: {}", path );
+		this.path = FilePath( path );
+		this.foundChildren = false;
+	}
+	
+	uint numberOfChildren( ) { // -1 for leaf nodes
+		Stdout.formatln( "numberOfChildren isFile={}", path.isFile );
+		if ( noPermissions )
+			return -1;
+		if ( path.isFile )
+			return -1;
+		return children.length;
+	}
+	
+	FileSystemItem childAtIndex( uint index ) {
+		return new FileSystemItem( children[index].toString );
+	}
+	
+	String relativePath( ) {
+		if ( path.name == "" )
+			return String.fromUTF8( "/" );
+		return String.fromUTF8( path.name );
+	}
+	
+	FilePath[] children( ) {
+		if ( !foundChildren ) {
+			foundChildren = true;
+			
+			if ( path.isEmpty )
+				return _children;
+			
+			Stdout.formatln( "Searching {}...", path.toString );
+			
+			/* TANGO FAIL: in-place patch to detect when tango completely fails at life
+			 * path.toList on an empty directory causes an infinite loop because someone
+			 * who writes for Tango thinks they are awesome using hacky coding style.
+			 */
+			DIR* dir = tango.stdc.posix.dirent.opendir( toStringz(path.toString) );
+			int count = 0;
+			if ( dir ) {
+				scope (exit) tango.stdc.posix.dirent.closedir (dir);
+			
+				dirent entry;
+	            dirent* pentry;
+
+				while (readdir_r (dir, &entry, &pentry) == 0 && pentry !is null) {
+					auto len = tango.stdc.string.strlen (entry.d_name.ptr);
+					auto str = entry.d_name.ptr [0 .. len];
+					
+					if (str.length > 3 || str != "..."[0 .. str.length]) {
+						count++;
+					}
+				}
+			}
+			/* END TANGO FAIL */
+			
+			if ( count > 0 ) {
+				try {
+					_children = path.toList;
+				} catch {
+					noPermissions = true;
+				}
+			}
+			
+			Stdout.formatln( "done" );
+		}
+		
+		return _children;
+	}
+}
