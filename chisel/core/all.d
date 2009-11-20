@@ -11,4 +11,5 @@ public {
 	import chisel.core.application;
 	import chisel.core.number;
 	import chisel.core.array;
+	import chisel.core.wrapped;
 }

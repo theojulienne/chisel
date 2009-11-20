@@ -23,42 +23,72 @@ extern (C) {
 	void _chisel_native_treeview_set_outline_column( native_handle treeview, native_handle column );
 	native_handle _chisel_native_treeview_get_outline_column( native_handle treeview );
 	
-	uint _chisel_native_treeview_child_count_callback( native_handle treeview, object_handle item ) {
+	uint _chisel_native_treeview_child_count_callback( native_handle treeview, native_handle item ) {
 		TreeView treeView = cast(TreeView)NativeBridge.forNative( treeview );
 		assert( treeView !is null );
+		
+		WrappedObject treeItem = null;
+		if ( item !is null ) {
+			treeItem = cast(WrappedObject)NativeBridge.forNative( item );
+		}
+		
+		Object itemObject = (treeItem is null) ? null : treeItem.object;
 		
 		TreeViewDataSource dataSource = treeView.dataSource;
 		if ( dataSource is null )
 			return 0;
 		
-		return dataSource.numberOfChildrenOfItem( treeView, cast(Object)item );
+		return dataSource.numberOfChildrenOfItem( treeView, itemObject );
 	}
 	
-	uint _chisel_native_treeview_item_expandable_callback( native_handle treeview, object_handle item ) {
+	uint _chisel_native_treeview_item_expandable_callback( native_handle treeview, native_handle item ) {
 		TreeView treeView = cast(TreeView)NativeBridge.forNative( treeview );
 		assert( treeView !is null );
+		
+		WrappedObject treeItem = null;
+		if ( item !is null ) {
+			treeItem = cast(WrappedObject)NativeBridge.forNative( item );
+		}
+		
+		Object itemObject = (treeItem is null) ? null : treeItem.object;
 		
 		TreeViewDataSource dataSource = treeView.dataSource;
 		if ( dataSource is null )
 			return 0;
 		
-		return dataSource.isItemExpandable( treeView, cast(Object)item );
+		return dataSource.isItemExpandable( treeView, itemObject );
 	}
 	
-	object_handle _chisel_native_treeview_child_at_index_callback( native_handle treeview, object_handle item, uint index ) {
+	native_handle _chisel_native_treeview_child_at_index_callback( native_handle treeview, native_handle item, uint index ) {
 		TreeView treeView = cast(TreeView)NativeBridge.forNative( treeview );
 		assert( treeView !is null );
+		
+		WrappedObject treeItem = null;
+		if ( item !is null ) {
+			treeItem = cast(WrappedObject)NativeBridge.forNative( item );
+		}
+		
+		Object itemObject = (treeItem is null) ? null : treeItem.object;
 		
 		TreeViewDataSource dataSource = treeView.dataSource;
 		if ( dataSource is null )
 			return null;
 		
-		return cast(object_handle)dataSource.childAtIndex( treeView, cast(Object)item, index );
+		WrappedObject wrapped = new WrappedObject( dataSource.childAtIndex( treeView, itemObject, index ) );
+		
+		return wrapped.native;
 	}
 	
-	native_handle _chisel_native_treeview_value_for_column_callback( native_handle treeview, object_handle item, native_handle column ) {
+	native_handle _chisel_native_treeview_value_for_column_callback( native_handle treeview, native_handle item, native_handle column ) {
 		TreeView treeView = cast(TreeView)NativeBridge.forNative( treeview );
 		assert( treeView !is null );
+		
+		WrappedObject treeItem = null;
+		if ( item !is null ) {
+			treeItem = cast(WrappedObject)NativeBridge.forNative( item );
+		}
+		
+		Object itemObject = (treeItem is null) ? null : treeItem.object;
 		
 		TableColumn tableColumn = cast(TableColumn)NativeBridge.forNative( column );
 		assert( tableColumn !is null );
@@ -67,7 +97,7 @@ extern (C) {
 		if ( dataSource is null )
 			return null;
 		
-		return dataSource.valueForTableColumn( treeView, cast(Object)item, tableColumn ).native;
+		return dataSource.valueForTableColumn( treeView, itemObject, tableColumn ).native;
 	}
 }
 

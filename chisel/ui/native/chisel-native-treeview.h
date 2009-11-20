@@ -14,10 +14,10 @@ void _chisel_native_treeview_remove_column( native_handle treeview, native_handl
 void _chisel_native_treeview_set_outline_column( native_handle treeview, native_handle column );
 native_handle _chisel_native_treeview_get_outline_column( native_handle treeview );
 
-uint _chisel_native_treeview_child_count_callback( native_handle treeview, object_handle item );
+uint _chisel_native_treeview_child_count_callback( native_handle treeview, native_handle item );
 
-uint _chisel_native_treeview_item_expandable_callback( native_handle treeview, object_handle item );
+uint _chisel_native_treeview_item_expandable_callback( native_handle treeview, native_handle item );
 
-object_handle _chisel_native_treeview_child_at_index_callback( native_handle treeview, object_handle item, uint index );
+native_handle _chisel_native_treeview_child_at_index_callback( native_handle treeview, native_handle item, uint index );
 
-native_handle _chisel_native_treeview_value_for_column_callback( native_handle treeview, object_handle item, native_handle column );
+native_handle _chisel_native_treeview_value_for_column_callback( native_handle treeview, native_handle item, native_handle column );

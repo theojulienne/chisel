@@ -6,6 +6,7 @@ $GEN chisel/core/string.d chisel/core/native/chisel-native-string.h
 $GEN chisel/core/array.d chisel/core/native/chisel-native-array.h
 $GEN chisel/core/number.d chisel/core/native/chisel-native-number.h
 $GEN chisel/core/native.d chisel/core/native/chisel-native-bridge.h
+$GEN chisel/core/wrapped.d chisel/core/native/chisel-native-wrapped.h
 
 $GEN chisel/graphics/context.d chisel/graphics/native/chisel-native-context.h
 $GEN chisel/graphics/image.d chisel/graphics/native/chisel-native-image.h

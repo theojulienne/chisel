@@ -7,26 +7,7 @@
 #include <chisel-native-view.h>
 #include <chisel-native-treeview.h>
 
-@interface ChiselTreeItem : NSObject
-{
-	object_handle _handle;
-}
-
-- (id)initWithHandle:(object_handle)handle;
-- (object_handle)handle;
-@end
-
-@implementation ChiselTreeItem
-- (id)initWithHandle:(object_handle)handle {
-	_handle = handle;
-	
-	return self;
-}
-
-- (object_handle)handle {
-	return _handle;
-}
-@end
+#include "../../core/macosx/wrapped.h"
 
 @interface ChiselTreeDataSource : NSObject
 {
@@ -35,10 +16,10 @@
 
 - (id)initWithNative:(native_handle)handle;
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(ChiselTreeItem *)item;
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(ChiselTreeItem *)item;
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ChiselTreeItem *)item;
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(ChiselTreeItem *)item;
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(ChiselWrappedObject *)item;
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(ChiselWrappedObject *)item;
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ChiselWrappedObject *)item;
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(ChiselWrappedObject *)item;
 @end
 
 @implementation ChiselTreeDataSource
@@ -48,22 +29,20 @@
 	return self;
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(ChiselTreeItem *)item {
-	object_handle child = _chisel_native_treeview_child_at_index_callback( treeview, [item handle], index );
-	
-	return [[ChiselTreeItem alloc] initWithHandle:child];
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(ChiselWrappedObject *)item {
+	return (ChiselWrappedObject *)_chisel_native_treeview_child_at_index_callback( treeview, (native_handle)item, index );
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(ChiselTreeItem *)item {
-	return _chisel_native_treeview_item_expandable_callback( treeview, [item handle] );
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(ChiselWrappedObject *)item {
+	return _chisel_native_treeview_item_expandable_callback( treeview, (native_handle)item );
 }
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ChiselTreeItem *)item {
-	return _chisel_native_treeview_child_count_callback( treeview, [item handle] );
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(ChiselWrappedObject *)item {
+	return _chisel_native_treeview_child_count_callback( treeview, (native_handle)item );
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(ChiselTreeItem *)item {
-	return (id)_chisel_native_treeview_value_for_column_callback( treeview, [item handle], (native_handle)tableColumn );
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(ChiselWrappedObject *)item {
+	return (id)_chisel_native_treeview_value_for_column_callback( treeview, (native_handle)item, (native_handle)tableColumn );
 }
 @end
 
