@@ -22,6 +22,35 @@ import tango.math.Math;
 import tango.stdc.stdlib;
 
 
+class Color {
+	float red;
+	float green;
+	float blue;
+	
+	this( float r, float g, float b ) {
+		red = r;
+		green = g;
+		blue = b;
+	}
+	
+	void glApply() {
+		glColor3f( red, green, blue );
+		/*
+		float[] materialColor = [ red, green, blue, 1 ];
+		float[] materialEmission = [ 0, 0, 0, 1 ];
+		float[] materialSpecular = [ 0.1, 0.1, 0.1, 1 ];
+		
+		// setting any of these makes the rotating cube not update the lighting
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, cast(float*)materialColor);
+		glMaterialfv(GL_FRONT, GL_AMBIENT, cast(float*)materialColor);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, cast(float*)materialSpecular);
+		glMaterialfv(GL_FRONT, GL_EMISSION, cast(float*)materialEmission);
+		
+		glMateriali(GL_FRONT, GL_SHININESS, 90);
+		*/
+	}
+}
+
 class Cube {
 	float x;
 	float y;
@@ -31,12 +60,49 @@ class Cube {
 	float yaw   = 0;
 	float roll  = 0;
 	
+	float vX, vY, vZ;
+	float vPitch, vYaw, vRoll;
+	
 	float size = 1.0;
 	
+	Color[] faceColors;
+	
 	this( float x, float y, float z ) {
+		Color[6] faceColors = [
+			new Color( 1, 0, 0 ),
+			new Color( 1, 1, 0 ),
+			new Color( 1, 0, 1 ),
+			new Color( 0, 1, 0 ),
+			new Color( 0, 1, 1 ),	
+			new Color( 0, 0, 1 ),
+		];
+		
+		this( x, y, z, faceColors );
+	}
+	
+	this( float x, float y, float z, Color cubeColor ) {
+		Color[6] faceColors;
+		for ( int i = 0; i < faceColors.length; i++ ) {
+			faceColors[i] = cubeColor;
+		}
+		
+		this( x, y, z, faceColors );
+	}
+	
+	this( float x, float y, float z, Color[] faceColors ) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		vX = 0;
+		vY = 0;
+		vZ = 0;
+		
+		vPitch = 0;
+		vYaw   = 0;
+		vRoll  = 0;
+		
+		this.faceColors = faceColors.dup;
 	}
 	
 	float distanceTo( float x, float y, float z ) {
@@ -49,13 +115,20 @@ class Cube {
 		return distance;
 	}
 	
+	void update( float timeDelta ) {
+		x += timeDelta * vX;
+		y += timeDelta * vY;
+		z += timeDelta * vZ;
+		
+		pitch += timeDelta * vPitch;
+		yaw   += timeDelta * vYaw;
+		roll  += timeDelta * vRoll;
+	}
+	
 	void render( ) {
 		glPushMatrix();
 		
 		glTranslatef( x, y, z );
-		
-		
-		glScalef( size, size, size );
 
 		double max = 360;
 
@@ -65,42 +138,49 @@ class Cube {
 
 		// draw the cube
 		glBegin( GL_QUADS );
-
-		glColor3f( 0.0f, 1.0f, 0.0f );
-		glVertex3f( 1.0f, 1.0f,-1.0f);
-		glVertex3f(-1.0f, 1.0f,-1.0f);
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f( 1.0f, 1.0f, 1.0f);
-
-		glColor3f(1.0f,0.5f,0.0f);
-		glVertex3f( 1.0f,-1.0f, 1.0f);
-		glVertex3f(-1.0f,-1.0f, 1.0f);
-		glVertex3f(-1.0f,-1.0f,-1.0f);
-		glVertex3f( 1.0f,-1.0f,-1.0f);
-
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f( 1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f,-1.0f, 1.0f);
-		glVertex3f( 1.0f,-1.0f, 1.0f);
-
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f( 1.0f,-1.0f,-1.0f);
-		glVertex3f(-1.0f,-1.0f,-1.0f);
-		glVertex3f(-1.0f, 1.0f,-1.0f);
-		glVertex3f( 1.0f, 1.0f,-1.0f);
-
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(-1.0f, 1.0f, 1.0f);
-		glVertex3f(-1.0f, 1.0f,-1.0f);
-		glVertex3f(-1.0f,-1.0f,-1.0f);
-		glVertex3f(-1.0f,-1.0f, 1.0f);
-
-		glColor3f(1.0f,0.0f,1.0f);
-		glVertex3f( 1.0f, 1.0f,-1.0f);
-		glVertex3f( 1.0f, 1.0f, 1.0f);
-		glVertex3f( 1.0f,-1.0f, 1.0f);
-		glVertex3f( 1.0f,-1.0f,-1.0f);
+		
+		//Quad1
+		faceColors[0].glApply();
+		glNormal3f(1.0f, 0.0f, 0.0f);   //N1
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( size/2, size/2, size/2);   //V2
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( size/2,-size/2, size/2);   //V1
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( size/2,-size/2,-size/2);   //V3
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( size/2, size/2,-size/2);   //V4
+		//Quad 2
+		faceColors[1].glApply();
+		glNormal3f(0.0f, 0.0f, -1.0f);  //N2
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( size/2, size/2,-size/2);   //V4
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( size/2,-size/2,-size/2);   //V3
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-size/2,-size/2,-size/2);   //V5
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-size/2, size/2,-size/2);   //V6
+		//Quad 3
+		faceColors[2].glApply();
+		glNormal3f(-1.0f, 0.0f, 0.0f);  //N3
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-size/2, size/2,-size/2);   //V6
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-size/2,-size/2,-size/2);   //V5
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-size/2,-size/2, size/2);   //V7
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-size/2, size/2, size/2);   //V8
+		//Quad 4
+		faceColors[3].glApply();
+		glNormal3f(0.0f, 0.0f, 1.0f);   //N4
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-size/2, size/2, size/2);   //V8
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-size/2,-size/2, size/2);   //V7
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( size/2,-size/2, size/2);   //V1
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( size/2, size/2, size/2);   //V2
+		//Quad 5
+		faceColors[4].glApply();
+		glNormal3f(0.0f, 1.0f, 0.0f);   //N5
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-size/2, size/2,-size/2);   //V6
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-size/2, size/2, size/2);   //V8
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( size/2, size/2, size/2);   //V2
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( size/2, size/2,-size/2);   //V4
+		//Quad 6
+		faceColors[5].glApply();
+		glNormal3f(1.0f, -1.0f, 0.0f);  //N6
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-size/2,-size/2, size/2);   //V7
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-size/2,-size/2,-size/2);   //V5
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( size/2,-size/2,-size/2);   //V3
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( size/2,-size/2, size/2);   //V1
 
 		glEnd();
 		
@@ -115,6 +195,10 @@ class RacerView : OpenGLView {
 	
 	Time startTime;
 	
+	bool wireframe = false;
+	
+	bool lights = true;
+	
 	float secondsSinceStart = 0.0;
 	
 	double steer = 0.0;
@@ -127,13 +211,15 @@ class RacerView : OpenGLView {
 	
 	double g = 9.8;
 	
-	double ground = -0.5;
+	double ground = -0.8;
 	
-	double cubeSize = 0.25;
+	double cubeSize = 0.5;
 	
 	int numCubes = 50;
 	
 	int fieldWidth = 10;
+	
+	double lightFader = 1.0;
 	
 	double progress( ) {
 		return (z / numCubes);
@@ -144,22 +230,29 @@ class RacerView : OpenGLView {
 		srand( WallClock.now.time.seconds );
 		cubeField.length = numCubes;
 		
-		newLevel( );
+		newLevel( 0.0 );
 	}
 
-	void newLevel( ) {
+	void newLevel( float speed ) {
 		this.x = 0.0;
 		this.y = ground;
 		this.z = 0.0;
 		
 		this.vx = 0.0;
 		this.vy = 0.0;
-		this.vz = 2.5; // whee
+		this.vz = 2.5 + speed; // whee
 		
 		for ( int i = 0; i < numCubes; i++ ) {
 			float x = cast(float) (rand() % fieldWidth - fieldWidth/2);
 			float z = cast(float) (rand() % numCubes);
-			cubeField[i] = new Cube( x, 0.0, z-numCubes );
+			
+			// pastels :)
+			float r = cast(float)(rand() % 128 + 128) / 255;
+			float g = cast(float)(rand() % 128 + 128) / 255;
+			float b = cast(float)(rand() % 128 + 128) / 255;
+			
+			
+			cubeField[i] = new Cube( x, 0.0, z-numCubes, new Color( r, g, b ) );
 			cubeField[i].size = cubeSize;
 		}	
 	}
@@ -210,6 +303,23 @@ class RacerView : OpenGLView {
 		glEnable(GL_POINT_SMOOTH);
 		glEnable(GL_LINE_SMOOTH);
 		glEnable(GL_POLYGON_SMOOTH);
+		
+		
+		
+		// tiny ambient light
+		float[] global_ambient = [ 0.2f, 0.2f, 0.2f, 1.0f ];
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cast(float*)global_ambient);
+		
+		glShadeModel(GL_SMOOTH);
+		
+		
+		glEnable(GL_LIGHTING);
+		
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+		
+		glEnable(GL_COLOR_MATERIAL);
+		
+		
 	}
 
 	void drawRect( GraphicsContext context, Rect dirtyRect ) {
@@ -225,8 +335,8 @@ class RacerView : OpenGLView {
 		this.z += frameDelta * vz;
 		
 		
-		if ( this.x < -fieldWidth/2 ) {
-			this.x = -fieldWidth/2;
+		if ( this.x < -fieldWidth/2 + 1 ) {
+			this.x = -fieldWidth/2 + 1;
 		}
 		
 		if ( this.x > fieldWidth/2 ) {
@@ -251,19 +361,71 @@ class RacerView : OpenGLView {
 		glLoadIdentity();
 
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+		
+		if ( wireframe ) {
+			glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		} else {
+			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+		}
+		
+		// fade lights		
+		if ( lights ) {
+			lightFader += frameDelta * 1.0;
+		} else {
+			lightFader -= frameDelta * 1.0;
+		}
+		
+		// limit lights
+		if ( lightFader <= 0.0 ) {
+			lightFader = 0;
+		} else if ( lightFader >= 1.0 ) {
+			lightFader = 1;
+		}
+		
+		
+		float[] ambientLight  = [ 0, 0, 0, 1 ];
+		float[] diffuseLight  = [ lightFader, lightFader, lightFader, 1 ];
+		float[] specularLight = [ 1, 1, 1, 1 ];
+		float[] positionLight = [ 0.0f, y*2, 0.0f, 1.0f ];
+	
+		glLightfv(GL_LIGHT0, GL_SPECULAR, cast(float*)specularLight);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, cast(float*)diffuseLight);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, cast(float*)ambientLight);
+		glLightfv(GL_LIGHT0, GL_POSITION, cast(float*)positionLight);
+		
+		glEnable(GL_LIGHT0);
+		
 
+
+		
+		glPushMatrix( );
+		
 		glTranslatef( x, y, z );
+		
 
 		bool ouch = false;
 		
 		foreach ( cube; cubeField ) {
 			//Stdout.formatln( "{}", cube.distanceTo( -x, y-ground, -z ) );
 			if ( cube.distanceTo( -x, y-ground, -z ) < 0.8 ) {
-				cube.y += 1.0;
+				//cube.y += 1.0;
+				
+				// spin (degrees per second)
+				// direction hit
+				if ( cube.x < x ) {
+					cube.vYaw = -180.0;
+				} else {
+					cube.vYaw = 180.0;
+				}
+				
 				ouch = true;
 			}
+			cube.update( frameDelta );
+			
 			cube.render( );
 		}
+		
+		glPopMatrix( );
 		
 		glContext.flushBuffer( );
 
@@ -296,14 +458,17 @@ class RacerApp : Application {
 		applicationName = "Chisel Racer";
 		
 		mainWindow = new Window( "Chisel Racer" );
-		mainWindow.setSize( 300, 500 );
+		mainWindow.setSize( 550, 640 );
 		
 		MenuBar menubar = new MenuBar( );
 		
 		MenuItem mi = new MenuItem( "Game" );
 		Menu exampleSub = new Menu( );
 		mi.submenu = exampleSub;
-		exampleSub.appendItem( new MenuItem( "New Game" ) );
+		
+		MenuItem menuNewGame = new MenuItem( "New Game", "N" );
+		menuNewGame.onPress += &newGame;
+		exampleSub.appendItem( menuNewGame );
 		menubar.appendItem( mi );
 		
 		mainWindow.menubar = menubar;
@@ -319,11 +484,11 @@ class RacerApp : Application {
 		createGroup( "control", "Controls" );
 		
 		// level
-		level = new Label( "Dodge the Squares!!!" );
+		level = new Label( "Dodge the Cubes!!!" );
 		groups["race"].addSubview( level );
 		
 		// game view
-		racer = new RacerView( Rect( 0, 0, 400, 200 ) );
+		racer = new RacerView( Rect( 0, 0, 500, 300 ) );
 		groups["race"].addSubview( racer );
 		
 		// level progress
@@ -350,6 +515,15 @@ class RacerApp : Application {
 		steering.onChange += &steer;
 		groups["control"].addSubview( steering );
 		
+		CheckBox wireframeCheckbox = new CheckBox( "Wireframe" );
+		wireframeCheckbox.onChange += &checkWireframe;
+		groups["control"].addSubview( wireframeCheckbox );
+		
+		CheckBox lightsCheckbox = new CheckBox( "Lights" );
+		lightsCheckbox.checked = true;
+		lightsCheckbox.onChange += &checkLights;
+		groups["control"].addSubview( lightsCheckbox );
+		
 		mainWindow.contentView = groupStackView;
 		
 		mainWindow.onClose += &onWindowCloses;
@@ -360,30 +534,49 @@ class RacerApp : Application {
 		this.useIdleTask = true;
 	}
 
+	void checkWireframe( Event event ) {
+		CheckBox checkbox = cast(CheckBox) event.target;
+		racer.wireframe = checkbox.checked;
+	}
+
+	void checkLights( Event event ) {
+		CheckBox checkbox = cast(CheckBox) event.target;
+		racer.lights = checkbox.checked;	
+	}
+
+	void newGame( ) {
+		raceProgress.value = 0.0;
+		racer.newLevel( 0.0 );
+	}
+
 	void idleTask( ) {
 		if ( !win ) {
 			racer.invalidate( );
 			levelProgress.value = racer.progress;
-		
-			if ( levelProgress.value == 1.0 ) {
-				racer.newLevel( );
-				raceProgress.value = raceProgress.value + 0.1;
-			}
-		
+	
 			if ( raceProgress.value == 1.0 ) {
 				level.text = "Win!!!";
 				win = true;
 			}
+					
+			if ( levelProgress.value == 1.0 ) {
+				raceProgress.value = raceProgress.value + 0.1;
+				racer.newLevel( raceProgress.value * 2.5 ); // 2.5 * 0.1 increase in speed each level
+			}
+
 		}
 	}
 	
 	void steer( Event event ) {
 		Slider steering = cast(Slider)event.target;
-		racer.steer = (steering.value * 2.0) - 1.0; // 0 -> -1, 0.5 -> 0, 1 -> 1
+		racer.steer = -((steering.value * 2.0) - 1.0); // 0 -> -1, 0.5 -> 0, 1 -> 1
 	}
 	
 	void jump( ) {
-		racer.vy = 6; // 6 m/s
+		if ( racer.y >= racer.ground ) {
+			// on the ground
+			racer.vy = 6; // 6 m/s
+		}
 	}
 	
 	void createGroup( unicode code, unicode title ) {
