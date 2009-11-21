@@ -18,10 +18,26 @@ extern (C) {
 	void _chisel_native_treeview_set_resize_columns( native_handle treeview, int flag );
 	int _chisel_native_treeview_get_resize_columns( native_handle treeview );
 	
+	void _chisel_native_treeview_set_multiple_selection( native_handle treeview, int flag );
+	int _chisel_native_treeview_get_multiple_selection( native_handle treeview );
+	
+	void _chisel_native_treeview_set_empty_selection( native_handle treeview, int flag );
+	int _chisel_native_treeview_get_empty_selection( native_handle treeview );
+	
 	void _chisel_native_treeview_add_column( native_handle treeview, native_handle column );
 	void _chisel_native_treeview_remove_column( native_handle treeview, native_handle column );
+	
 	void _chisel_native_treeview_set_outline_column( native_handle treeview, native_handle column );
 	native_handle _chisel_native_treeview_get_outline_column( native_handle treeview );
+	
+	native_handle _chisel_native_treeview_get_selected_rows( native_handle treeview );
+	
+	void _chisel_native_treeview_selection_changed_callback( native_handle native ) {
+		TreeView treeView = cast(TreeView)NativeBridge.forNative( native );
+		assert( treeView !is null );
+		
+		treeView.selectionChanged( );
+	}
 	
 	uint _chisel_native_treeview_child_count_callback( native_handle treeview, native_handle item ) {
 		TreeView treeView = cast(TreeView)NativeBridge.forNative( treeview );
@@ -110,11 +126,17 @@ interface TreeViewDataSource {
 
 class TreeView : View {
 	TreeViewDataSource _dataSource;
+	EventManager onSelectionChanged;
 	
 	this( ) {
 		super( );
 		native = _chisel_native_treeview_create( );
 		_chisel_native_treeview_prepare( native );
+		
+		this.allowsColumnReordering = true;
+		this.allowsColumnResizing = true;
+		this.allowsMultipleSelection = false;
+		this.allowsEmptySelection = true;
 	}
 	
 	this( Rect frame ) {
@@ -146,6 +168,22 @@ class TreeView : View {
 		return _chisel_native_treeview_get_resize_columns( native ) != 0;
 	}
 	
+	void allowsMultipleSelection( bool val ) {
+		_chisel_native_treeview_set_multiple_selection( native, val?1:0 );
+	}
+	
+	bool allowsMultipleSelection( ) {
+		return _chisel_native_treeview_get_multiple_selection( native ) != 0;
+	}
+	
+	void allowsEmptySelection( bool val ) {
+		_chisel_native_treeview_set_empty_selection( native, val?1:0 );
+	}
+	
+	bool allowsEmptySelection( ) {
+		return _chisel_native_treeview_get_empty_selection( native ) != 0;
+	}
+	
 	TreeViewDataSource dataSource( ) {
 		return _dataSource;
 	}
@@ -163,5 +201,23 @@ class TreeView : View {
 		native_handle column = _chisel_native_treeview_get_outline_column( native );
 		
 		return NativeBridge.fromNative!(TableColumn)( column );
+	}
+	
+	void selectionChanged( ) {
+		onSelectionChanged.call( this );
+	}
+	
+	Object[] selectedRows( ) {
+		Object[] rows;
+		
+		native_handle nrows = _chisel_native_treeview_get_selected_rows( native );
+		CArray wrappedRowsN = NativeBridge.fromNative!(CArray)( nrows );
+		WrappedObject[] wrappedRows = wrappedRowsN.toDArray!(WrappedObject)( );
+		
+		foreach ( row; wrappedRows ) {
+			rows ~= row.object;
+		}
+		
+		return rows;
 	}
 }

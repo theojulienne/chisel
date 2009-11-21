@@ -19,13 +19,17 @@ import chisel.ui.all;
 class TreeTestApp : Application {
 	Window mainWindow;
 	
+	TreeView tv;
+	
 	this( ) {
 		mainWindow = new Window( "Tree Test" );
 		mainWindow.setSize( 500, 500 );
 		
 		mainWindow.onClose += &stop;
 		
-		auto tv = new TreeView;
+		tv = new TreeView;
+		
+		tv.onSelectionChanged += &selectionChanged;
 		
 		tv.dataSource = new FileSystemDataSource( );
 		
@@ -39,6 +43,10 @@ class TreeTestApp : Application {
 		mainWindow.contentView = tv;
 		
 		mainWindow.show( );
+	}
+	
+	void selectionChanged( Event e ) {
+		Stdout.formatln( "Selection changed: {}", tv.selectedRows );
 	}
 }
 

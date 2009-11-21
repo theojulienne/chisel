@@ -9,10 +9,19 @@ int _chisel_native_treeview_get_reorder_columns( native_handle treeview );
 void _chisel_native_treeview_set_resize_columns( native_handle treeview, int flag );
 int _chisel_native_treeview_get_resize_columns( native_handle treeview );
 
+void _chisel_native_treeview_set_multiple_selection( native_handle treeview, int flag );
+int _chisel_native_treeview_get_multiple_selection( native_handle treeview );
+
+void _chisel_native_treeview_set_empty_selection( native_handle treeview, int flag );
+int _chisel_native_treeview_get_empty_selection( native_handle treeview );
+
 void _chisel_native_treeview_add_column( native_handle treeview, native_handle column );
 void _chisel_native_treeview_remove_column( native_handle treeview, native_handle column );
+
 void _chisel_native_treeview_set_outline_column( native_handle treeview, native_handle column );
 native_handle _chisel_native_treeview_get_outline_column( native_handle treeview );
+
+native_handle _chisel_native_treeview_get_selected_rows( native_handle treeview );
 
 uint _chisel_native_treeview_child_count_callback( native_handle treeview, native_handle item );
 
