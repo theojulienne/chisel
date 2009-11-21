@@ -190,6 +190,10 @@ class TreeView : View {
 	
 	void dataSource( TreeViewDataSource dataSource ) {
 		_dataSource = dataSource;
+		reloadData( );
+	}
+	
+	void reloadData( ) {
 		_chisel_native_treeview_reload( native );
 	}
 	
