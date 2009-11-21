@@ -7,16 +7,7 @@
 #include <chisel-native-view.h>
 #include <chisel-native-tablecolumn.h>
 
-@interface ColumnIdentifier : NSObject
-{
-@public
-	object_handle identifier;
-}
-@end
-
-@implementation ColumnIdentifier
-
-@end
+#include "../../core/macosx/wrapped.h"
 
 native_handle _chisel_native_tablecolumn_create( ) {
 	NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier: nil];
@@ -39,19 +30,17 @@ native_handle _chisel_native_tablecolumn_get_title( native_handle ntablecolumn )
 	return (native_handle)[[[tableColumn headerCell] stringValue] retain];
 }
 
-void _chisel_native_tablecolumn_set_identifier( native_handle ntablecolumn, object_handle identifier ) {
+void _chisel_native_tablecolumn_set_identifier( native_handle ntablecolumn, native_handle identifier ) {
 	NSTableColumn *tableColumn = (NSTableColumn *)ntablecolumn;
+	ChiselWrappedObject *wrapped = (ChiselWrappedObject *)identifier;
 	
-	ColumnIdentifier *ci = [[ColumnIdentifier alloc] init];
-	ci->identifier = identifier;
-	
-	[tableColumn setIdentifier: ci];
+	[tableColumn setIdentifier: wrapped];
 }
 
-object_handle _chisel_native_tablecolumn_get_identifier( native_handle ntablecolumn ) {
+native_handle _chisel_native_tablecolumn_get_identifier( native_handle ntablecolumn ) {
 	NSTableColumn *tableColumn = (NSTableColumn *)ntablecolumn;
 	
-	ColumnIdentifier *ci = (NSTableColumn *)[tableColumn identifier];
+	ChiselWrappedObject *ci = (ChiselWrappedObject *)[tableColumn identifier];
 	
-	return ci->identifier;
+	return (native_handle)ci;
 }

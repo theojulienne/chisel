@@ -12,8 +12,8 @@ extern (C) {
 	void _chisel_native_tablecolumn_set_title( native_handle tablecolumn, native_handle title );
 	native_handle _chisel_native_tablecolumn_get_title( native_handle tablecolumn );
 	
-	void _chisel_native_tablecolumn_set_identifier( native_handle tablecolumn, object_handle identifier );
-	object_handle _chisel_native_tablecolumn_get_identifier( native_handle tablecolumn );
+	void _chisel_native_tablecolumn_set_identifier( native_handle tablecolumn, native_handle identifier );
+	native_handle _chisel_native_tablecolumn_get_identifier( native_handle tablecolumn );
 }
 
 class TableColumn : CObject {
@@ -45,16 +45,6 @@ class TableColumn : CObject {
 		this.identifier = identifier;
 	}
 	
-	this( String title, object_handle identifier ) {
-		this( title );
-		this.identifier = identifier;
-	}
-	
-	this( unicode title, object_handle identifier ) {
-		this( title );
-		this.identifier = identifier;
-	}
-	
 	void title( String titleText ) {
 		_chisel_native_tablecolumn_set_title( native, titleText.native );
 	}
@@ -68,16 +58,16 @@ class TableColumn : CObject {
 		return NativeBridge.fromNative!(String)( nTitle );
 	}
 	
-	void identifier( object_handle value ) {
-		_chisel_native_tablecolumn_set_identifier( native, value );
-	}
-	
 	void identifier( Object value ) {
-		// FIXME: "value" must be set to not be relocated by the GC, otherwise it will become invalid
-		identifier = cast(object_handle)value;
+		WrappedObject wrapped = new WrappedObject( value );
+		_chisel_native_tablecolumn_set_identifier( native, wrapped.native );
 	}
 	
 	Object identifier( ) {
-		return cast(Object)_chisel_native_tablecolumn_get_identifier( native );
+		native_handle wobj = _chisel_native_tablecolumn_get_identifier( native );
+		if ( wobj is null )
+			return null;
+		WrappedObject obj = NativeBridge.fromNative!(WrappedObject)( wobj );
+		return cast(Object)obj.object;
 	}
 }

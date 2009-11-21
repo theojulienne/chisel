@@ -5,6 +5,7 @@ version (Tango) {
 	import tango.io.FilePath;
 	import tango.io.Stdout;
 	import tango.stdc.posix.dirent;
+	import Integer = tango.text.convert.Integer;
 } else {
 	import std.math;
 }
@@ -31,6 +32,9 @@ class TreeTestApp : Application {
 		auto col = new TableColumn( "Filename" );
 		tv.addTableColumn( col );
 		tv.outlineTableColumn = col;
+		
+		auto sizecol = new TableColumn( "Size", String.fromUTF8("size") );
+		tv.addTableColumn( sizecol );
 		
 		mainWindow.contentView = tv;
 		
@@ -68,7 +72,11 @@ class FileSystemDataSource : TreeViewDataSource {
 	CObject valueForTableColumn( TreeView treeView, Object item, TableColumn column ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
 		Stdout.formatln( "valueForTableColumn {} {} {}", treeView, item, column );
-		return ( item is null ) ? String.fromUTF8("/") : fitem.relativePath;
+		if ( column.identifier is null ) {
+			return ( item is null ) ? String.fromUTF8("/") : fitem.relativePath;
+		} else {
+			return ( item is null || fitem.isFolder ) ? String.fromUTF8("-") : fitem.fileSize;
+		}
 	}
 }
 
@@ -107,6 +115,14 @@ class FileSystemItem {
 		if ( path.name == "" )
 			return String.fromUTF8( "/" );
 		return String.fromUTF8( path.name );
+	}
+	
+	bool isFolder( ) {
+		return path.isFolder;
+	}
+	
+	String fileSize( ) {
+		return String.fromUTF8( Integer.toString(path.fileSize) );//new Number( cast(int)path.fileSize );
 	}
 	
 	FilePath[] children( ) {
