@@ -12,7 +12,6 @@ import chisel.graphics.all;
 import chisel.text.all;
 import chisel.ui.all;
 
-
 class Hypotrochoid {
 	
 	real bigR, littleR, distance;
@@ -74,6 +73,22 @@ class CanvasView : View {
 
 		double height = frame.size.height;
 		double width = frame.size.width;
+		
+		context.fillColor( Color( 1, 1, 1 ) );
+		
+		context.strokeColor( Color( 0.5, 0.5, 0.5 ) );
+		
+		Path border = new Path( );
+		
+		border.moveTo( 1, 1 );
+		border.lineTo( 1, height-1 );
+		border.lineTo( width-1, height-1 );
+		border.lineTo( width-1, 1 );
+		border.lineTo( 1, 1 );
+		
+		context.fillStroke( border );
+		
+		context.strokeColor( Color( 0, 0, 1 ) );
 		
 		context.translate( width/2, height/2 );
 		
