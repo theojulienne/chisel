@@ -5,11 +5,25 @@ import chisel.core.cobject;
 import chisel.core.native;
 
 extern (C) {
+	native_handle _chisel_native_array_from_natives( native_handle *natives, int count );
 	uint _chisel_native_array_get_length( native_handle );
 	native_handle _chisel_native_array_get_object( native_handle, uint index );
 }
 
 class CArray : CObject {
+	static CArray withObjects( CObject[] objects ) {
+		native_handle[] natives;
+		natives.length = objects.length;
+		
+		foreach ( i, object; objects ) {
+			natives[i] = object.native;
+		}
+		
+		native_handle native = _chisel_native_array_from_natives( natives.ptr, natives.length );
+		
+		return new CArray( native );
+	}
+	
 	this( native_handle native ) {
 		super( );
 		

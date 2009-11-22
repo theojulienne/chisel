@@ -23,6 +23,8 @@ native_handle _chisel_native_treeview_get_outline_column( native_handle treeview
 
 native_handle _chisel_native_treeview_get_selected_rows( native_handle treeview );
 
+void _chisel_native_treeview_selection_changed_callback( native_handle native );
+
 uint _chisel_native_treeview_child_count_callback( native_handle treeview, native_handle item );
 
 uint _chisel_native_treeview_item_expandable_callback( native_handle treeview, native_handle item );

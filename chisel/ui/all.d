@@ -23,4 +23,7 @@ public {
 	import chisel.ui.menuitem;
 	import chisel.ui.menubar;
 	import chisel.ui.contextmenu;
+	
+	import chisel.ui.fileopenchooser;
+	import chisel.ui.filesavechooser;
 }

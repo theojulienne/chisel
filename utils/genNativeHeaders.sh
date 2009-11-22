@@ -35,3 +35,6 @@ $GEN chisel/ui/menu.d chisel/ui/native/chisel-native-menu.h
 $GEN chisel/ui/menuitem.d chisel/ui/native/chisel-native-menuitem.h
 $GEN chisel/ui/menubar.d chisel/ui/native/chisel-native-menubar.h
 $GEN chisel/ui/contextmenu.d chisel/ui/native/chisel-native-contextmenu.h
+# choosers
+$GEN chisel/ui/fileopenchooser.d chisel/ui/native/chisel-native-fileopenchooser.h
+$GEN chisel/ui/filesavechooser.d chisel/ui/native/chisel-native-filesavechooser.h
