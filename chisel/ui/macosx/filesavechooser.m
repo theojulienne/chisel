@@ -20,7 +20,8 @@
 
 @implementation ChiselSaveDelegate
 - (void)savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-	printf( "done!\n" );
+	assert( [[sheet URL] isFileURL] );
+	_chisel_native_filesavechooser_completed_callback( (native_handle)sheet, (returnCode == NSFileHandlingPanelOKButton) );
 }
 @end
 
@@ -79,15 +80,17 @@ void _chisel_native_filesavechooser_begin_modal( native_handle chooser, native_h
 	NSSavePanel *panel = (NSSavePanel *)chooser;
 	NSWindow *window = (NSWindow *)nwindow;
 	
-	if ( window == nil ) {
-		[panel runModalForDirectory:nil file:nil];
-	} else {
-		[panel beginSheetForDirectory:nil
-			  	file:nil
-				modalForWindow:window
-				modalDelegate:[[[ChiselSaveDelegate alloc] init] autorelease]
-				didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
-				contextInfo:nil
-				];
-	}
+	[panel beginSheetForDirectory:nil
+		  	file:nil
+			modalForWindow:window
+			modalDelegate:[[ChiselSaveDelegate alloc] init]
+			didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
+			contextInfo:nil
+			];
+}
+
+native_handle _chisel_native_filesavechooser_get_path( native_handle chooser ) {
+	NSSavePanel *panel = (NSSavePanel *)chooser;
+	
+	return (native_handle)[[panel URL] path];
 }

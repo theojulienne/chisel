@@ -59,6 +59,10 @@ class String : CObject {
 		return ustr;
 	}
 	
+	char[] toString( ) {
+		return dString;
+	}
+	
 	char* cString( ) {
 		unicode ustr;
 		

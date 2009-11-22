@@ -17,9 +17,21 @@ extern (C) {
 	native_handle _chisel_native_filesavechooser_get_allowed_file_types( native_handle chooser );
 	
 	void _chisel_native_filesavechooser_begin_modal( native_handle chooser, native_handle window );
+	
+	native_handle _chisel_native_filesavechooser_get_path( native_handle chooser );
+	
+	void _chisel_native_filesavechooser_completed_callback( native_handle native, int success ) {
+		FileSaveChooser chooser = cast(FileSaveChooser)NativeBridge.forNative( native );
+		assert( chooser !is null );
+		
+		chooser.completed( success != 0 );
+	}
 }
 
 class FileSaveChooser : CObject {
+	EventManager onCompleted;
+	bool fileWasChosen = false;
+	
 	this( ) {
 		super( );
 		native = _chisel_native_filesavechooser_create( );
@@ -75,5 +87,15 @@ class FileSaveChooser : CObject {
 	
 	void beginModal( ) {
 		_chisel_native_filesavechooser_begin_modal( native, null );
+	}
+	
+	void completed( bool fileWasChosen ) {
+		this.fileWasChosen = fileWasChosen;
+		onCompleted.call( this );
+	}
+	
+	String chosenPath( ) {
+		native_handle nstr = _chisel_native_filesavechooser_get_path( native );
+		return NativeBridge.fromNative!(String)( nstr );
 	}
 }
