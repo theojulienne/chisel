@@ -33,4 +33,19 @@ struct Color {
 	CLFloat green;
 	CLFloat blue;
 	CLFloat alpha;
+	
+	static Color opCall( CLFloat red, CLFloat green, CLFloat blue, CLFloat alpha ) {
+		Color c;
+		
+		c.red = red;
+		c.green = green;
+		c.blue = blue;
+		c.alpha = alpha;
+		
+		return c;
+	}
+	
+	static Color opCall( CLFloat red, CLFloat green, CLFloat blue ) {
+		return Color( red, green, blue, 1.0 );
+	}
 }
