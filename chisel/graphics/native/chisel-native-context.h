@@ -13,3 +13,7 @@ void _chisel_native_graphicscontext_stroke_path( native_handle );
 void _chisel_native_graphicscontext_fill_path( native_handle );
 
 void _chisel_native_graphicscontext_translate( native_handle, CLFloat x, CLFloat y );
+void _chisel_native_graphicscontext_scale( native_handle, CLFloat x, CLFloat y );
+
+void _chisel_native_graphicscontext_set_fill_color( native_handle, CLFloat r, CLFloat g, CLFloat b, CLFloat a );
+void _chisel_native_graphicscontext_set_stroke_color( native_handle, CLFloat r, CLFloat g, CLFloat b, CLFloat a );
