@@ -5,6 +5,18 @@ import chisel.graphics.all;
 
 import chisel.graphics.types;
 
+enum PathCommand {
+	MoveTo,
+	LineTo,
+	CurveTo,
+	Close,
+}
+
+struct PathSegment {
+	PathCommand command;
+	CLFloat[] items;
+}
+
 class Path {
 	SubPath[] subpaths;
 	
@@ -13,25 +25,37 @@ class Path {
 	}
 	
 	class SubPath {
+		PathSegment[] segments;
+		
 		bool isEmpty( ) {
-			assert( false );
-			return true;
+			return segments.length == 0;
 		}
 		
 		void moveTo( CLFloat x, CLFloat y ) {
-			
+			PathSegment seg;
+			seg.command = PathCommand.MoveTo;
+			seg.items = [x, y];
+			segments ~= seg;
 		}
 		
 		void lineTo( CLFloat x, CLFloat y ) {
-			
+			PathSegment seg;
+			seg.command = PathCommand.LineTo;
+			seg.items = [x, y];
+			segments ~= seg;
 		}
 		
 		void curveTo( CLFloat cp1X, CLFloat cp1Y, CLFloat cp2X, CLFloat cp2Y, CLFloat endX, CLFloat endY ) {
-			
+			PathSegment seg;
+			seg.command = PathCommand.CurveTo;
+			seg.items = [cp1X, cp1Y, cp2X, cp2Y, endX, endY];
+			segments ~= seg;
 		}
 		
 		void close( ) {
-			
+			PathSegment seg;
+			seg.command = PathCommand.Close;
+			segments ~= seg;
 		}
 	}
 	

@@ -46,20 +46,39 @@ class CanvasView : View {
 			fmtString.drawToContext( context, point );
 		}
 		
+		context.saveGraphicsState( );
+		
+		context.translate( 250, 0 );
+		double height = frame.size.height;
+		double availableWidth = frame.size.width - 250;
+		
 		Path p = new Path;
-		p.moveTo( 0, 100 );
-		p.lineTo( 0, 0 );
-		p.lineTo( 100, 0 );
+		p.moveTo( 0, 0 );
+		p.lineTo( 0, height );
+		p.moveTo( 0, height/2 );
+		p.lineTo( frame.size.width, height/2 );
 		
 		context.stroke( p );
 		
-		Path curve = new Path;
-		curve.moveTo( 0, 0 );
-		for ( float x = 0; x < 10; x+=1 ) {
-			curve.lineTo( x*100, sin(x)*100 );
+		void displayFunc( real function(real) func ) {
+			Path curve = new Path;
+			curve.moveTo( 0, 0 );
+			float maxX = 3.142 * 4;
+			double scaler = height/2;
+			for ( float x = 0; x <= maxX; x+=0.01 ) {
+				float val = func(x);
+				curve.lineTo( x/maxX*(availableWidth), (1-val)*scaler );
+			}
+		
+			context.stroke( curve );
 		}
 		
-		context.stroke( curve );
+		context.strokeColor = Color( 1.0, 0.0, 0.0, 1.0 );
+		displayFunc( &sin );
+		context.strokeColor = Color( 0.0, 0.0, 1.0, 1.0 );
+		displayFunc( &cos );
+		
+		context.restoreGraphicsState( );
 	}
 }
 
@@ -68,7 +87,7 @@ class CanvasApp : Application {
 	
 	this( ) {
 		mainWindow = new Window( "Canvas Example" );
-		mainWindow.setSize( 500, 500 );
+		mainWindow.setSize( 800, 500 );
 		
 		mainWindow.onClose += &stop;
 		

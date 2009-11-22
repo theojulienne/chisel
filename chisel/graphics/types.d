@@ -27,3 +27,10 @@ struct Rect {
 		return r;
 	}
 }
+
+struct Color {
+	CLFloat red;
+	CLFloat green;
+	CLFloat blue;
+	CLFloat alpha;
+}
