@@ -475,8 +475,7 @@ class RacerApp : Application {
 		
 		
 		// create a stack of groups
-		groupStackView = new StackView( );
-		groupStackView.direction = StackDirection.Vertical;
+		groupStackView = new StackView( StackDirection.Vertical );
 		groupStackView.padding = 15;
 		
 		// create our groups

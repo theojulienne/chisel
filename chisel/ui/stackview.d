@@ -14,6 +14,20 @@ class StackView : View {
 	StackDirection _stackDirection;
 	double _padding;
 	
+	this( ) {
+		super( );
+		direction = StackDirection.Horizontal;
+	}
+	
+	this( StackDirection dir ) {
+		super( );
+		direction = dir;
+	}
+	
+	this( native_handle hdl ) {
+		super( hdl );
+	}
+	
 	void direction( StackDirection dir ) {
 		_stackDirection = dir;
 	}

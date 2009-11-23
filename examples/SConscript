@@ -21,6 +21,7 @@ EXAMPLES = [
 	'treetest',
 	'racer',
 	'dialogs',
+	'hypotrochoid',
 ]
 
 for example in EXAMPLES:

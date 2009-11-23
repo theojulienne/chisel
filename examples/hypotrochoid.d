@@ -119,8 +119,7 @@ class CanvasApp : Application {
 		
 		split.addSubview( canvas );
 		
-		auto rightView = new StackView( );
-		rightView.direction = StackDirection.Vertical;
+		auto rightView = new StackView( StackDirection.Vertical );
 		rightView.padding = 5;
 		
 		
@@ -128,8 +127,7 @@ class CanvasApp : Application {
 		parameterFrame.title = "Parameters";
 		
 		
-		auto parameterView = new StackView( );
-		parameterView.direction = StackDirection.Vertical;
+		auto parameterView = new StackView( StackDirection.Vertical );
 		parameterView.padding = 5;
 		
 		parameterView.addSubview( new Label( "R:" ) );
@@ -172,8 +170,7 @@ class CanvasApp : Application {
 		auto optionsFrame = new Frame( );
 		optionsFrame.title = "Drawing Options";
 		
-		auto optionsView = new StackView( );
-		optionsView.direction = StackDirection.Vertical;
+		auto optionsView = new StackView( StackDirection.Vertical );
 		optionsView.padding = 5;
 		
 		optionsView.addSubview( new Label( "Iterations:" ) );

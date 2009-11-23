@@ -148,8 +148,7 @@ class GLCubeApp : Application {
 		
 		split.addSubview( glView );
 		
-		auto rightView = new StackView( );
-		rightView.direction = StackDirection.Vertical;
+		auto rightView = new StackView( StackDirection.Vertical );
 		rightView.padding = 5;
 		
 		auto rotateView = new Frame( );
@@ -157,8 +156,7 @@ class GLCubeApp : Application {
 		
 		rightView.addSubview( rotateView );
 		
-		auto rotatePropsView = new StackView( );
-		rotatePropsView.direction = StackDirection.Vertical;
+		auto rotatePropsView = new StackView( StackDirection.Vertical );
 		rotatePropsView.padding = 5;
 		
 		rotateView.contentView = rotatePropsView;

@@ -45,8 +45,7 @@ class HelloWorldApp : Application {
 		
 		
 		// create a stack of groups
-		groupStackView = new StackView( );
-		groupStackView.direction = StackDirection.Vertical;
+		groupStackView = new StackView( StackDirection.Vertical );
 		groupStackView.padding = 15;
 		
 		// create our groups
@@ -100,8 +99,7 @@ class HelloWorldApp : Application {
 		groupStackView.addSubview( groupFrame );
 		
 		// create a stack for this group
-		auto groupStack = new StackView( );
-		groupStack.direction = StackDirection.Vertical;
+		auto groupStack = new StackView( StackDirection.Vertical );
 		groupStack.padding = 10;
 		
 		groupFrame.contentView = groupStack;
