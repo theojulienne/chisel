@@ -36,6 +36,8 @@
 	if ( _menuBar != nil ) {
 		[_menuBar update];
 		[NSApp setMainMenu: _menuBar];
+		[[[[NSApp mainMenu] itemAtIndex:0] submenu] setTitle:@"New Title"];
+		[[[NSApp mainMenu] itemAtIndex:0] setTitle:@"New Title"];
 	}
 }
 

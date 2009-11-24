@@ -26,9 +26,13 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 }
 
 - (NSMenuItem *)createAppleMenuItem {
-	NSString *appName = [[NSProcessInfo processInfo] processName];
-	
 	NSString *preferredName = (NSString *)_chisel_native_application_name_callback( );
+	
+	if ( preferredName != nil ) {
+		[[NSProcessInfo processInfo] setProcessName:preferredName];
+	}
+	
+	NSString *appName = [[NSProcessInfo processInfo] processName];
 
 	if ( preferredName != nil ) {
 		[preferredName retain];
@@ -37,7 +41,7 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	}
 
 	// menu stuff
-	ChiselMenu *appleMenu = [[ChiselMenu alloc] initWithTitle:@""];
+	ChiselMenu *appleMenu = [[ChiselMenu alloc] initWithTitle:appName];
 	NSMenuItem *menuItem;
 
 	ChiselMenu *servicesMenu = [[ChiselMenu alloc] init];
@@ -86,7 +90,7 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 
 
 	
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+	menuItem = [[NSMenuItem alloc] initWithTitle:appName action:nil keyEquivalent:@""];
 	[menuItem setSubmenu:appleMenu];
 	//ChiselMenu *mainMenu = [[[ChiselMenu alloc] init] autorelease];
 	//[mainMenu addItem:menuItem];
@@ -215,6 +219,17 @@ void _chisel_native_application_init( ) {
 		
 		SetFrontProcess( &myProc );
 	}
+}
+
+void _chisel_native_application_name_updated( ) {
+	NSBundle *bundle = [NSBundle mainBundle];
+	NSMutableDictionary *info = (NSMutableDictionary *)[bundle infoDictionary];
+	
+	NSString *preferredName = (NSString *)_chisel_native_application_name_callback( );
+	
+	assert( preferredName != nil );
+	
+	[info setObject:preferredName forKey:@"CFBundleName"];
 }
 
 void _chisel_native_application_run( ) {

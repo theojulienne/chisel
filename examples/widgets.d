@@ -22,7 +22,7 @@ class HelloWorldApp : Application {
 	}
 	
 	this( ) {
-		applicationName = "Chisel Widgets";
+		super( "Chisel Widgets" );
 		
 		mainWindow = new Window( "Hello, Chisel!" );
 		mainWindow.setSize( 300, 500 );

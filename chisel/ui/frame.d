@@ -29,6 +29,16 @@ class Frame : View {
 		this.frame = frame;
 	}
 	
+	this( unicode title ) {
+		this( );
+		this.title = title;
+	}
+	
+	this( String title ) {
+		this( );
+		this.title = title;
+	}
+	
 	void title( String titleText ) {
 		_chisel_native_frame_set_title( native, titleText.native );
 	}

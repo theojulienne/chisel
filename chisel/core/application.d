@@ -10,6 +10,8 @@ extern (C) {
 	void _chisel_native_application_run( );
 	void _chisel_native_application_stop( );
 	
+	void _chisel_native_application_name_updated( );
+	
 	void _chisel_native_application_set_use_idle_task( int );
 	
 	void _chisel_native_application_idle_task_callback( ) {
@@ -29,10 +31,6 @@ extern (C) {
 	}
 }
 
-static this( ) {
-	_chisel_native_application_init( );
-}
-
 class Application : CObject {
 	static Application _sharedApplication = null;
 	
@@ -46,7 +44,19 @@ class Application : CObject {
 	
 	String _applicationName = null;
 	
+	this( unicode appName ) {
+		this( );
+		applicationName = appName;
+	}
+	
+	this( String appName ) {
+		this( );
+		applicationName = appName;
+	}
+	
 	this( ) {
+		_chisel_native_application_init( );
+		
 		super( );
 		
 		assert( _sharedApplication is null );
@@ -79,10 +89,11 @@ class Application : CObject {
 	
 	void applicationName( String name ) {
 		_applicationName = name;
+		_chisel_native_application_name_updated( );
 	}
 	
 	void applicationName( unicode name ) {
-		_applicationName = String.fromUTF8( name );
+		applicationName = String.fromUTF8( name );
 	}
 	
 	String applicationName( ) {
