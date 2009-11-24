@@ -12,12 +12,6 @@ enum FillRule {
 	EvenOdd,
 }
 
-enum PathDrawingMode {
-	Fill,
-	Stroke,
-	FillStroke,
-}
-
 enum LineCap {
 	Butt,
 	Round,
