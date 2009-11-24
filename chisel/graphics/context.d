@@ -25,6 +25,9 @@ extern (C) {
 	
 	void _chisel_native_graphicscontext_set_fill_color( native_handle, CLFloat r, CLFloat g, CLFloat b, CLFloat a );
 	void _chisel_native_graphicscontext_set_stroke_color( native_handle, CLFloat r, CLFloat g, CLFloat b, CLFloat a );
+	
+	void _chisel_native_graphicscontext_clear_rect( native_handle, Rect rect );
+	void _chisel_native_graphicscontext_fill_rect( native_handle, Rect rect );
 }
 
 class GraphicsContext : CObject {
@@ -149,5 +152,27 @@ class GraphicsContext : CObject {
 	
 	void strokeColor( Color col ) {
 		strokeColor( col.red, col.green, col.blue, col.alpha );
+	}
+	
+	void clear( Rect rect ) {
+		_chisel_native_graphicscontext_clear_rect( native, rect );
+	}
+	
+	void fill( Rect rect ) {
+		_chisel_native_graphicscontext_fill_rect( native, rect );
+	}
+	
+	void clear( Size size ) {
+		Rect rect;
+		rect.origin.x = rect.origin.y = 0;
+		rect.size = size;
+		_chisel_native_graphicscontext_clear_rect( native, rect );
+	}
+	
+	void fill( Size size ) {
+		Rect rect;
+		rect.origin.x = rect.origin.y = 0;
+		rect.size = size;
+		_chisel_native_graphicscontext_fill_rect( native, rect );
 	}
 }

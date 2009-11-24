@@ -1,4 +1,4 @@
-OBJS=image.o context.o
+OBJS=image.o context.o helpers.o
 TARGET=libchiselnative-graphics.a
 CFLAGS=-m32 -g -Wall -I../../core/macosx/ -I../../core/native/ -I../native/
 

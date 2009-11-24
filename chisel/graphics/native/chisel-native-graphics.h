@@ -18,3 +18,9 @@ typedef struct {
 	CLPoint origin;
 	CLSize size;
 } CLRect;
+
+Rect NSRectToRect( NSRect inRect );
+NSRect RectToNSRect( Rect inRect );
+
+Rect CGRectToRect( CGRect inRect );
+CGRect RectToCGRect( Rect inRect );

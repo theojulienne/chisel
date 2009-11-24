@@ -123,3 +123,17 @@ void _chisel_native_graphicscontext_set_stroke_color( native_handle native, CLFl
 	
 	CGContextSetRGBStrokeColor( context, r, g, b, a );
 }
+
+void _chisel_native_graphicscontext_clear_rect( native_handle native, Rect rect ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGContextClearRect( context, RectToCGRect( rect ) );
+}
+
+void _chisel_native_graphicscontext_fill_rect( native_handle native, Rect rect ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGContextFillRect( context, RectToCGRect( rect ) );
+}
