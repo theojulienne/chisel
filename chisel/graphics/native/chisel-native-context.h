@@ -25,3 +25,5 @@ void _chisel_native_graphicscontext_stroke_rect( native_handle, Rect rect );
 void _chisel_native_graphicscontext_set_line_cap( native_handle, int );
 void _chisel_native_graphicscontext_set_line_join( native_handle, int );
 void _chisel_native_graphicscontext_set_blend_mode( native_handle, int );
+
+void _chisel_native_graphicscontext_set_line_width( native_handle, CLFloat );
