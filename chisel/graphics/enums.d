@@ -8,24 +8,24 @@ enum AntiAlias {
 }
 
 enum FillRule {
-	Winding,
+	Winding=0,
 	EvenOdd,
 }
 
 enum LineCap {
-	Butt,
+	Butt=0,
 	Round,
 	Square,
 }
 
 enum LineJoin {
-	Miter,
+	Miter=0,
 	Round,
 	Bevel,
 }
 
 enum BlendMode {
-	Normal,
+	Normal=0,
 	Multiply,
 	Screen,
 	Overlay,

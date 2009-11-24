@@ -90,6 +90,8 @@ class CanvasView : View {
 		
 		context.fillStroke( frame.size );
 		
+		context.lineWidth = 2;
+		
 		context.strokeColor( Color( 0, 0, 1 ) );
 		
 		context.translate( width/2, height/2 );

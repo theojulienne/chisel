@@ -145,3 +145,78 @@ void _chisel_native_graphicscontext_stroke_rect( native_handle native, Rect rect
 	CGContextStrokeRect( context, RectToCGRect( rect ) );
 }
 
+void _chisel_native_graphicscontext_set_line_cap( native_handle native, int cap ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGLineCap lookup[] = {
+		kCGLineCapButt,
+		kCGLineCapRound,
+		kCGLineCapSquare
+	};
+	
+	CGContextSetLineCap( context, lookup[cap] );
+}
+
+void _chisel_native_graphicscontext_set_line_join( native_handle native, int join ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGLineJoin lookup[] = {
+		kCGLineJoinMiter,
+		kCGLineJoinRound,
+		kCGLineJoinBevel
+	};
+	
+	CGContextSetLineJoin( context, lookup[join] );
+}
+
+void _chisel_native_graphicscontext_set_blend_mode( native_handle native, int mode ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGBlendMode lookup[] = {
+		kCGBlendModeNormal, // Normal=0,
+		kCGBlendModeMultiply, // Multiply,
+		kCGBlendModeScreen, // Screen,
+		kCGBlendModeOverlay, // Overlay,
+		kCGBlendModeDarken, // Darken,
+		kCGBlendModeLighten, // Lighten,
+		kCGBlendModeColorDodge, // ColorDodge,
+		kCGBlendModeColorBurn, // ColorBurn,
+		kCGBlendModeSoftLight, // SoftLight,
+		kCGBlendModeHardLight, // HardLight,
+		kCGBlendModeDifference, // Difference,
+		kCGBlendModeExclusion, // Exclusion,
+		kCGBlendModeHue, // Hue,
+		kCGBlendModeSaturation, // Saturation,
+		kCGBlendModeColor, // Color,
+		kCGBlendModeLuminosity, // Luminosity,
+
+		kCGBlendModeClear, // Clear,
+		kCGBlendModeCopy, // Copy,
+
+		kCGBlendModeSourceIn, // SourceIn,
+		kCGBlendModeSourceOut, // SourceOut,
+		kCGBlendModeSourceAtop, // SourceAtop,
+
+		kCGBlendModeDestinationOver, // DestinationOver,
+		kCGBlendModeDestinationIn, // DestinationIn,
+		kCGBlendModeDestinationOut, // DestinationOut,
+		kCGBlendModeDestinationAtop, // DestinationAtop,
+
+		kCGBlendModeXOR, // XOR,
+		kCGBlendModePlusDarker, // PlusDarker,
+		kCGBlendModePlusLighter // PlusLighter,
+	};
+	
+	CGContextSetBlendMode( context, lookup[mode] );
+}
+
+void _chisel_native_graphicscontext_set_line_width( native_handle native, CLFloat width ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGContextSetLineWidth( context, width );
+}
+

@@ -29,6 +29,12 @@ extern (C) {
 	void _chisel_native_graphicscontext_clear_rect( native_handle, Rect rect );
 	void _chisel_native_graphicscontext_fill_rect( native_handle, Rect rect );
 	void _chisel_native_graphicscontext_stroke_rect( native_handle, Rect rect );
+	
+	void _chisel_native_graphicscontext_set_line_cap( native_handle, int );
+	void _chisel_native_graphicscontext_set_line_join( native_handle, int );
+	void _chisel_native_graphicscontext_set_blend_mode( native_handle, int );
+	
+	void _chisel_native_graphicscontext_set_line_width( native_handle, CLFloat );
 }
 
 class GraphicsContext : CObject {
@@ -196,5 +202,21 @@ class GraphicsContext : CObject {
 	void fillStroke( Size size ) {
 		fill( size );
 		stroke( size );
+	}
+	
+	void lineCap( LineCap cap ) {
+		_chisel_native_graphicscontext_set_line_cap( native, cap );
+	}
+	
+	void lineJoin( LineJoin join ) {
+		_chisel_native_graphicscontext_set_line_join( native, join );
+	}
+	
+	void blendMode( BlendMode mode ) {
+		_chisel_native_graphicscontext_set_blend_mode( native, mode );
+	}
+	
+	void lineWidth( CLFloat width ) {
+		_chisel_native_graphicscontext_set_line_width( native, width );
 	}
 }
