@@ -78,7 +78,7 @@ class CanvasView : View {
 		
 		context.strokeColor( Color( 0.5, 0.5, 0.5 ) );
 		
-		Path border = new Path( );
+		/*Path border = new Path( );
 		
 		border.moveTo( 1, 1 );
 		border.lineTo( 1, height-1 );
@@ -86,7 +86,9 @@ class CanvasView : View {
 		border.lineTo( width-1, 1 );
 		border.lineTo( 1, 1 );
 		
-		context.fillStroke( border );
+		context.fillStroke( border );*/
+		
+		context.fillStroke( frame.size );
 		
 		context.strokeColor( Color( 0, 0, 1 ) );
 		

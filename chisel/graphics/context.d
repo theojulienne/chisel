@@ -28,6 +28,7 @@ extern (C) {
 	
 	void _chisel_native_graphicscontext_clear_rect( native_handle, Rect rect );
 	void _chisel_native_graphicscontext_fill_rect( native_handle, Rect rect );
+	void _chisel_native_graphicscontext_stroke_rect( native_handle, Rect rect );
 }
 
 class GraphicsContext : CObject {
@@ -162,6 +163,15 @@ class GraphicsContext : CObject {
 		_chisel_native_graphicscontext_fill_rect( native, rect );
 	}
 	
+	void stroke( Rect rect ) {
+		_chisel_native_graphicscontext_fill_rect( native, rect );
+	}
+	
+	void fillStroke( Rect rect ) {
+		fill( rect );
+		stroke( rect );
+	}
+	
 	void clear( Size size ) {
 		Rect rect;
 		rect.origin.x = rect.origin.y = 0;
@@ -174,5 +184,17 @@ class GraphicsContext : CObject {
 		rect.origin.x = rect.origin.y = 0;
 		rect.size = size;
 		_chisel_native_graphicscontext_fill_rect( native, rect );
+	}
+	
+	void stroke( Size size ) {
+		Rect rect;
+		rect.origin.x = rect.origin.y = 0;
+		rect.size = size;
+		_chisel_native_graphicscontext_stroke_rect( native, rect );
+	}
+	
+	void fillStroke( Size size ) {
+		fill( size );
+		stroke( size );
 	}
 }

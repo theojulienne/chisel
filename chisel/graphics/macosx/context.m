@@ -137,3 +137,11 @@ void _chisel_native_graphicscontext_fill_rect( native_handle native, Rect rect )
 	
 	CGContextFillRect( context, RectToCGRect( rect ) );
 }
+
+void _chisel_native_graphicscontext_stroke_rect( native_handle native, Rect rect ) {
+	NSGraphicsContext *gc = (NSGraphicsContext *)native;
+	CGContextRef context = (CGContextRef)[gc graphicsPort];
+	
+	CGContextStrokeRect( context, RectToCGRect( rect ) );
+}
+
