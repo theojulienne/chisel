@@ -19,8 +19,11 @@ typedef struct {
 	CLSize size;
 } CLRect;
 
+#ifdef __APPLE__
 Rect NSRectToRect( NSRect inRect );
 NSRect RectToNSRect( Rect inRect );
 
 Rect CGRectToRect( CGRect inRect );
 CGRect RectToCGRect( Rect inRect );
+#endif
+

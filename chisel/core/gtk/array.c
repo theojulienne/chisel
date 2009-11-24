@@ -8,6 +8,10 @@
 #include <chisel-native.h>
 #include <chisel-native-array.h>
 
+native_handle _chisel_native_array_from_natives( native_handle *natives, int count ) {
+	return NULL;
+}
+
 uint _chisel_native_array_get_length( native_handle native ) {
 	return g_list_length( (GList *)(native) );
 }

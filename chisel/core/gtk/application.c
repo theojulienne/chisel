@@ -36,3 +36,8 @@ void _chisel_native_handle_bridge_registered( native_handle native ) {
 void _chisel_native_handle_bridge_deregistered( native_handle native ) {
 	
 }
+
+void _chisel_native_application_name_updated( ) {
+
+}
+

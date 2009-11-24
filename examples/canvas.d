@@ -74,9 +74,9 @@ class CanvasView : View {
 		}
 		
 		context.strokeColor = Color( 1.0, 0.0, 0.0, 1.0 );
-		displayFunc( &sin );
+		displayFunc( cast(real function(real))&sin );
 		context.strokeColor = Color( 0.0, 0.0, 1.0, 1.0 );
-		displayFunc( &cos );
+		displayFunc( cast(real function(real))&cos );
 		
 		context.restoreGraphicsState( );
 	}

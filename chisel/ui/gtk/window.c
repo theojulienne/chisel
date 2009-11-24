@@ -33,9 +33,16 @@ native_handle _chisel_native_window_create( ) {
 	gtk_box_pack_start( GTK_BOX(container), w, FALSE, FALSE, 0 );
 	//gtk_widget_show( w );
 	
+	// create a holder for the contentView that takes up all remaining space in the window (after menu/status)
+	GtkWidget *contentViewHolder = gtk_vbox_new( TRUE, 0 );
+	gtk_box_pack_end( GTK_BOX(container), contentViewHolder, TRUE, TRUE, 0 );
+	gtk_widget_show( GTK_WIDGET(contentViewHolder) );
+	
+	// create a default contentView, and add it to the holder
 	GtkWidget *contentView = gtk_layout_new( NULL, NULL );
+	g_object_set_data( G_OBJECT(contentView), "chisel-content-view", contentView );
 	_chisel_gtk_setup_events( contentView );
-	gtk_container_add( GTK_CONTAINER(container), contentView );
+	gtk_box_pack_start( GTK_BOX(contentViewHolder), contentView, TRUE, TRUE, 0 );
 	gtk_widget_show( GTK_WIDGET(contentView) );
 	
 	// bottom button
@@ -44,6 +51,7 @@ native_handle _chisel_native_window_create( ) {
 	//gtk_widget_show( w );
 	
 	g_object_set_data( G_OBJECT(window), "chisel-window-container", container );
+	g_object_set_data( G_OBJECT(window), "chisel-content-view-holder", contentViewHolder );
 	g_object_set_data( G_OBJECT(window), "chisel-content-view", contentView );
 	
 	return (native_handle)window;
@@ -83,13 +91,13 @@ native_handle _chisel_native_window_get_content_view( native_handle native ) {
 void _chisel_native_window_set_content_view( native_handle native, native_handle nview ) {
 	GtkWidget *window = (GtkWidget *)native;
 
-	GtkWidget *container = g_object_get_data( G_OBJECT(window), "chisel-window-container" );
+	GtkWidget *contentViewHolder = g_object_get_data( G_OBJECT(window), "chisel-content-view-holder" );
 
 	GtkWidget *contentView = g_object_get_data( G_OBJECT(window), "chisel-content-view" );
-	gtk_container_remove( GTK_CONTAINER(container), contentView );
+	gtk_container_remove( GTK_CONTAINER(contentViewHolder), contentView );
 	
 	contentView = GTK_WIDGET(nview);
-	gtk_container_add( GTK_CONTAINER(container), contentView );
+	gtk_container_add( GTK_CONTAINER(contentViewHolder), contentView );
 	
 	g_object_set_data( G_OBJECT(window), "chisel-content-view", contentView );
 	
