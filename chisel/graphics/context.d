@@ -45,6 +45,9 @@ class GraphicsContext : CObject {
 	static GraphicsContext currentContext( ) {
 		native_handle native = _chisel_native_graphicscontext_get_current_context( );
 		
+		if ( native is null )
+			return null;
+		
 		return NativeBridge.fromNative!(GraphicsContext)(native);
 	}
 	

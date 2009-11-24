@@ -32,6 +32,8 @@ static gboolean _chisel_gtk_resize_event( GtkWidget *widget, GdkEvent *event, gp
 		printf( "frame changed! (%d-%d %d-%d %d-%d %d-%d)\n", x, alloc.x, y, alloc.y, w, alloc.width, h, alloc.height );
 		_chisel_native_view_frame_changed_callback( widget );
 	}
+	
+	return TRUE;
 }
 
 void _chisel_gtk_setup_events( GtkWidget *widget ) {

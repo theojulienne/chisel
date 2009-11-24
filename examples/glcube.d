@@ -7,7 +7,7 @@ import chisel.ui.all;
 import chisel.ui.opengl;
 import chisel.ui.openglu;
 
-import tango.stdc.stdlib;
+version (Tango) import tango.stdc.stdlib;
 
 class CubeView : OpenGLView {
 	float angleX = 0.0;

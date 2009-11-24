@@ -115,13 +115,13 @@ Rect _chisel_native_view_get_frame( native_handle native ) {
 	r.size.width = allocation.width;
 	r.size.height = allocation.height;
 	
-	printf( "get frame (%f,%f %fx%f)\n", r.origin.x, r.origin.y, r.size.width, r.size.height );
+	//printf( "get frame (%f,%f %fx%f)\n", r.origin.x, r.origin.y, r.size.width, r.size.height );
 	
 	return r;
 }
 
 void _chisel_native_view_invalidate_rect( native_handle native, Rect rect ) {
-	
+	gtk_widget_queue_draw_area( GTK_WIDGET(native), rect.origin.x, rect.origin.y, rect.size.width, rect.size.height );
 }
 
 native_handle _chisel_native_view_get_subviews( native_handle native ) {

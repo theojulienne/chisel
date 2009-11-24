@@ -13,7 +13,7 @@ EXAMPLES = [
 	'helloworld',
 	'canvas',
 #	'fonts',
-#	'glcube',
+	'glcube',
 	'strings',
 #	'starfield',
 	'widgets',
