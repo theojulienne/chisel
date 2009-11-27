@@ -64,6 +64,7 @@ native_handle _chisel_native_treeview_create( ) {
 	[scrollView setHasVerticalScroller:YES];
 	[scrollView setHasHorizontalScroller:YES];
 	[scrollView setAutohidesScrollers:YES];
+	[treeView setAutoresizesAllColumnsToFit:YES];
 	
 	return (native_handle)scrollView;
 }
