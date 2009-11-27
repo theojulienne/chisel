@@ -64,7 +64,7 @@ native_handle _chisel_native_treeview_create( ) {
 	[scrollView setHasVerticalScroller:YES];
 	[scrollView setHasHorizontalScroller:YES];
 	[scrollView setAutohidesScrollers:YES];
-	[treeView setAutoresizesAllColumnsToFit:YES];
+	[treeView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
 	
 	return (native_handle)scrollView;
 }
@@ -84,6 +84,12 @@ void _chisel_native_treeview_reload( native_handle native ) {
 	NSOutlineView *treeView = (NSOutlineView *)[scrollView documentView];
 	
 	[treeView reloadItem:nil reloadChildren:YES];
+	
+	NSRect frame = [scrollView frame];
+	frame.size.width--;
+	[scrollView setFrame: frame];
+	frame.size.width++;
+	[scrollView setFrame: frame];
 }
 
 void _chisel_native_treeview_add_column( native_handle ntreeview, native_handle ncolumn ) {

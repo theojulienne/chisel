@@ -13,6 +13,7 @@ native_handle _chisel_native_tablecolumn_create( ) {
 	NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier: nil];
 	
 	[tableColumn setEditable: NO];
+	[tableColumn setResizingMask: NSTableColumnAutoresizingMask | NSTableColumnUserResizingMask];
 	
 	return (native_handle)tableColumn;
 }
