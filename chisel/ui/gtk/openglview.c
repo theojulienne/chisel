@@ -24,8 +24,8 @@ static gboolean reshape( GtkWidget *widget, GdkEvent *event, gpointer native_dat
 }
 
 static gboolean expose( GtkWidget *widget, GdkEventExpose *event, gpointer native_data ) {
-	if (event->count > 0)
-		return TRUE;
+	/*if (event->count > 0)
+		return TRUE;*/
 
 	if ( !gtk_gl_area_make_current(GTK_GL_AREA(widget)) )
 		return TRUE;

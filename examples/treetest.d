@@ -46,7 +46,8 @@ class TreeTestApp : Application {
 	}
 	
 	void selectionChanged( Event e ) {
-		Stdout.formatln( "Selection changed: {}", tv.selectedRows );
+		version (Tango)
+			Stdout.formatln( "Selection changed: {}", tv.selectedRows );
 	}
 }
 
@@ -61,25 +62,25 @@ int main( char[][] args ) {
 class FileSystemDataSource : TreeViewDataSource {
 	uint numberOfChildrenOfItem( TreeView treeView, Object item ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
-		Stdout.formatln( "numberOfChildrenOfItem {} {}", treeView, item );
+		version (Tango) Stdout.formatln( "numberOfChildrenOfItem {} {}", treeView, item );
 		return ( item is null ) ? 1 : fitem.numberOfChildren;
 	}
 	
 	bool isItemExpandable( TreeView treeView, Object item ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
-		Stdout.formatln( "isItemExpandable {} {}", treeView, item );
+		version (Tango) Stdout.formatln( "isItemExpandable {} {}", treeView, item );
 		return ( item is null ) ? true : (fitem.numberOfChildren != -1);
 	}
 	
 	Object childAtIndex( TreeView treeView, Object parent, uint index ) {
 		FileSystemItem item = cast(FileSystemItem)parent;
-		Stdout.formatln( "childAtIndex {} {} {}", treeView, parent, index );
+		version (Tango) Stdout.formatln( "childAtIndex {} {} {}", treeView, parent, index );
 		return ( parent is null ) ? FileSystemItem.rootItem : item.childAtIndex(index);
 	}
 	
 	CObject valueForTableColumn( TreeView treeView, Object item, TableColumn column ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
-		Stdout.formatln( "valueForTableColumn {} {} {}", treeView, item, column );
+		version (Tango) Stdout.formatln( "valueForTableColumn {} {} {}", treeView, item, column );
 		if ( column.identifier is null ) {
 			return ( item is null ) ? String.fromUTF8("/") : fitem.relativePath;
 		} else {
@@ -93,46 +94,72 @@ class FileSystemItem {
 		return new FileSystemItem( "/" );
 	}
 	
-	FilePath path;
+	version (Tango) {
+		FilePath path;
 	
-	FilePath[] _children;
+		FilePath[] _children;
+	}
+	
 	bool foundChildren = false;
 	
 	bool noPermissions = false;
 	
 	this( unicode path ) {
-		Stdout.formatln( "FilePath for: {}", path );
-		this.path = FilePath( path );
-		this.foundChildren = false;
+		version (Tango) {
+			Stdout.formatln( "FilePath for: {}", path );
+			this.path = FilePath( path );
+			this.foundChildren = false;
+		}
 	}
 	
 	uint numberOfChildren( ) { // -1 for leaf nodes
-		Stdout.formatln( "numberOfChildren isFile={}", path.isFile );
-		if ( noPermissions )
-			return -1;
-		if ( path.isFile )
-			return -1;
-		return children.length;
+		version (Tango) {
+			Stdout.formatln( "numberOfChildren isFile={}", path.isFile );
+			if ( noPermissions )
+				return -1;
+			if ( path.isFile )
+				return -1;
+			return children.length;
+		} else {
+			return 0;
+		}
 	}
 	
 	FileSystemItem childAtIndex( uint index ) {
-		return new FileSystemItem( children[index].toString );
+		version (Tango) {
+			return new FileSystemItem( children[index].toString );
+		} else {
+			return null;
+		}
 	}
 	
 	String relativePath( ) {
-		if ( path.name == "" )
-			return String.fromUTF8( "/" );
-		return String.fromUTF8( path.name );
+		version (Tango) {
+			if ( path.name == "" )
+				return String.fromUTF8( "/" );
+			return String.fromUTF8( path.name );
+		} else {
+			return String.fromUTF8( "Help me by replacing Tango fail" );
+		}
 	}
 	
 	bool isFolder( ) {
-		return path.isFolder;
+		version (Tango) {
+			return path.isFolder;
+		} else {
+			return false;
+		}
 	}
 	
 	String fileSize( ) {
-		return String.fromUTF8( Integer.toString(path.fileSize) );//new Number( cast(int)path.fileSize );
+		version (Tango) {
+			return String.fromUTF8( Integer.toString(path.fileSize) );//new Number( cast(int)path.fileSize );
+		} else {
+			return String.fromUTF8( "can not haz tango" );
+		}
 	}
 	
+	version (Tango) {
 	FilePath[] children( ) {
 		if ( !foundChildren ) {
 			foundChildren = true;
@@ -177,5 +204,6 @@ class FileSystemItem {
 		}
 		
 		return _children;
+	}
 	}
 }
