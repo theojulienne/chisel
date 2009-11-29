@@ -12,6 +12,9 @@ extern (C) {
 	
 	native_handle _chisel_native_frame_get_content_view( native_handle );
 	void _chisel_native_frame_set_content_view( native_handle, native_handle );
+	
+	void _chisel_native_frame_set_border( native_handle native, int flag );
+	int _chisel_native_frame_get_border( native_handle native );
 }
 
 class Frame : View {
@@ -56,6 +59,14 @@ class Frame : View {
 		assert( view !is null );
 		
 		_chisel_native_frame_set_content_view( native, view.native );
+	}
+	
+	bool border( ) {
+		return _chisel_native_frame_get_border( native ) != 0;
+	}
+	
+	void border( bool hasBorder ) {
+		_chisel_native_frame_set_border( native, hasBorder?1:0 );
 	}
 	
 	SizeHint sizeHint( ) {

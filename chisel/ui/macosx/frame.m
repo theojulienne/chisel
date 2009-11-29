@@ -39,3 +39,19 @@ void _chisel_native_frame_set_content_view( native_handle native, native_handle 
 	
 	[frame setContentView: view];
 }
+
+void _chisel_native_frame_set_border( native_handle native, int flag ) {
+	NSBox *frame = (NSBox *)native;
+	
+	if ( flag ) {
+		[frame setBorderType: NSLineBorder];
+	} else {
+		[frame setBorderType: NSNoBorder];
+	}
+}
+
+int _chisel_native_frame_get_border( native_handle native ) {
+	NSBox *frame = (NSBox *)native;
+	
+	return [frame borderType] != NSNoBorder;
+}

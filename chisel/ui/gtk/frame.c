@@ -55,3 +55,18 @@ void _chisel_native_frame_set_content_view( native_handle native, native_handle 
 	
 	gtk_widget_show( GTK_WIDGET(contentView) );
 }
+
+void _chisel_native_frame_set_border( native_handle native, int flag ) {
+	GtkWidget *frame = (GtkWidget *)native;
+	
+	if ( flag ) {
+		gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_IN );
+	} else {
+		gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_NONE );
+	}
+}
+
+int _chisel_native_frame_get_border( native_handle native ) {
+	return gtk_frame_set_shadow_type( GTK_FRAME(native) ) != GTK_SHADOW_NONE;
+}
+
