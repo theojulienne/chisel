@@ -64,7 +64,8 @@ native_handle _chisel_native_treeview_create( ) {
 	[scrollView setHasVerticalScroller:YES];
 	[scrollView setHasHorizontalScroller:YES];
 	[scrollView setAutohidesScrollers:YES];
-	[treeView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
+	[scrollView setBorderType:NSBezelBorder];
+	[treeView setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
 	
 	return (native_handle)scrollView;
 }
