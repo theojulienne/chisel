@@ -35,7 +35,7 @@ int _chisel_native_button_get_enabled( native_handle native ) {
 
 void _chisel_native_button_set_text( native_handle native, native_handle s ) {
 	GtkWidget *widget = GTK_WIDGET(native);
-	GString *string = (GString *)s;
+	GString *string = (GString *)g_object_get_data( G_OBJECT(s), "gstring" );
 	
 	gtk_button_set_label( GTK_BUTTON(widget), string->str );
 }

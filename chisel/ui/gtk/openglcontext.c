@@ -41,11 +41,11 @@ void _chisel_native_openglcontext_make_current_context( native_handle handle ) {
 }
 
 void _chisel_native_openglcontext_flush_buffer( native_handle handle ) {
-	GdkGLContext *context = (GdkGLContext *)handle;
-	GdkGLDrawable *drawable = gdk_gl_context_get_gl_drawable( context );
+	GdkGLDrawable *drawable = (GdkGLDrawable *)handle; //gdk_gl_context_get_gl_drawable( context );
 	
 	if ( gdk_gl_drawable_is_double_buffered( drawable ) ) {
-		gdk_gl_drawable_swap_buffers( drawable );
+		printf( "swap\n" );
+		//gdk_gl_drawable_swap_buffers( drawable );
 	} else {
 		glFlush( );
 	}

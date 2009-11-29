@@ -29,7 +29,7 @@ native_handle _chisel_native_frame_create( ) {
 
 void _chisel_native_frame_set_title( native_handle native, native_handle str ) {
 	GtkWidget *widget = GTK_WIDGET(native);
-	GString *string = (GString *)str;
+	GString *string = (GString *)g_object_get_data( G_OBJECT(str), "gstring" );
 	
 	gtk_frame_set_label( GTK_FRAME(widget), string->str );
 }

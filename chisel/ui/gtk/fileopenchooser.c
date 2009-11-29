@@ -9,6 +9,7 @@
 #include <chisel-native-ui.h>
 
 #include <chisel-native-fileopenchooser.h>
+#include <chisel-native-string.h>
 
 
 native_handle _chisel_native_fileopenchooser_create( ) {
@@ -86,7 +87,20 @@ void _chisel_native_fileopenchooser_begin_modal( native_handle chooser, native_h
 }
 
 native_handle _chisel_native_fileopenchooser_get_paths( native_handle chooser ) {
-	GSList *filenames = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER(chooser) );
+	GSList *filenamesRaw = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER(chooser) );
+	GList *filenames = NULL;
+	
+	GSList *node;
+	for ( node = filenamesRaw; node != NULL; node = g_slist_next(node) ) {
+		char* filename = (char *)node->data;
+		native_handle str = _chisel_native_string_create_with_utf8_bytes( filename, strlen(filename) );
+		
+		filenames = g_list_append( filenames, str );
+		
+		g_free( filename );
+	}
+	
+	g_slist_free( filenamesRaw );
 	
 	return (native_handle)filenames;
 }

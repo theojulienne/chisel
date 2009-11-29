@@ -120,8 +120,14 @@ Rect _chisel_native_view_get_frame( native_handle native ) {
 	return r;
 }
 
-void _chisel_native_view_invalidate_rect( native_handle native, Rect rect ) {
-	gtk_widget_queue_draw_area( GTK_WIDGET(native), rect.origin.x, rect.origin.y, rect.size.width, rect.size.height );
+void _chisel_native_view_invalidate_rect( native_handle native, Rect crect ) {
+	//gtk_widget_queue_draw_area( GTK_WIDGET(native), rect.origin.x, rect.origin.y, rect.size.width, rect.size.height );
+	GdkRectangle rect;
+	rect.x = crect.origin.x;
+	rect.y = crect.origin.y;
+	rect.width = crect.size.width;
+	rect.height = crect.size.height;
+	gdk_window_invalidate_rect( GTK_WIDGET(native)->window, &rect, FALSE );
 }
 
 native_handle _chisel_native_view_get_subviews( native_handle native ) {

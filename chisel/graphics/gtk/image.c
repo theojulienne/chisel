@@ -9,7 +9,7 @@
 #include <chisel-native-image.h>
 
 native_handle _chisel_native_image_create_from_file( native_handle nFilename ) {
-    GString *filename = (GString *)nFilename;
+    GString *filename = (GString *)g_object_get_data( G_OBJECT(nFilename), "gstring" );
     
 	return (native_handle)gdk_pixbuf_new_from_file( filename->str, NULL );
 }

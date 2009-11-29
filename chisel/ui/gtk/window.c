@@ -14,6 +14,8 @@
 
 static gboolean _chisel_gtk_delete_event( GtkWidget *widget, GdkEvent *event, gpointer data ) {
 	_chisel_native_window_will_close_callback( widget );
+	
+	return FALSE;
 }
 
 native_handle _chisel_native_window_create( ) {
@@ -59,7 +61,7 @@ native_handle _chisel_native_window_create( ) {
 
 void _chisel_native_window_set_title( native_handle native, native_handle str ) {
 	GtkWidget *window = (GtkWidget *)native;
-	GString *string = (GString *)str;
+	GString *string = (GString *)g_object_get_data( G_OBJECT(str), "gstring" );
 	
 	gtk_window_set_title( GTK_WINDOW(window), string->str );
 }

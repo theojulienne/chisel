@@ -6,6 +6,8 @@ import chisel.ui.all;
 
 version (Tango) {
 	import tango.io.Stdout;
+} else {
+	import std.stdio;
 }
 
 class DialogsApp : Application {
@@ -89,6 +91,12 @@ class DialogsApp : Application {
 			} else {
 				Stdout.formatln( "User cancelled open: {}", chooser );
 			}
+		} else {
+			if ( chooser.fileWasChosen ) {
+				writefln( "Open dialog complete, user selected: %s", chooser.chosenPaths );
+			} else {
+				writefln( "User cancelled open: %s", chooser );
+			}
 		}
 	}
 	
@@ -113,6 +121,12 @@ class DialogsApp : Application {
 				Stdout.formatln( "Save dialog complete, user selected: {}", chooser.chosenPath );
 			} else {
 				Stdout.formatln( "User cancelled save: {}", chooser );
+			}
+		} else {
+			if ( chooser.fileWasChosen ) {
+				writefln( "Save dialog complete, user selected: %s", chooser.chosenPath );
+			} else {
+				writefln( "User cancelled save: %s", chooser );
 			}
 		}
 	}

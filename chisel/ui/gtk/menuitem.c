@@ -74,7 +74,7 @@ int _chisel_native_menuitem_get_visible( native_handle nmenuItem ) {
 
 void _chisel_native_menuitem_set_title( native_handle nmenuItem, native_handle ntitle ) {
 	GtkWidget *menu_label = gtk_bin_get_child( GTK_BIN(nmenuItem) );
-	GString *string = (GString *)ntitle;
+	GString *string = (GString *)g_object_get_data( G_OBJECT(ntitle), "gstring" );
 	
 	//printf( "TYPE: %s\n", g_type_name(G_TYPE_FROM_INSTANCE(menu_label)) );
 	
@@ -111,10 +111,14 @@ void _chisel_native_menuitem_set_image( native_handle nMenuItem, native_handle n
 	GdkBitmap *mask;
 	gdk_pixbuf_render_pixmap_and_mask( pixbuf, &pixmap, &mask, 0 );
 	
+	assert( pixmap != NULL && mask != NULL );
+	
 	GtkWidget *image = gtk_image_new_from_pixmap( pixmap, mask );
-	gtk_widget_show( image );
+	
+	assert( image != NULL );
 	
 	gtk_image_menu_item_set_image( (GtkImageMenuItem *)(menuitem), image );
+	gtk_widget_show( image );
 }
 
 native_handle _chisel_native_menuitem_get_image( native_handle nMenuItem ) {

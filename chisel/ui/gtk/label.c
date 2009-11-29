@@ -28,7 +28,7 @@ int _chisel_native_label_get_selectable( native_handle native ) {
 }
 
 void _chisel_native_label_set_text( native_handle native, native_handle s ) {
-	GString *str = (GString *)s;
+	GString *str = (GString *)g_object_get_data( G_OBJECT(s), "gstring" );
 	
 	gtk_label_set_text( GTK_LABEL(native), str->str );
 }
