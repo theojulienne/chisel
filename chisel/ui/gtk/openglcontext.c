@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #include <gtk/gtk.h>
-#include <gtk/gtkgl.h>
+#include <gtkgl/gtkglarea.h>
 
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
@@ -25,6 +25,10 @@ void _chisel_native_openglcontext_update( native_handle handle ) {
 }
 
 void _chisel_native_openglcontext_make_current_context( native_handle handle ) {
+	GtkWidget *widget = g_object_get_data( G_OBJECT(handle), "gtkglarea" );
+	
+	gtk_gl_area_make_current( GTK_GL_AREA(widget) );
+#if 0
 	GdkGLContext *context = (GdkGLContext *)handle;
 	GdkGLDrawable *drawable = gdk_gl_context_get_gl_drawable( context );
 	
@@ -38,9 +42,16 @@ void _chisel_native_openglcontext_make_current_context( native_handle handle ) {
 	
 	gdk_gl_drawable_gl_begin( drawable, context );
 	*/
+#endif
 }
 
 void _chisel_native_openglcontext_flush_buffer( native_handle handle ) {
+	GtkWidget *widget = g_object_get_data( G_OBJECT(handle), "gtkglarea" );
+
+	glFlush( );
+	gtk_gl_area_swapbuffers( GTK_GL_AREA(widget) );
+	
+#if 0
 	GdkGLDrawable *drawable = (GdkGLDrawable *)handle; //gdk_gl_context_get_gl_drawable( context );
 	
 	if ( gdk_gl_drawable_is_double_buffered( drawable ) ) {
@@ -50,5 +61,6 @@ void _chisel_native_openglcontext_flush_buffer( native_handle handle ) {
 		glFlush( );
 	}
 	//gdk_gl_drawable_swap_buffers( drawable );
+#endif
 }
 

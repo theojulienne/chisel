@@ -23,6 +23,8 @@ native_handle _chisel_native_window_create( ) {
 	
 	window = (GtkWidget *)gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	
+	//gtk_container_set_reallocate_redraws( GTK_CONTAINER(window), TRUE ); 
+	
 	g_signal_connect( G_OBJECT(window), "delete_event", G_CALLBACK(_chisel_gtk_delete_event), NULL );
 	
 	GtkWidget *container = gtk_vbox_new( FALSE, 0 );
@@ -55,6 +57,8 @@ native_handle _chisel_native_window_create( ) {
 	g_object_set_data( G_OBJECT(window), "chisel-window-container", container );
 	g_object_set_data( G_OBJECT(window), "chisel-content-view-holder", contentViewHolder );
 	g_object_set_data( G_OBJECT(window), "chisel-content-view", contentView );
+	
+	gtk_quit_add_destroy(1, GTK_OBJECT(window));
 	
 	return (native_handle)window;
 }
