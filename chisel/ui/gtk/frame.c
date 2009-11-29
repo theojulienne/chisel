@@ -67,6 +67,6 @@ void _chisel_native_frame_set_border( native_handle native, int flag ) {
 }
 
 int _chisel_native_frame_get_border( native_handle native ) {
-	return gtk_frame_set_shadow_type( GTK_FRAME(native) ) != GTK_SHADOW_NONE;
+	return gtk_frame_get_shadow_type( GTK_FRAME(native) ) != GTK_SHADOW_NONE;
 }
 
