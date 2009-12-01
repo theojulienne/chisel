@@ -11,6 +11,15 @@ extern (C) {
 class WrappedObject : CObject {
 	Object _obj;
 	
+	static WrappedObject[Object] objects;
+	static WrappedObject forObject( Object obj ) {
+		if ( !(obj in objects) ) {
+			objects[obj] = new WrappedObject( obj );
+		}
+		
+		return objects[obj];
+	}
+	
 	this( Object object ) {
 		_obj = object;
 		this( _chisel_native_create_wrapped_object( cast(object_handle)object ) );

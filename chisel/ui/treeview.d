@@ -87,10 +87,14 @@ extern (C) {
 		Object itemObject = (treeItem is null) ? null : treeItem.object;
 		
 		TreeViewDataSource dataSource = treeView.dataSource;
-		if ( dataSource is null )
+		if ( dataSource is null ) {
+			printf( "dataSource is null, no object\n" );
 			return null;
+		}
 		
-		WrappedObject wrapped = new WrappedObject( dataSource.childAtIndex( treeView, itemObject, index ) );
+		Object obj = dataSource.childAtIndex( treeView, itemObject, index );
+		
+		WrappedObject wrapped = WrappedObject.forObject( obj );
 		
 		return wrapped.native;
 	}

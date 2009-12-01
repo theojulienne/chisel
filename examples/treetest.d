@@ -7,7 +7,10 @@ version (Tango) {
 	import tango.stdc.posix.dirent;
 	import Integer = tango.text.convert.Integer;
 } else {
-	import std.math;
+	import std.path;
+	import std.file;
+	import std.string;
+	import std.stdio;
 }
 
 
@@ -63,24 +66,28 @@ class FileSystemDataSource : TreeViewDataSource {
 	uint numberOfChildrenOfItem( TreeView treeView, Object item ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
 		version (Tango) Stdout.formatln( "numberOfChildrenOfItem {} {}", treeView, item );
+		else writefln( "numberOfChildrenOfItem %s %s", treeView, item );
 		return ( item is null ) ? 1 : fitem.numberOfChildren;
 	}
 	
 	bool isItemExpandable( TreeView treeView, Object item ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
 		version (Tango) Stdout.formatln( "isItemExpandable {} {}", treeView, item );
+		else writefln( "isItemExpandable %s %s", treeView, item );
 		return ( item is null ) ? true : (fitem.numberOfChildren != -1);
 	}
 	
 	Object childAtIndex( TreeView treeView, Object parent, uint index ) {
 		FileSystemItem item = cast(FileSystemItem)parent;
 		version (Tango) Stdout.formatln( "childAtIndex {} {} {}", treeView, parent, index );
+		else writefln( "childAtIndex %s %s %s", treeView, parent, index );
 		return ( parent is null ) ? FileSystemItem.rootItem : item.childAtIndex(index);
 	}
 	
 	CObject valueForTableColumn( TreeView treeView, Object item, TableColumn column ) {
 		FileSystemItem fitem = cast(FileSystemItem)item;
 		version (Tango) Stdout.formatln( "valueForTableColumn {} {} {}", treeView, item, column );
+		else writefln( "valueForTableColumn %s %s %s", treeView, item, column );
 		if ( column.identifier is null ) {
 			return ( item is null ) ? String.fromUTF8("/") : fitem.relativePath;
 		} else {
@@ -90,15 +97,25 @@ class FileSystemDataSource : TreeViewDataSource {
 }
 
 class FileSystemItem {
+	static FileSystemItem _rootItem = null;
+
 	static FileSystemItem rootItem( ) {
-		return new FileSystemItem( "/" );
+		if ( _rootItem is null )
+			_rootItem = new FileSystemItem( "/" );
+		return _rootItem;
 	}
 	
 	version (Tango) {
 		FilePath path;
 	
 		FilePath[] _children;
+	} else {
+		char[] path;
+		
+		char[][] _children;
 	}
+	
+	FileSystemItem[] savedChildren;
 	
 	bool foundChildren = false;
 	
@@ -109,6 +126,28 @@ class FileSystemItem {
 			Stdout.formatln( "FilePath for: {}", path );
 			this.path = FilePath( path );
 			this.foundChildren = false;
+		} else {
+			this.path = path;
+			
+			try {
+			
+				if ( isdir( path ) ) {
+					if ( path[$-1] != '/' ) {
+						path ~= "/";
+						this.path = path;
+					}
+					writefln( "list: %s", path );
+					this._children = std.file.listdir( path );
+				}
+			} catch {
+				this._children = [];
+			}
+		}
+		
+		savedChildren.length = _children.length;
+		
+		foreach ( i, child; savedChildren ) {
+			savedChildren[i] = null;
 		}
 	}
 	
@@ -121,16 +160,26 @@ class FileSystemItem {
 				return -1;
 			return children.length;
 		} else {
-			return 0;
+			try {
+				if ( isfile(path) )
+					return -1;
+			} catch {
+				return -1;
+			}
+			return _children.length;
 		}
 	}
 	
 	FileSystemItem childAtIndex( uint index ) {
-		version (Tango) {
-			return new FileSystemItem( children[index].toString );
-		} else {
-			return null;
+		if ( savedChildren[index] is null ) {
+			version (Tango) {
+				savedChildren[index] = new FileSystemItem( children[index].toString );
+			} else {
+				savedChildren[index] = new FileSystemItem( path ~ _children[index] );
+			}
 		}
+		
+		return savedChildren[index];
 	}
 	
 	String relativePath( ) {
@@ -139,7 +188,11 @@ class FileSystemItem {
 				return String.fromUTF8( "/" );
 			return String.fromUTF8( path.name );
 		} else {
-			return String.fromUTF8( "Help me by replacing Tango fail" );
+			if ( path[$-1] == '/' && path.length > 1 )
+				return String.fromUTF8( getBaseName(path[0..$-1]) );
+			if ( path.length > 1 )
+				return String.fromUTF8( getBaseName(path) );
+			return String.fromUTF8( path );
 		}
 	}
 	
@@ -147,7 +200,11 @@ class FileSystemItem {
 		version (Tango) {
 			return path.isFolder;
 		} else {
-			return false;
+			try {
+				return isdir( path ) != 0;
+			} catch {
+				return false;
+			}
 		}
 	}
 	
@@ -155,7 +212,11 @@ class FileSystemItem {
 		version (Tango) {
 			return String.fromUTF8( Integer.toString(path.fileSize) );//new Number( cast(int)path.fileSize );
 		} else {
-			return String.fromUTF8( "can not haz tango" );
+			try {
+				return String.fromUTF8( std.string.toString( getSize( path ) ) );
+			} catch {
+				return String.fromUTF8( "unknown" );
+			}
 		}
 	}
 	
