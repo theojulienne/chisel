@@ -42,6 +42,12 @@ void _chisel_native_view_add_subview( native_handle native, native_handle subvie
 	[pView addSubview: sView];
 }
 
+void _chisel_native_view_remove_from_superview( native_handle native ) {
+	NSView *pView = (NSView *)native;
+	
+	[pView removeFromSuperview];
+}
+
 void _chisel_native_view_set_frame( native_handle native, Rect frame ) {
 	NSView *pView = (NSView *)native;
 	

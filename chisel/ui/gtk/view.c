@@ -54,6 +54,10 @@ void _chisel_native_view_add_subview( native_handle native, native_handle subvie
 	gtk_widget_show( GTK_WIDGET(child) );
 }
 
+void _chisel_native_view_remove_from_superview( native_handle native ) {
+	
+}
+
 void _chisel_native_view_set_frame( native_handle native, Rect frame ) {
 	GtkWidget *widget = GTK_WIDGET(native);
 	
