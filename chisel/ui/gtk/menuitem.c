@@ -79,7 +79,7 @@ void _chisel_native_menuitem_set_title( native_handle nmenuItem, native_handle n
 	//printf( "TYPE: %s\n", g_type_name(G_TYPE_FROM_INSTANCE(menu_label)) );
 	
 	assert( GTK_IS_LABEL(menu_label) );
-	printf( "%s\n", string->str );
+	//printf( "%s\n", string->str );
     gtk_label_set_text( GTK_LABEL(menu_label), string->str ); 
 }
 
