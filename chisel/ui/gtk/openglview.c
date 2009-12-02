@@ -16,7 +16,7 @@ static gboolean reshape( GtkWidget *widget, GdkEvent *event, gpointer native_dat
 	if ( !gtk_gl_area_make_current(GTK_GL_AREA(widget)) )
 		return TRUE;
 	
-	printf( "reshape!\n" );
+	//printf( "reshape!\n" );
 	
 	_chisel_native_openglview_reshape_callback( (native_handle)widget );
 
@@ -35,7 +35,7 @@ static gboolean expose( GtkWidget *widget, GdkEventExpose *event, gpointer nativ
 	rect.origin.y = event->area.y;
 	rect.size.width = event->area.width;
 	rect.size.height = event->area.height;
-	printf( "expose!\n" );
+	//printf( "expose!\n" );
 	_chisel_native_view_draw_rect_callback( (native_handle)widget, rect );
 	
 	return TRUE;

@@ -13,15 +13,21 @@ env = Environment(
 from os.path import exists
 import sys
 
-if exists( '/usr/lib/libgtango.a' ):
-	env.Append( LIBS=['gtango'] )
-	env.Append( DFLAGS=['-version=Tango'] )
-elif exists( '/usr/lib/libgphobos.a' ):
-	env.Append( LIBS=['gphobos'] )
-
 if env.Detect( ['dmd', 'gdmd', 'ldmd'] ) == 'ldmd':
-	env.Append( LINKFLAGS=['-L/usr/local/ldc/ldc/lib'] )
-	env.Append( LIBS=['tango-user-ldc','tango-base-ldc'] )
+	if exists('/usr/lib/d/'):
+		env.Append( LINKFLAGS=['-L/usr/lib/d'] )
+		env.Append( LIBS=['tango-ldc'] )
+	else:
+		env.Append( LINKFLAGS=['-L/usr/local/ldc/ldc/lib'] )
+		env.Append( LIBS=['tango-user-ldc','tango-base-ldc'] )
+else:
+	if exists( '/usr/lib/libgtango.a' ):
+		env.Append( LIBS=['gtango'] )
+		env.Append( DFLAGS=['-version=Tango'] )
+	elif exists( '/usr/lib/libgphobos.a' ):
+		env.Append( LIBS=['gphobos'] )
+
+
 
 platform_name = ''
 

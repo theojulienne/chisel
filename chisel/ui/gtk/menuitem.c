@@ -109,7 +109,7 @@ void _chisel_native_menuitem_set_image( native_handle nMenuItem, native_handle n
 	
 	GdkPixmap *pixmap;
 	GdkBitmap *mask;
-	gdk_pixbuf_render_pixmap_and_mask( pixbuf, &pixmap, &mask, 0 );
+	gdk_pixbuf_render_pixmap_and_mask( pixbuf, &pixmap, &mask, 10 );
 	
 	assert( pixmap != NULL && mask != NULL );
 	
@@ -117,8 +117,9 @@ void _chisel_native_menuitem_set_image( native_handle nMenuItem, native_handle n
 	
 	assert( image != NULL );
 	
-	gtk_image_menu_item_set_image( (GtkImageMenuItem *)(menuitem), image );
 	gtk_widget_show( image );
+	gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(menuitem), image );
+	gtk_image_menu_item_set_always_show_image( GTK_IMAGE_MENU_ITEM(menuitem), TRUE );
 }
 
 native_handle _chisel_native_menuitem_get_image( native_handle nMenuItem ) {

@@ -392,7 +392,7 @@ static void _chisel_native_treeview_update_selection( native_handle ntreeview ) 
 		mode = empty ? GTK_SELECTION_SINGLE : GTK_SELECTION_BROWSE;
 	}
 	
-	gtk_tree_selection_set_mode( GTK_TREE_VIEW(treeview), mode );
+	gtk_tree_selection_set_mode( GTK_TREE_SELECTION(sel), mode );
 }
 
 void _chisel_native_treeview_set_multiple_selection( native_handle ntreeview, int flag ) {
