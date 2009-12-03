@@ -3,6 +3,7 @@ module chisel.ui.view;
 import chisel.core.all;
 import chisel.graphics.context;
 import chisel.ui.native;
+import chisel.ui.window;
 import chisel.core.array;
 
 extern (C) {
@@ -11,6 +12,7 @@ extern (C) {
 	Rect _chisel_native_view_get_frame( native_handle native );
 	void _chisel_native_view_add_subview( native_handle native, native_handle subview );
 	void _chisel_native_view_remove_from_superview( native_handle native );
+	native_handle _chisel_native_view_get_window( native_handle native );
 	native_handle _chisel_native_view_get_subviews( native_handle native );
 	void _chisel_native_view_invalidate_rect( native_handle native, Rect frame );
 	
@@ -105,5 +107,11 @@ class View : CObject {
 	
 	void frameChanged( ) {
 		
+	}
+	
+	Window window( ) {
+		native_handle win = _chisel_native_view_get_window( native );
+		
+		return NativeBridge.fromNative!(Window)( win );
 	}
 }

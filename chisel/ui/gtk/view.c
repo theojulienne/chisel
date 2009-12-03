@@ -139,3 +139,7 @@ native_handle _chisel_native_view_get_subviews( native_handle native ) {
 	
 	return (native_handle)children;
 }
+
+native_handle _chisel_native_view_get_window( native_handle native ) {
+	
+}

@@ -51,6 +51,8 @@ class StackView : View {
 		} else {
 			proportions[subView] = proportion;
 		}
+		
+		frameChanged( );
 	}
 	
 	void setSize( View subView, double size ) {
@@ -59,6 +61,8 @@ class StackView : View {
 		} else {
 			fixedSizes[subView] = size;
 		}
+		
+		frameChanged( );
 	}
 	
 	void setUseHints( View subView ) {
@@ -69,13 +73,23 @@ class StackView : View {
 		if ( subView in fixedSizes ) {
 			fixedSizes.remove( subView );
 		}
+		
+		frameChanged( );
 	}
 	
-	private double totalProp( ) {
+	void addSubview( View view ) {
+		View.addSubview( view );
+		
+		frameChanged( );
+	}
+	
+	private double totalProp( View[] children ) {
 		double total = 0;
 		
-		foreach ( prop; proportions ) {
-			total += prop;
+		foreach ( child; children ) {
+			if ( child in proportions ) {
+				total += proportions[child];
+			}
 		}
 		
 		return total;
@@ -139,7 +153,7 @@ class StackView : View {
 			flexiSpace = 0;
 		}
 		
-		double totalProportions = totalProp( );
+		double totalProportions = totalProp( children );
 		
 		if ( totalProportions == 0 ) {
 			totalProportions = 1;

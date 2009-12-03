@@ -81,3 +81,9 @@ native_handle _chisel_native_view_get_subviews( native_handle native ) {
 	
 	return (native_handle)subviews;
 }
+
+native_handle _chisel_native_view_get_window( native_handle native ) {
+	NSView *pView = (NSView *)native;
+	
+	return [pView window];
+}
