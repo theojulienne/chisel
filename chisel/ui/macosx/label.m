@@ -35,6 +35,8 @@ void _chisel_native_label_set_text( native_handle native, native_handle s ) {
 	NSString *str = (NSString *)s;
 	
 	[label setStringValue: str];
+	
+	[label displayIfNeeded];
 }
 
 CLFloat _chisel_native_label_get_height( native_handle native ) {

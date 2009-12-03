@@ -56,12 +56,16 @@ void _chisel_native_progressbar_set_minimum( native_handle native, CLFloat minVa
 	NSProgressIndicator *progressbar = (NSProgressIndicator *)native;
 	
 	[progressbar setMinValue:minValue];
+	
+	[progressbar displayIfNeeded];
 }
 
 void _chisel_native_progressbar_set_maximum( native_handle native, CLFloat maxValue ) {
 	NSProgressIndicator *progressbar = (NSProgressIndicator *)native;
 	
 	[progressbar setMaxValue:maxValue];
+	
+	[progressbar displayIfNeeded];
 }
 
 void _chisel_native_progressbar_set_value( native_handle native, CLFloat value ) {
@@ -74,6 +78,8 @@ void _chisel_native_progressbar_set_value( native_handle native, CLFloat value )
 	}
 	
 	[progressbar setDoubleValue: value];
+	
+	[progressbar displayIfNeeded];
 }
 
 CLFloat _chisel_native_progressbar_get_value( native_handle native ) {
@@ -90,6 +96,8 @@ void _chisel_native_progressbar_set_indeterminate( native_handle native, int val
 	NSProgressIndicator *progressbar = (NSProgressIndicator *)native;
 	
 	[progressbar setIndeterminate: val == 0 ? NO : YES];
+	
+	[progressbar displayIfNeeded];
 }
 
 int _chisel_native_progressbar_get_indeterminate( native_handle native ) {
@@ -106,6 +114,8 @@ void _chisel_native_progressbar_set_animating( native_handle native, int val ) {
 	} else {
 		[progressbar stopAnimation: progressbar];
 	}
+	
+	[progressbar displayIfNeeded];
 }
 
 int _chisel_native_progressbar_get_animating( native_handle native ) {
