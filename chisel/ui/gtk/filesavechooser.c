@@ -47,22 +47,26 @@ native_handle _chisel_native_filesavechooser_get_allowed_file_types( native_hand
 	return NULL;
 }
 
+static void response_cb( GtkDialog *dialog, gint response_id, gpointer user_data ) {
+	gtk_widget_hide( GTK_WIDGET(dialog) );
+
+	_chisel_native_filesavechooser_completed_callback( dialog, (response_id == GTK_RESPONSE_ACCEPT) );
+}
+
 void _chisel_native_filesavechooser_begin_modal( native_handle chooser, native_handle nwindow ) {
 	GtkWidget *dialog = GTK_WIDGET(chooser);
 	GtkWidget *window = GTK_WIDGET(nwindow);
 	
 	assert( dialog != NULL );
 	
-	int response = gtk_dialog_run( GTK_DIALOG(dialog) );
+	g_signal_connect( dialog, "response", G_CALLBACK(response_cb), NULL );
 	
-	_chisel_native_filesavechooser_completed_callback( chooser, (response == GTK_RESPONSE_ACCEPT) );
-	
-	gtk_widget_hide( dialog );
+	gtk_widget_show_all( dialog );
 }
 
 native_handle _chisel_native_filesavechooser_get_path( native_handle chooser ) {
 	char *filename = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(chooser) );
-	native_handle str = _chisel_native_string_create_with_utf8_bytes( filename, strlen(filename) );
+	native_handle str = (native_handle)_chisel_native_string_create_with_utf8_bytes( filename, strlen(filename) );
 	
 	g_free( filename );
 	

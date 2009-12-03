@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include <gtk/gtk.h>
+#include <glib-object.h>
 
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
@@ -137,9 +138,12 @@ void _chisel_native_view_invalidate_rect( native_handle native, Rect crect ) {
 native_handle _chisel_native_view_get_subviews( native_handle native ) {
 	GList *children = gtk_container_get_children( GTK_CONTAINER(native) );
 	
-	return (native_handle)children;
+	gpointer obj = g_object_new( G_TYPE_OBJECT, NULL );
+	g_object_set_data( G_OBJECT(obj), "glist", children );
+	
+	return (native_handle)obj;
 }
 
 native_handle _chisel_native_view_get_window( native_handle native ) {
-	
+	return (native_handle)GTK_WINDOW( gtk_widget_get_toplevel( GTK_WIDGET(native) ) );
 }

@@ -9,10 +9,12 @@
 #include <chisel-native-number.h>
 
 native_handle _chisel_native_number_create_with_double( double val ) {
+	assert( FALSE );
 	return NULL;
 }
 
 native_handle _chisel_native_number_create_with_int( int val ) {
+	assert( FALSE );
 	return NULL;
 }
 

@@ -6,6 +6,7 @@
 #include <glib-object.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtk.h>
+#include <glib-object.h>
 
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
@@ -307,6 +308,13 @@ ChiselTreeStore *chisel_tree_store_new( void ) {
 
 static void _chisel_native_treeview_update_selection( native_handle ntreeview );
 
+static void tree_selection_changed_cb( GtkTreeSelection *selection, gpointer data ) {
+	native_handle native = g_object_get_data( G_OBJECT(selection), "chisel-native" );
+	
+	_chisel_native_treeview_selection_changed_callback( native );
+	printf( "selection changed!\n" );
+}
+
 native_handle _chisel_native_treeview_create( ) {
 	GtkWidget *scrollview = gtk_scrolled_window_new( NULL, NULL );
 	GtkWidget *treeview = gtk_tree_view_new( );
@@ -321,6 +329,11 @@ native_handle _chisel_native_treeview_create( ) {
 	gtk_widget_show( treeview );
 	
 	_chisel_native_treeview_update_selection( (native_handle)scrollview );
+	
+	GtkTreeSelection *sel = gtk_tree_view_get_selection( GTK_TREE_VIEW(treeview) );
+	g_object_set_data( G_OBJECT(sel), "chisel-treeview", treeview );
+	g_object_set_data( G_OBJECT(sel), "chisel-native", scrollview );
+	g_signal_connect( G_OBJECT(sel), "changed", G_CALLBACK(tree_selection_changed_cb), NULL );
 	
 	return (native_handle)scrollview;
 }
@@ -413,7 +426,25 @@ int _chisel_native_treeview_get_empty_selection( native_handle ntreeview ) {
 	return (int)g_object_get_data( G_OBJECT(ntreeview), "chisel-treeview-empty-sel");
 }
 
+static void append_selected_row( GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data ) {
+	GList **rows_ = (GList **)data;
+	GList *rows = *rows_;
+	
+	rows = g_list_append( rows, iter->user_data );
+	
+	*rows_ = rows;
+}
+
 native_handle _chisel_native_treeview_get_selected_rows( native_handle ntreeview ) {
-	return NULL;
+	GList *rows = NULL;
+	
+	GtkWidget *treeview = g_object_get_data( G_OBJECT(ntreeview), "chisel-treeview" );
+	GtkTreeSelection *sel = gtk_tree_view_get_selection( GTK_TREE_VIEW(treeview) );
+	gtk_tree_selection_selected_foreach( sel, append_selected_row, &rows );
+	
+	gpointer obj = g_object_new( G_TYPE_OBJECT, NULL );
+	g_object_set_data( G_OBJECT(obj), "glist", rows );
+	
+	return (native_handle)obj;
 }
 

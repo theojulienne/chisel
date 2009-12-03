@@ -31,6 +31,8 @@ void _chisel_native_label_set_text( native_handle native, native_handle s ) {
 	GString *str = (GString *)g_object_get_data( G_OBJECT(s), "gstring" );
 	
 	gtk_label_set_text( GTK_LABEL(native), str->str );
+	
+	_chisel_force_gtk_refresh( );
 }
 
 CLFloat _chisel_native_label_get_height( native_handle native ) {

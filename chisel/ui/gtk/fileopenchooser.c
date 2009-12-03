@@ -73,17 +73,28 @@ native_handle _chisel_native_fileopenchooser_get_allowed_file_types( native_hand
 	return NULL;
 }
 
+static void response_cb( GtkDialog *dialog, gint response_id, gpointer user_data ) {
+	gtk_widget_hide( GTK_WIDGET(dialog) );
+
+	_chisel_native_fileopenchooser_completed_callback( dialog, (response_id == GTK_RESPONSE_ACCEPT) );
+}
+
 void _chisel_native_fileopenchooser_begin_modal( native_handle chooser, native_handle nwindow ) {
 	GtkWidget *dialog = GTK_WIDGET(chooser);
 	GtkWidget *window = GTK_WIDGET(nwindow);
 	
 	assert( dialog != NULL );
 	
-	int response = gtk_dialog_run( GTK_DIALOG(dialog) );
+	g_signal_connect( dialog, "response", G_CALLBACK(response_cb), NULL );
 	
-	_chisel_native_fileopenchooser_completed_callback( chooser, (response == GTK_RESPONSE_ACCEPT) );
+	gtk_widget_show_all( dialog );
+	
+	/*int response = gtk_dialog_run( GTK_DIALOG(dialog) );
 	
 	gtk_widget_hide( dialog );
+	
+	_chisel_native_fileopenchooser_completed_callback( chooser, (response == GTK_RESPONSE_ACCEPT) );
+	*/
 }
 
 native_handle _chisel_native_fileopenchooser_get_paths( native_handle chooser ) {
@@ -102,6 +113,9 @@ native_handle _chisel_native_fileopenchooser_get_paths( native_handle chooser ) 
 	
 	g_slist_free( filenamesRaw );
 	
-	return (native_handle)filenames;
+	gpointer obj = g_object_new( G_TYPE_OBJECT, NULL );
+	g_object_set_data( G_OBJECT(obj), "glist", filenames );
+	
+	return (native_handle)obj;
 }
 

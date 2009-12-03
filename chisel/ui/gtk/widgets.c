@@ -40,3 +40,7 @@ void _chisel_gtk_setup_events( GtkWidget *widget ) {
 	g_signal_connect( G_OBJECT(widget), "size_allocate", G_CALLBACK(_chisel_gtk_resize_event), NULL );
 	//g_signal_connect( G_OBJECT(widget), "configure_event", G_CALLBACK(_chisel_gtk_resize_event), NULL );
 }
+
+void _chisel_force_gtk_refresh( ) {
+	gtk_main_iteration_do( FALSE ); // non-blocking iteration so updates happen
+}

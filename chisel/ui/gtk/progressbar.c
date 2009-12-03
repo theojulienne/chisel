@@ -65,6 +65,8 @@ void _chisel_native_progressbar_set_value( native_handle native, CLFloat value )
 	CLFloat fraction = (value - (*min)) / range;
 	
 	gtk_progress_bar_set_fraction( GTK_PROGRESS_BAR(native), fraction );
+	
+	_chisel_force_gtk_refresh( );
 }
 
 CLFloat _chisel_native_progressbar_get_value( native_handle native ) {
@@ -103,6 +105,8 @@ void _chisel_native_progressbar_set_animating( native_handle native, int val ) {
 			g_object_set_data( G_OBJECT(native), "chisel-progress-animating", (void*)0 );
 		}
 	}
+	
+	_chisel_force_gtk_refresh( );
 }
 
 int _chisel_native_progressbar_get_animating( native_handle native ) {

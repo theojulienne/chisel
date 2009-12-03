@@ -61,6 +61,8 @@ class View : CObject {
 	}
 	
 	void frame( Rect frame ) {
+		if ( frame.size.width < 0 ) frame.size.width = 0;
+		if ( frame.size.height < 0 ) frame.size.height = 0;
 		_chisel_native_view_set_frame( native, frame );
 	}
 	
