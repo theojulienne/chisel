@@ -107,7 +107,7 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	return menuItem;
 }
 
-- (void)chiselQuit {
+- (void)chiselQuit:(id)item {
 	_chisel_native_application_quit_callback( );
 }
 @end

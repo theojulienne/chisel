@@ -2,5 +2,5 @@
 {}
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification;
 - (NSMenuItem *)createAppleMenuItem;
-- (void)chiselQuit;
+- (void)chiselQuit:(id)item;
 @end
