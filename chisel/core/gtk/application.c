@@ -25,8 +25,22 @@ void _chisel_native_application_stop( ) {
 	gtk_main_quit( );
 }
 
-void _chisel_native_application_set_use_idle_task( int status ) {
+gboolean _chisel_native_idle_task( gpointer data ) {
+	_chisel_native_application_idle_task_callback( );
 	
+	return TRUE;
+}
+
+void _chisel_native_application_set_use_idle_task( int status ) {
+	static gboolean currentStatus = FALSE;
+	
+	if ( status && !currentStatus ) {
+		g_idle_add( _chisel_native_idle_task, _chisel_native_idle_task );
+	} else if ( !status && currentStatus ) {
+		g_idle_remove_by_data( _chisel_native_idle_task );
+	}
+	
+	currentStatus = status;
 }
 
 void _chisel_native_handle_bridge_registered( native_handle native ) {
