@@ -29,6 +29,12 @@ extern (C) {
 		
 		return app._applicationName.native;
 	}
+	
+	void _chisel_native_application_quit_callback( ) {
+		Application app = Application.sharedApplication;
+		
+		app.quit( );
+	}
 }
 
 class Application : CObject {
@@ -98,5 +104,9 @@ class Application : CObject {
 	
 	String applicationName( ) {
 		return _applicationName;
+	}
+	
+	void quit( ) {
+		stop( );
 	}
 }

@@ -82,9 +82,9 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	
 	menuItem = [[NSMenuItem alloc]
 			initWithTitle:[@"Quit " stringByAppendingString:appName]
-			action:@selector(terminate:) 
+			action:@selector(chiselQuit:) 
 			keyEquivalent:@"q"];
-	[menuItem setTarget:NSApp];
+	[menuItem setTarget:self];
 	[appleMenu addItem:menuItem];
 	[menuItem release];
 
@@ -105,6 +105,10 @@ void CPSEnableForegroundOperation( ProcessSerialNumber* psn );
 	[appName release];
 	
 	return menuItem;
+}
+
+- (void)chiselQuit {
+	_chisel_native_application_quit_callback( );
 }
 @end
 
