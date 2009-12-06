@@ -22,7 +22,7 @@
 - (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	[sheet close];
 	
-	assert( [[sheet URL] isFileURL] );
+	assert( (returnCode != NSFileHandlingPanelOKButton) || [[sheet URL] isFileURL] );
 	_chisel_native_fileopenchooser_completed_callback( (native_handle)sheet, (returnCode == NSFileHandlingPanelOKButton) );
 }
 @end
