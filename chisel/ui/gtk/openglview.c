@@ -4,7 +4,9 @@
 #include <assert.h>
 
 #include <gtk/gtk.h>
+#ifndef _WIN32
 #include <gtkgl/gtkglarea.h>
+#endif
 
 #include <chisel-native.h>
 #include <chisel-native-ui.h>
@@ -13,11 +15,12 @@
 #include <chisel-native-openglview.h>
 
 static gboolean reshape( GtkWidget *widget, GdkEvent *event, gpointer native_data ) {
+#ifndef _WIN32
 	if ( !gtk_gl_area_make_current(GTK_GL_AREA(widget)) )
 		return TRUE;
 	
 	//printf( "reshape!\n" );
-	
+#endif
 	_chisel_native_openglview_reshape_callback( (native_handle)widget );
 
 	return TRUE;
@@ -26,10 +29,10 @@ static gboolean reshape( GtkWidget *widget, GdkEvent *event, gpointer native_dat
 static gboolean expose( GtkWidget *widget, GdkEventExpose *event, gpointer native_data ) {
 	/*if (event->count > 0)
 		return TRUE;*/
-
+#ifndef _WIN32
 	if ( !gtk_gl_area_make_current(GTK_GL_AREA(widget)) )
 		return TRUE;
-	
+#endif
 	Rect rect;
 	rect.origin.x = event->area.x;
 	rect.origin.y = event->area.y;
@@ -42,6 +45,7 @@ static gboolean expose( GtkWidget *widget, GdkEventExpose *event, gpointer nativ
 }
 
 native_handle _chisel_native_openglview_create( ) {
+#ifndef _WIN32
 	int attrlist[] = {
 		GDK_GL_RGBA,
 		GDK_GL_RED_SIZE,1,
@@ -54,7 +58,10 @@ native_handle _chisel_native_openglview_create( ) {
 	assert( gdk_gl_query() && "Application requires OpenGL" );
 	
 	GtkWidget *glarea = GTK_WIDGET(gtk_gl_area_new(attrlist));
-	
+#else
+	GtkWidget *glarea = GTK_WIDGET(gtk_drawing_area_new( ));
+#endif
+
 	_chisel_gtk_setup_events( glarea );
 	
 	gtk_widget_set_events( glarea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK );

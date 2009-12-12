@@ -8,7 +8,9 @@ import sys
 if sys.platform.startswith( 'linux' ):
 	env.Append( LIBS=['GL', 'GLU'] )
 	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0' )
-
+elif sys.platform == 'win32':
+	env.Append( LIBS=['opengl32', 'winmm', 'gdi32'] )
+	
 EXAMPLES = [
 	'helloworld',
 	'canvas',
@@ -23,6 +25,11 @@ EXAMPLES = [
 	'dialogs',
 	'hypotrochoid',
 ]
+
+if sys.platform == 'win32':
+	# no opengl yet
+	EXAMPLES.remove( 'glcube' )
+	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0' )
 
 for example in EXAMPLES:
 	prog = env.Program( example+'.d' )

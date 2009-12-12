@@ -40,6 +40,14 @@ if sys.platform.startswith( 'linux' ):
 	platform_name = 'gtk'
 	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0 gtkgl-2.0' )
 
+if sys.platform == 'win32':
+	# chisel currently doesn't natively support windows, so use GTK
+	platform_name = 'gtk'
+	
+	env.ParseConfig( 'pkg-config --cflags --libs gtk+-2.0' )
+	env.Append( LIBS=['opengl32'] )
+	env.Append( LIBS=['gphobos'] )
+	
 assert platform_name != ''
 
 from glob import glob
@@ -86,7 +94,10 @@ for package in CHISEL_PACKAGES:
 	sub_env.Append( LIBS=link_libs )
 	sub_env.Append( CFLAGS=cflags_str )
 	
-	lib = sub_env.Library( target, sources )
+	if sys.platform == 'win32':
+		lib = sub_env.StaticLibrary( target, sources )
+	else:
+		lib = sub_env.Library( target, sources )
 	libs[package] = lib
 
 for package in CHISEL_PACKAGES:
