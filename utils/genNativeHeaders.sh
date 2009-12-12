@@ -21,6 +21,8 @@ $GEN chisel/ui/openglcontext.d chisel/ui/native/chisel-native-openglcontext.h
 $GEN chisel/ui/openglview.d chisel/ui/native/chisel-native-openglview.h
 $GEN chisel/ui/splitview.d chisel/ui/native/chisel-native-splitview.h
 $GEN chisel/ui/frame.d chisel/ui/native/chisel-native-frame.h
+$GEN chisel/ui/tabview.d chisel/ui/native/chisel-native-tabview.h
+$GEN chisel/ui/tabviewitem.d chisel/ui/native/chisel-native-tabviewitem.h
 # controls
 $GEN chisel/ui/slider.d chisel/ui/native/chisel-native-slider.h
 $GEN chisel/ui/label.d chisel/ui/native/chisel-native-label.h
