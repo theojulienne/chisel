@@ -17,6 +17,9 @@ class SharedInstance(object):
 
 			return _%(name)s;
 		}""" % data
+	
+	def generateJNI( self, data ):
+		pass
 
 class Property(object):
 	def __init__( self, name, _type ):
@@ -47,6 +50,9 @@ class Property(object):
 		public native %(type)s %(getter)s( );
 		public native void %(setter)s( %(type)s value );
 		""" % data
+		
+	def generateJNI( self, data ):
+		pass
 
 class Function(object):
 	def __init__( self, name, returns, takes ):
@@ -77,6 +83,9 @@ class Function(object):
 		return """
 		public native %(return_type)s %(name)s( %(args)s );
 		""" % data
+		
+	def generateJNI( self, data ):
+		pass
 
 class Constructor(object):
 	def __init__( self, args ):
@@ -105,6 +114,9 @@ class Constructor(object):
 			%(prop_sets)s
 		}
 		""" % data
+		
+	def generateJNI( self, data ):
+		pass
 
 class Class(object):
 	def __init__( self, name, superclass=None, premade=False ):
@@ -142,25 +154,32 @@ class Class(object):
 		return self._name
 
 	def generate( self, output_path, namespace_path ):
-		my_path = output_path + '/' + self.name + '.java'
-		
 		if self.premade:
-			self.generatePremade( my_path, namespace_path )
+			self.generatePremade( output_path, namespace_path )
 		else:
-			self.generateJava( my_path, namespace_path )
+			self.generateJava( output_path, namespace_path )
 
 	def generatePremade( self, my_path, namespace_path ):
 		file_base = os.path.dirname(__file__)
 		premade_base = '/'.join( [file_base,'premade'] + namespace_path )
 		
+		my_j_path = my_path + '/' + self.name + '.java'
+		my_c_path = my_path + '/' + self.name + '.c'
+		
 		filename = self.name + '.java'
 		src_file = premade_base + '/' + filename
-		f = open( my_path, 'wb' )
+		f = open( my_j_path, 'wb' )
+		f.write( open( src_file, 'rb' ).read() )
+		f.close( )
+		
+		filename = self.name + '.c'
+		src_file = premade_base + '/' + filename
+		f = open( my_c_path, 'wb' )
 		f.write( open( src_file, 'rb' ).read() )
 		f.close( )
 
 	def generateJava( self, my_path, namespace_path ):
-		f = open( my_path, 'wb' )
+		f = open( my_path + '/' + self.name + '.java', 'wb' )
 		f.write( 'package %s;\n' % '.'.join(namespace_path) )
 		f.write( '\n' )
 		superdef = ''
@@ -170,7 +189,7 @@ class Class(object):
 			if namespace != self._chisel_namespace:
 				f.write( 'import %s.*;\n\n' % namespace.getPath( ) )
 			superdef = ' extends ' + self.superclass.name
-		f.write( 'class %s%s {\n' % (self.name, superdef) )
+		f.write( 'public class %s%s {\n' % (self.name, superdef) )
 		f.write( '\tstatic { System.loadLibrary( "%s" ); }\n' % '-'.join(namespace_path) )
 		f.write( '\tprivate native void initNative( );')
 		for field in self.fields:
@@ -183,5 +202,36 @@ class Class(object):
 				for line in defn.split( '\n' ):
 					f.write( line[1:] + '\n' ) # skip first tab, HAX
 		f.write( '}\n' )
+		f.write( '\n' )
+		f.close( )
+		
+		self.generateJNI( my_path, namespace_path )
+	
+	def generateJNI( self, my_path, ns_path ):
+		jni_prefix = 'Java_' + '_'.join( ns_path ) + '_' + self.name
+		
+		# JNI c file
+		f = open( my_path + '/' + self.name + '.c', 'wb' )
+		f.write( '#include <assert.h>\n' )
+		f.write( '\n' )
+		f.write( '#include "%s.h"\n' % (self.name,) )
+		f.write( '\n' )
+		f.write( 'JNIEXPORT void JNICALL %s_initNative(JNIEnv *env, jobject obj) {\n' % (jni_prefix,))
+		f.write( '\tjclass cls = (*env)->GetObjectClass(env, obj);\n' )
+		f.write( '\tjfieldID fid = (*env)->GetFieldID(env, cls, "native_handle", "I");\n' )
+		f.write( '\tassert( fid != NULL );\n' )
+		f.write( '\tjint handle = (*env)->GetIntField(env, cls, fid);\n' )
+		f.write( '\tprintf( "native: %p\\n", handle );\n' )
+		f.write( '}\n')
+		for field in self.fields:
+			data = {
+				'class_name': self.name,
+				'jni_prefix': jni_prefix,
+			}
+			field._chisel_class = self
+			defn = field.generateJNI( data )
+			if defn is not None:
+				for line in defn.split( '\n' ):
+					f.write( line[1:] + '\n' ) # skip first tab, HAX
 		f.write( '\n' )
 		f.close( )

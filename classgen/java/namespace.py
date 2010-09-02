@@ -51,12 +51,12 @@ class Namespace(object):
 		
 		mf.write( 'all: jni\n\n' )
 		
-		mf.write( 'jni: jniheaders\n' )
+		mf.write( 'jni: jniheaders %s\n' % ' '.join( 'lib'+self.name+'-'+ns.name+'.jnilib' for ns in self.namespaces ) )
 		
 		
 		classes = self.get_classes( )
 		
-		headerlist = [ 'jni/'+c.replace('.','_')+'.h' for c in classes ]
+		headerlist = [ ''+c.replace('.','/')+'.h' for c in classes ]
 		classlist = [ ''+c.replace('.','/')+'.class' for c in classes ]
 		javalist = [ ''+c.replace('.','/')+'.java' for c in classes ]
 		
@@ -69,11 +69,30 @@ class Namespace(object):
 			javafile = javalist[i]
 			
 			mf.write( '%s: %s\n' % (hfile, classfile) )
-			mf.write( '\tjavah -d jni -jni %s\n' % (cls,) )
+			mf.write( '\tjavah -o %s -jni %s\n' % (hfile, cls,) )
 			mf.write( '\n' )
 			mf.write( '%s: %s\n' % (classfile, javafile) )
 			mf.write( '\tjavac %s\n' % (javafile,) )
 			mf.write( '\n' )
+			mf.write( '\n' )
+		
+		for ns in self.namespaces:
+			ns_name = self.name + '.' + ns.name
+			
+			lib_name = ns_name.replace( '.', '-' )
+			
+			ns_classes = ns.get_classes( )
+			
+			c_files = [ self.name+'/'+c.replace('.','/')+'.c' for c in ns_classes ]
+			o_files = [ self.name+'/'+c.replace('.','/')+'.o' for c in ns_classes ]
+			
+			mf.write( 'lib%s.jnilib: %s\n' % (lib_name, ' '.join( c_files )) )
+			for cls in ns_classes:
+				c_file = self.name + '/' + cls.replace( '.', '/' ) + '.c'
+				o_file = self.name + '/' + cls.replace( '.', '/' ) + '.o'
+				
+				mf.write( '\tcc -c -I/System/Library/Frameworks/JavaVM.framework/Headers %s -o %s\n' % (c_file, o_file))
+			mf.write( '\tcc -dynamiclib -o lib%s.jnilib %s -framework JavaVM\n' % (lib_name, ' '.join( o_files )) )
 			mf.write( '\n' )
 		
 		mf.close( )
