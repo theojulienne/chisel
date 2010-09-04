@@ -86,13 +86,18 @@ class Namespace(object):
 			c_files = [ self.name+'/'+c.replace('.','/')+'.c' for c in ns_classes ]
 			o_files = [ self.name+'/'+c.replace('.','/')+'.o' for c in ns_classes ]
 			
+			native_lib = '../../native/%s/macosx/libchiselnative-%s.a' % (ns.name, ns.name)
+			native_inc = '../../native/%s/include' % (ns.name,)
+			core_inc = '../../native/core/include'
+			
 			mf.write( 'lib%s.jnilib: %s\n' % (lib_name, ' '.join( c_files )) )
 			for cls in ns_classes:
 				c_file = self.name + '/' + cls.replace( '.', '/' ) + '.c'
 				o_file = self.name + '/' + cls.replace( '.', '/' ) + '.o'
 				
-				mf.write( '\tcc -c -I/System/Library/Frameworks/JavaVM.framework/Headers %s -o %s\n' % (c_file, o_file))
-			mf.write( '\tcc -dynamiclib -o lib%s.jnilib %s -framework JavaVM\n' % (lib_name, ' '.join( o_files )) )
+				mf.write( '\tcc -c -I/System/Library/Frameworks/JavaVM.framework/Headers -I%s -I%s %s -o %s\n' % (core_inc, native_inc, c_file, o_file))
+			
+			mf.write( '\tcc -dynamiclib -o lib%s.jnilib %s -framework JavaVM -framework Cocoa %s\n' % (lib_name, ' '.join( o_files ), native_lib) )
 			mf.write( '\n' )
 		
 		mf.close( )
@@ -127,3 +132,13 @@ class Namespace(object):
 		for cls in self.classes:
 			cls._chisel_namespace = self
 			cls.generate( my_path, my_ns_path )
+	
+	def generateHeader( self, output_path, namespace_path=[] ):
+		for ns in self.namespaces:
+			path = output_path + '/' + ns.name + '/include'
+			
+			for cls in ns.classes:
+				cls_path = path + '/chisel-'+ns.name+'-native-'+cls.name.lower()+'.h'
+				func_prefix = '_native_chisel_'+ns.name+'_'+cls.name.lower()
+				
+				cls.generateHeader( func_prefix, cls_path )

@@ -1,8 +1,20 @@
 import chisel.core.*;
 import chisel.ui.*;
 
-public class Test {
+public class Test extends Application {
+	private Window mainWindow;
+	
+	public Test( ) {
+		//this.setApplicationName( "Test" );
+		
+		mainWindow = new Window( );
+		
+		mainWindow.show( );
+	}
+	
 	public static void main( String[] args ) {
-		Application foo = Application.sharedApplication( );
+		Test test = new Test( );
+		System.out.println( "Init'd app!" );
+		test.run( );
 	}
 }

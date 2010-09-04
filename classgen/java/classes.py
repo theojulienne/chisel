@@ -20,6 +20,9 @@ class SharedInstance(object):
 	
 	def generateJNI( self, data ):
 		pass
+		
+	def generateHeader( self, data ):
+		pass
 
 class Property(object):
 	def __init__( self, name, _type ):
@@ -53,6 +56,9 @@ class Property(object):
 		
 	def generateJNI( self, data ):
 		pass
+		
+	def generateHeader( self, data ):
+		pass
 
 class Function(object):
 	def __init__( self, name, returns, takes ):
@@ -85,7 +91,41 @@ class Function(object):
 		""" % data
 		
 	def generateJNI( self, data ):
-		pass
+		data.update( {
+			'func_name': self.getCName( ),
+		} )
+		
+		return """
+		JNIEXPORT void JNICALL %(jni_prefix)s_%(func_name)s(JNIEnv *env, jobject obj) {
+			printf( "in %(func_name)s with env %%p...\\n", env );
+			jclass cls = (*env)->GetObjectClass(env, obj);
+			printf( "getting field...\\n" );
+			jfieldID fid = (*env)->GetFieldID(env, cls, "native_handle", "J");
+			assert( fid != NULL );
+			//printf( "ready, getting native handle...\\n" );
+			native_handle native = (native_handle) ( (*env)->GetLongField(env, obj, fid) );
+			%(chisel_prefix)s_%(func_name)s( native );
+		}
+		""" % data
+		
+	def getCName( self ):
+		name = ''
+		
+		for c in self.name:
+			if c.isupper():
+				name += '_'
+			name += c.lower( )
+		
+		return name
+	
+	def generateHeader( self, data ):
+		data.update( {
+			'func_name': self.getCName( ),
+		} )
+		
+		return [
+			'void %(chisel_prefix)s_%(func_name)s( native_handle );' % data
+		]
 
 class Constructor(object):
 	def __init__( self, args ):
@@ -116,6 +156,9 @@ class Constructor(object):
 		""" % data
 		
 	def generateJNI( self, data ):
+		pass
+	
+	def generateHeader( self, data ):
 		pass
 
 class Class(object):
@@ -208,25 +251,31 @@ class Class(object):
 		self.generateJNI( my_path, namespace_path )
 	
 	def generateJNI( self, my_path, ns_path ):
+		chisel_prefix = '_native_' + '_'.join( ns_path ) + '_' + self.name.lower()
 		jni_prefix = 'Java_' + '_'.join( ns_path ) + '_' + self.name
 		
 		# JNI c file
 		f = open( my_path + '/' + self.name + '.c', 'wb' )
 		f.write( '#include <assert.h>\n' )
 		f.write( '\n' )
+		f.write( '#include <chisel-core-native.h>\n' )
+		f.write( '#include <%s-native-%s.h>\n' % ('-'.join(ns_path), self.name.lower()) )
+		f.write( '\n' )
 		f.write( '#include "%s.h"\n' % (self.name,) )
 		f.write( '\n' )
 		f.write( 'JNIEXPORT void JNICALL %s_initNative(JNIEnv *env, jobject obj) {\n' % (jni_prefix,))
+		f.write( '\tprintf( "initNative with env=%p\\n", env );\n ')
 		f.write( '\tjclass cls = (*env)->GetObjectClass(env, obj);\n' )
-		f.write( '\tjfieldID fid = (*env)->GetFieldID(env, cls, "native_handle", "I");\n' )
+		f.write( '\tjfieldID fid = (*env)->GetFieldID(env, cls, "native_handle", "J");\n' )
 		f.write( '\tassert( fid != NULL );\n' )
-		f.write( '\tjint handle = (*env)->GetIntField(env, cls, fid);\n' )
-		f.write( '\tprintf( "native: %p\\n", handle );\n' )
+		f.write( '\tnative_handle native = %s_init(  );\n' % (chisel_prefix) )
+		f.write( '\t(*env)->SetLongField(env, obj, fid, (jlong)native);\n' )
 		f.write( '}\n')
 		for field in self.fields:
 			data = {
 				'class_name': self.name,
 				'jni_prefix': jni_prefix,
+				'chisel_prefix': chisel_prefix,
 			}
 			field._chisel_class = self
 			defn = field.generateJNI( data )
@@ -234,4 +283,17 @@ class Class(object):
 				for line in defn.split( '\n' ):
 					f.write( line[1:] + '\n' ) # skip first tab, HAX
 		f.write( '\n' )
+		f.close( )
+	
+	def generateHeader( self, func_prefix, cls_path ):
+		f = open( cls_path, 'wb' )
+		f.write( 'native_handle %s_init( void );\n' % func_prefix )
+		for field in self.fields:
+			data = {
+				'class_name': self.name,
+				'chisel_prefix': func_prefix,
+			}
+			defn = field.generateHeader( data )
+			if defn is not None:
+				f.write( '\n'.join( defn ) + '\n' )
 		f.close( )

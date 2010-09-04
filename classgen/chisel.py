@@ -33,12 +33,15 @@ Window.addFunction( 'show' )
 Window.addFunction( 'hide' )
 Window.addFunction( 'close' )
 Window.addFunction( 'willClose' )
+Window.addConstructor( )
+Window.addConstructor( 'title' )
 
 
 View = UI.addClass( 'View', superclass=CObject )
-View.addFunction( 'addSubview', takes=[ (View, 'viewToAdd') ] )
+#View.addFunction( 'addSubview', takes=[ (View, 'viewToAdd') ] )
 View.addFunction( 'removeFromSuperview' )
 View.addFunction( 'invalidate' )
 Window.addProperty( 'contentView', View )
 
 Chisel.generate( 'out' )
+Chisel.generateHeader( '../native' )
