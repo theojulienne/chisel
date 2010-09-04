@@ -1,5 +1,5 @@
-from java.namespace import Namespace
-from java.types import *
+from csharp.namespace import Namespace
+from csharp.types import *
 
 Chisel = Namespace( 'Chisel' )
 
@@ -8,6 +8,7 @@ Chisel = Namespace( 'Chisel' )
 Core = Chisel.addNamespace( 'Core' )
 
 CObject = Core.addPremadeClass( 'CObject' )
+CString = Core.addPremadeClass( 'CString' )
 
 Application = Core.addClass( 'Application', superclass=CObject )
 Application.addSharedInstance( 'sharedApplication' )
